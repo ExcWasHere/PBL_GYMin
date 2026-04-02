@@ -67,24 +67,26 @@
     ];
 @endphp
 
-<section id="features" class="py-28 px-6">
-    <div class="max-w-7xl mx-auto">
+<section id="features" class="section">
+    <div class="container-custom">
 
-        <div class="max-w-2xl mb-16 reveal">
+        <div class="max-w-2xl mb-20 reveal">
             <div class="section-tag">
-                <span style="width:24px;height:1px;background:var(--gym-red);display:inline-block;"></span>
+                <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
                 Fitur Unggulan
             </div>
+
             <h2 class="section-title">
                 SEMUA YANG KAMU<br>
                 <span style="color:var(--gym-red);">BUTUHKAN</span>
             </h2>
-            <p style="color:var(--gym-gray);margin-top:1rem;font-size:0.95rem;line-height:1.7;font-weight:300;">
+
+            <p class="mt-4 text-[0.95rem] leading-[1.7] font-light text-[var(--gym-gray)]">
                 Gym-In hadir dengan fitur lengkap untuk memaksimalkan pengalaman gym kamu — dari pantau kepadatan hingga tracking progres harian.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($features as $i => $f)
                 <div class="feature-card reveal" style="transition-delay:{{ ($i % 3) * 0.1 }}s;">
                     <div class="feature-num">{{ $f['num'] }}</div>
