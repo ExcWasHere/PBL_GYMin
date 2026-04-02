@@ -1,12 +1,13 @@
 <style>
     .hero {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        padding-top: 80px;
-    }
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 100px;
+    padding-bottom: 60px;
+}
     .hero::after {
         content: '';
         position: absolute;
@@ -56,12 +57,13 @@
         font-weight: 300;
     }
 
-    .stat-item { border-left: 2px solid var(--gym-red); padding-left: 16px; }
+    .stat-item { border-left: 2px solid var(--gym-red); padding-left: 24px; }
     .stat-number {
         font-family: 'Bebas Neue', sans-serif;
         font-size: 2.4rem;
         line-height: 1;
         color: var(--gym-white);
+        margin-bottom: 6px;
     }
     .stat-label {
         font-size: 0.72rem;
@@ -124,7 +126,7 @@
                     <a href="#features" class="btn-outline" style="padding:13px 28px;font-size:0.85rem;">Lihat Fitur →</a>
                 </div>
 
-                <div class="flex gap-8">
+                <div class="flex gap-12 mt-4">
                     <div class="stat-item">
                         <div class="stat-number">2.4K+</div>
                         <div class="stat-label">Member Aktif</div>

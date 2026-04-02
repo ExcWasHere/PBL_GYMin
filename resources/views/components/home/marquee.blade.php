@@ -34,9 +34,8 @@
     $items = ['Jadwal Latihan', 'Streak & Reward', 'Kepadatan Realtime', 'Progress Tracker', 'Program Workout', 'Notifikasi Pintar', 'Riwayat Latihan', 'Multi-Device'];
 @endphp
 
-<div class="marquee-wrap">
+<div class="marquee-wrap my-12">
     <div class="marquee-track">
-        {{-- Duplikat 2x biar marquee seamless --}}
         @foreach(array_merge($items, $items) as $item)
             <div class="marquee-item">
                 <span class="dot"></span>

@@ -26,9 +26,9 @@
     $colors= ['#22c55e','#f59e0b','#22c55e','#ef4444','#22c55e','#ef4444','#22c55e','#f59e0b','#22c55e'];
 @endphp
 
-<section id="kepadatan" class="py-24 px-6">
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<section id="kepadatan" class="section">
+    <div class="container-custom">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
             {{-- Text --}}
             <div class="reveal">

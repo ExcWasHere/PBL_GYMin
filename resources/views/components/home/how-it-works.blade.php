@@ -26,36 +26,42 @@
     ];
 @endphp
 
-<section id="cara-pakai" class="py-24 px-6" style="background:var(--gym-dark);border-top:1px solid var(--gym-border);border-bottom:1px solid var(--gym-border);">
-    <div class="max-w-7xl mx-auto">
+<section id="cara-pakai" class="section bg-[var(--gym-dark)] border-y border-[var(--gym-border)]">
+    <div class="container-custom">
 
-        <div class="text-center mb-16 reveal">
-            <div class="section-tag" style="justify-content:center;">
-                <span style="width:24px;height:1px;background:var(--gym-red);display:inline-block;"></span>
+        <div class="text-center mb-20 reveal">
+            <div class="section-tag justify-center">
+                <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
                 Cara Pakai
-                <span style="width:24px;height:1px;background:var(--gym-red);display:inline-block;"></span>
+                <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
             </div>
+
             <h2 class="section-title">
                 MULAI DALAM<br>
                 <span style="color:var(--gym-red);">3 LANGKAH</span>
             </h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
             @foreach($steps as $i => $step)
                 <div class="text-center reveal" style="transition-delay:{{ $i * 0.15 }}s;">
-                    <div class="relative mb-6">
+
+                    <div class="relative mb-8 flex justify-center">
                         <div class="step-circle active">{{ $step['num'] }}</div>
+
                         @if(!$loop->last)
-                            <div class="hidden md:block absolute top-7 left-1/2 w-full h-px" style="background:var(--gym-border);"></div>
+                            <div class="hidden md:block absolute top-7 left-[60%] w-[80%] h-px bg-[var(--gym-border)]"></div>
                         @endif
                     </div>
-                    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.05em;margin-bottom:0.5rem;">
+
+                    <h3 class="font-[Bebas Neue] text-[1.4rem] tracking-[0.05em] mb-2">
                         {{ $step['title'] }}
                     </h3>
-                    <p style="color:var(--gym-gray);font-size:0.875rem;line-height:1.65;font-weight:300;">
+
+                    <p class="text-[var(--gym-gray)] text-[0.875rem] leading-[1.65] font-light">
                         {{ $step['desc'] }}
                     </p>
+
                 </div>
             @endforeach
         </div>

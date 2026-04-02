@@ -1,25 +1,25 @@
 <style>
     .footer-logo {
         font-family: 'Bebas Neue', sans-serif;
-        font-size: 2.2rem;
-        letter-spacing: 0.05em;
+        font-size: 2.4rem;
+        letter-spacing: 0.06em;
     }
     .footer-logo span { color: var(--gym-red); }
 
     .footer-heading {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         font-weight: 600;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
         color: var(--gym-white);
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
     }
     .footer-link {
         display: block;
         color: var(--gym-gray);
         font-size: 0.875rem;
         text-decoration: none;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.8rem;
         font-weight: 300;
         transition: color 0.2s;
     }
@@ -32,11 +32,11 @@
 </style>
 
 <footer id="tentang" style="background: var(--gym-dark); border-top: 1px solid var(--gym-border);">
-    <div class="max-w-7xl mx-auto px-6 py-16">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-14">
 
             {{-- Brand --}}
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 pr-8">
                 <div class="footer-logo mb-4">GYM<span>-IN</span></div>
                 <p style="color:var(--gym-gray);font-size:0.875rem;line-height:1.75;font-weight:300;max-width:300px;margin-bottom:1.5rem;">
                     Platform manajemen gym pintar yang membantu member berlatih lebih efektif, efisien, dan konsisten.
@@ -64,11 +64,10 @@
                 <a href="#" class="footer-link">Syarat &amp; Ketentuan</a>
                 <a href="#" class="footer-link">Hubungi Kami</a>
             </div>
-
         </div>
     </div>
 
-    <div class="footer-bottom">
+    <div class="footer-bottom mt-10">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-3">
             <div style="font-size:0.78rem;color:var(--gym-gray);">
                 &copy; {{ date('Y') }} Gym-In. Dibuat oleh Kelompok 6 — Politeknik Negeri Malang.
