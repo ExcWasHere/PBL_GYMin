@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\GymDensityController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard/progress', [ProgressController::class, 'index'])->name('progress.index');
         Route::post('/dashboard/progress', [ProgressController::class, 'store'])->name('progress.store');
         Route::delete('/dashboard/progress/{progressLog}', [ProgressController::class, 'destroy'])->name('progress.destroy');
+        Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
     });
 
 });
