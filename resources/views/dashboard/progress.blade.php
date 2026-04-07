@@ -12,24 +12,28 @@
             @csrf
             <div class="form-group">
                 <label class="form-label">Tanggal</label>
-                <input type="date" name="log_date" class="form-input" required>
+                <input type="date" name="log_date" class="form-input"
+                    value="{{ old('log_date', now()->toDateString()) }}" required>
                 @error('log_date') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="form-group">
                     <label class="form-label">Berat Badan (kg)</label>
-                    <input type="number" name="weight_kg" class="form-input" step="0.1" min="1" max="300" placeholder="e.g. 72.5">
+                    <input type="number" name="weight_kg" class="form-input" step="0.1" min="1" max="300"
+                        value="{{ old('weight_kg') }}" placeholder="e.g. 72.5">
                     @error('weight_kg') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="form-group">
                     <label class="form-label">Massa Otot (kg)</label>
-                    <input type="number" name="muscle_mass_kg" class="form-input" step="0.1" min="1" max="200" placeholder="e.g. 35.0">
+                    <input type="number" name="muscle_mass_kg" class="form-input" step="0.1" min="1" max="200"
+                        value="{{ old('muscle_mass_kg') }}" placeholder="e.g. 35.0">
                     @error('muscle_mass_kg') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">% Lemak Tubuh</label>
-                <input type="number" name="body_fat_pct" class="form-input" step="0.1" min="0" max="100" placeholder="e.g. 18.5">
+                <input type="number" name="body_fat_pct" class="form-input" step="0.1" min="0" max="100"
+                    value="{{ old('body_fat_pct') }}" placeholder="e.g. 18.5">
                 @error('body_fat_pct') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
@@ -50,7 +54,7 @@
                 ? round($latest->weight_kg - $first->weight_kg, 1) : null;
         @endphp
         <div class="stat-card">
-            <div class="stat-label">Berat Terkini</div>
+            <div class="stat-label">Berat Saat Ini</div>
             <div class="stat-value">{{ $latest?->weight_kg ?? '—' }}<span class="stat-unit">kg</span></div>
             @if($weightDiff !== null)
                 <div style="font-size:0.78rem;margin-top:4px;color:{{ $weightDiff <= 0 ? '#4ade80' : '#f87171' }}">
@@ -59,15 +63,15 @@
             @endif
         </div>
         <div class="stat-card">
-            <div class="stat-label">Massa Otot Terkini</div>
+            <div class="stat-label">Massa Otot Saat Ini</div>
             <div class="stat-value">{{ $latest?->muscle_mass_kg ?? '—' }}<span class="stat-unit">kg</span></div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">% Lemak Terkini</div>
+            <div class="stat-label">% Lemak Saat Ini</div>
             <div class="stat-value">{{ $latest?->body_fat_pct ?? '—' }}<span class="stat-unit">%</span></div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Total Entri</div>
+            <div class="stat-label">Total Entri Log</div>
             <div class="stat-value">{{ $logs->count() }}<span class="stat-unit">hari</span></div>
         </div>
     </div>
@@ -76,10 +80,11 @@
 {{-- grafik --}}
 @if($logs->count() > 1)
 <div class="card" style="margin-bottom:28px;">
-    <div class="card-title">Grafik Perkembangan</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="card-title">Grafik Perkembanganmu</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
         <div><canvas id="chartWeight" height="180"></canvas></div>
         <div><canvas id="chartMuscle" height="180"></canvas></div>
+        <div><canvas id="chartFat"    height="180"></canvas></div>
     </div>
 </div>
 @endif
@@ -128,6 +133,7 @@
     const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m')));
     const weights = @json($logs->pluck('weight_kg'));
     const muscles = @json($logs->pluck('muscle_mass_kg'));
+    const fats    = @json($logs->pluck('body_fat_pct'));
 
     const chartDefaults = {
         responsive: true,
@@ -143,7 +149,6 @@
         data: {
             labels,
             datasets: [{
-                label: 'Berat (kg)',
                 data: weights,
                 borderColor: '#E8292A',
                 backgroundColor: 'rgba(232,41,42,0.08)',
@@ -159,7 +164,6 @@
         data: {
             labels,
             datasets: [{
-                label: 'Massa Otot (kg)',
                 data: muscles,
                 borderColor: '#60a5fa',
                 backgroundColor: 'rgba(96,165,250,0.08)',
@@ -168,6 +172,21 @@
             }]
         },
         options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, title: { display: true, text: 'Massa Otot (kg)', color: '#888', font: { size: 11 } } } }
+    });
+
+    new Chart(document.getElementById('chartFat'), {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data: fats,
+                borderColor: '#fbbf24',
+                backgroundColor: 'rgba(251,191,36,0.08)',
+                tension: 0.4, fill: true, pointRadius: 4,
+                pointBackgroundColor: '#fbbf24'
+            }]
+        },
+        options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, title: { display: true, text: '% Lemak Tubuh', color: '#888', font: { size: 11 } } } }
     });
 </script>
 @endif
