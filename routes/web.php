@@ -18,10 +18,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
 });
 
-// klo authenticated
+// klo authenticated atau klo udah login (middleware untuk user yg udah login doang)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', LogoutController::class)->name('logout');
 
+    // klo user buka dashboard, check rolenya pke auth role
     Route::get('/dashboard', function () {
         return match (Auth::user()->role) { //arahkn sesuai role
             'owner' => redirect()->route('owner.dashboard'),
