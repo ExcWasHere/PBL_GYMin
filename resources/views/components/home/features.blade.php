@@ -82,7 +82,7 @@
             </h2>
 
             <p class="mt-4 text-[0.95rem] leading-[1.7] font-light text-[var(--gym-gray)]">
-                Gym-In hadir dengan fitur lengkap untuk memaksimalkan pengalaman gym kamu — dari pantau kepadatan hingga tracking progres harian.
+                Gym-In jadi solusi dengan fitur lengkap untuk memaksimalkan pengalaman gym kamu
             </p>
         </div>
 

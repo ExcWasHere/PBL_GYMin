@@ -8,7 +8,7 @@
     .crowd-fill {
         height: 100%;
         border-radius: 3px;
-        background: linear-gradient(90deg, #22c55e, #f59e0b);
+        background: #22c55e;
         transition: width 1s ease;
     }
 </style>
@@ -29,8 +29,6 @@
 <section id="kepadatan" class="section">
     <div class="container-custom">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-
-            {{-- Text --}}
             <div class="reveal">
                 <div class="section-tag">
                     <span style="width:24px;height:1px;background:var(--gym-red);display:inline-block;"></span>
@@ -40,7 +38,7 @@
                     TAU KAPAN<br><span style="color:var(--gym-red);">GYM SEPI</span>
                 </h2>
                 <p style="color:var(--gym-gray);font-size:0.95rem;line-height:1.75;font-weight:300;margin-bottom:2rem;">
-                    Tidak perlu lagi datang ke gym dan menemukan semua alat sedang dipakai. Pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
+                    Ga perlu datang ke gym cuma buat kena php, ternyata semua alat lagi dipakai. Pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
                 </p>
                 <ul style="display:flex;flex-direction:column;gap:12px;">
                     @foreach($benefits as $item)
@@ -51,24 +49,18 @@
                     @endforeach
                 </ul>
             </div>
-
-            {{-- Live widget --}}
             <div class="reveal" style="transition-delay:0.15s;">
                 <div style="background:var(--gym-card);border:1px solid var(--gym-border);padding:2rem;">
-
-                    {{-- Header --}}
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
                         <div>
                             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;">Status Gym Hari Ini</div>
-                            <div style="font-size:0.72rem;color:var(--gym-gray);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Live — 18:30 WIB</div>
+                            <div style="font-size:0.72rem;color:var(--gym-gray);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Live 18:30 WIB</div>
                         </div>
                         <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#22c55e;font-weight:500;">
                             <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;"></span>
                             Tersedia
                         </div>
                     </div>
-
-                    {{-- Main percentage --}}
                     <div style="text-align:center;padding:1.5rem 0;border-top:1px solid var(--gym-border);border-bottom:1px solid var(--gym-border);margin-bottom:1.5rem;">
                         <div style="font-family:'Bebas Neue',sans-serif;font-size:4.5rem;line-height:1;color:#22c55e;">47%</div>
                         <div style="font-size:0.78rem;color:var(--gym-gray);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Kapasitas Terpakai</div>
@@ -76,8 +68,6 @@
                             <div class="crowd-fill" style="width:47%;"></div>
                         </div>
                     </div>
-
-                    {{-- Hourly bars --}}
                     <div>
                         <div style="font-size:0.7rem;color:var(--gym-gray);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Prediksi Per Jam</div>
                         <div style="display:flex;align-items:flex-end;gap:6px;height:60px;">
@@ -91,17 +81,14 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
 @push('scripts')
 <script>
-    // Animate crowd fill bar on scroll into view
     const crowdFill = document.querySelector('.crowd-fill');
     if (crowdFill) {
         const targetWidth = crowdFill.style.width;
