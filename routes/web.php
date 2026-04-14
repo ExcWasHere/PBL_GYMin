@@ -31,19 +31,29 @@ Route::middleware('auth')->group(function () {
         };
     })->name('dashboard');
     
-    Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
-        Route::get('/dashboard', fn() => view('dashboard.owner'))->name('dashboard');
+    Route::middleware('role:owner')
+        ->prefix('owner')
+        ->name('owner.')
+        ->group(function () {
+            Route::get('/dashboard', fn() => view('dashboard.owner'))->name('dashboard');
     });
 
     Route::middleware('role:receptionist')->prefix('receptionist')->name('receptionist.')->group(function () {
         Route::get('/dashboard', fn() => view('dashboard.receptionist'))->name('dashboard');
     });
 
-    Route::middleware('role:member')->group(function () {
-        Route::get('/dashboard/progress', [ProgressController::class, 'index'])->name('progress.index');
-        Route::post('/dashboard/progress', [ProgressController::class, 'store'])->name('progress.store');
-        Route::delete('/dashboard/progress/{progressLog}', [ProgressController::class, 'destroy'])->name('progress.destroy');
-        Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
+    Route::middleware('role:member')
+        ->group(function () {
+            Route::get('/dashboard/progress', [ProgressController::class, 'index'])->name('progress.index');
+            Route::post('/dashboard/progress', [ProgressController::class, 'store'])->name('progress.store');
+            Route::delete('/dashboard/progress/{progressLog}', [ProgressController::class, 'destroy'])->name('progress.destroy');
+            Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
+            // FITUR : RESERVASI
+            // FITUR : HADIAH
+            // SEMENTARA
+            Route::get('/reservasi', fn() => view('dashboard.reservasi'))->name('reservasi');
+            Route::get('/hadiah', fn() => view('dashboard.hadiah'))->name('hadiah');
+            // FITUR LAIN^2
     });
 
 });
