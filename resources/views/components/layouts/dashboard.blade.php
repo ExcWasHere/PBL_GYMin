@@ -305,6 +305,27 @@
             margin-left: 4px;
         }
 
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--gym-border);
+            color: var(--gym-gray);
+            cursor: pointer;
+            font-size: 0.78rem;
+            padding: 7px 14px;
+            font-family: 'DM Sans', sans-serif;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .btn-logout:hover {
+            border-color: var(--gym-red);
+            color: var(--gym-red);
+            background: rgba(232, 41, 42, 0.08);
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -364,12 +385,29 @@
                     </svg>
                     Progress Tracker
                 </a>
+                
                 <a href="{{ route('gym.density') }}"
                     class="nav-item {{ request()->routeIs('gym.density') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.5 8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1m0-8v8m0-8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1M17.5 8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1m0-8v8m0-8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1 M8.5 12h7" />
                     </svg>
                     Kepadatan Gym
+                </a>
+                <a href="{{ route('reservasi') }}"
+                    class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Reservasi
+                </a>
+                <a href="{{ route('hadiah') }}"
+                    class="nav-item {{ request()->routeIs('hadiah') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                    </svg>
+                    Hadiah
                 </a>
             @endif
         </nav>
@@ -378,9 +416,12 @@
             {{ ucfirst(Auth::user()->role) }}
             <form method="POST" action="{{ route('logout') }}" style="margin-top:10px">
                 @csrf
-                <button type="submit"
-                    style="background:none;border:none;color:var(--gym-gray);cursor:pointer;font-size:0.78rem;padding:0;font-family:'DM Sans',sans-serif;">
-                    Keluar ->
+                <button type="submit" class="btn-logout">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
+                    </svg>
+                    Keluar
                 </button>
             </form>
         </div>
@@ -389,7 +430,7 @@
     <div class="main-content">
         <header class="topbar">
             <span class="topbar-title">{{ $title ?? 'Dashboard' }}</span>
-            <span style="font-size:0.8rem;color:var(--gym-gray)">Halo, {{ Auth::user()->name }}</span>
+            <span style="font-size:0.8rem;color:var(--gym-gray)">Halo kink {{ Auth::user()->name }}</span>
         </header>
         <div class="page-body">
             {{ $slot }}
