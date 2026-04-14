@@ -1,19 +1,22 @@
 <style>
     .hero {
-    min-height: calc(100vh - 80px);
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    padding-top: 100px;
-    padding-bottom: 60px;
-}
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+
     .hero::after {
         content: '';
         position: absolute;
-        top: 0; right: 0;
-        width: 45%; height: 100%;
-        background: linear-gradient(135deg, transparent 30%, rgba(232,41,42,0.06) 100%);
+        top: 0;
+        right: 0;
+        width: 45%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 30%, rgba(232, 41, 42, 0.06) 100%);
         clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
         pointer-events: none;
     }
@@ -29,10 +32,12 @@
         color: var(--gym-red);
         margin-bottom: 1.5rem;
     }
+
     .hero-eyebrow::before {
         content: '';
         display: block;
-        width: 32px; height: 1px;
+        width: 32px;
+        height: 1px;
         background: var(--gym-red);
     }
 
@@ -43,8 +48,9 @@
         letter-spacing: 0.02em;
         margin-bottom: 1.8rem;
     }
+
     .hero-title .outline {
-        -webkit-text-stroke: 1px rgba(245,245,240,0.3);
+        -webkit-text-stroke: 1px rgba(245, 245, 240, 0.3);
         color: transparent;
     }
 
@@ -57,7 +63,11 @@
         font-weight: 300;
     }
 
-    .stat-item { border-left: 2px solid var(--gym-red); padding-left: 24px; }
+    .stat-item {
+        border-left: 2px solid var(--gym-red);
+        padding-left: 24px;
+    }
+
     .stat-number {
         font-family: 'Bebas Neue', sans-serif;
         font-size: 2.4rem;
@@ -65,6 +75,7 @@
         color: var(--gym-white);
         margin-bottom: 6px;
     }
+
     .stat-label {
         font-size: 0.72rem;
         letter-spacing: 0.12em;
@@ -73,57 +84,51 @@
         margin-top: 4px;
     }
 
-    /* Hero visual */
-    .hero-circle {
-        width: 420px; height: 420px;
+    .hero-carousel {
+        width: 420px;
+        height: 420px;
         border-radius: 50%;
-        background: radial-gradient(circle at 40% 40%, rgba(232,41,42,0.15), transparent 65%),
-                    conic-gradient(from 0deg, var(--gym-border), #1a1a1a, var(--gym-border));
+        overflow: hidden;
+        position: relative;
         border: 1px solid var(--gym-border);
-        display: flex; align-items: center; justify-content: center;
-        animation: spin-slow 30s linear infinite;
-    }
-    .hero-inner-circle {
-        width: 300px; height: 300px;
-        border-radius: 50%;
-        background: var(--gym-dark);
-        border: 1px solid #2a2a2a;
-        display: flex; align-items: center; justify-content: center;
-        animation: spin-slow 30s linear infinite reverse;
-    }
-    .hero-icon-center {
-        font-size: 5rem;
-        animation: spin-slow 30s linear infinite;
     }
 
-    .badge-float {
-        position: absolute;
-        background: var(--gym-card);
-        border: 1px solid var(--gym-border);
-        padding: 12px 16px;
-        font-size: 0.75rem;
+    .carousel-track {
+        width: 100%;
+        height: 100%;
+        position: relative;
     }
-    .badge-float .badge-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gym-red); display: block; }
-    .badge-float .badge-lbl { color: var(--gym-gray); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .carousel-img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+    }
+
+    .carousel-img.active {
+        opacity: 1;
+    }
 </style>
 
 <section class="hero">
     <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {{-- Left: Copy --}}
             <div>
                 <div class="hero-eyebrow">Gym Management Platform</div>
                 <h1 class="hero-title">
                     LATIHAN<br>LEBIH<br><span class="outline">SMART</span>
                 </h1>
                 <p class="hero-desc">
-                    Pantau kepadatan gym, atur jadwal latihan, catat progres, dan kumpulkan streak — semua dalam satu platform yang dirancang untuk kamu.
+                    Cek rame-sepinya gym, atur jadwal latihan, reservasi slot, catat progress sampai jaga streak, semua udah ada di satu tempat buat kamu.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 mb-12">
-                    <a href="{{ route('register') }}" class="btn-primary" style="padding:14px 32px;font-size:0.9rem;">Mulai Gratis</a>
-                    <a href="#features" class="btn-outline" style="padding:13px 28px;font-size:0.85rem;">Lihat Fitur →</a>
+                    <a href="{{ route('register') }}" class="btn-primary" style="padding:14px 32px;font-size:0.9rem;">GYM
+                        Yuk</a>
+                    <a href="#features" class="btn-outline" style="padding:13px 28px;font-size:0.85rem;">Lihat Fitur</a>
                 </div>
 
                 <div class="flex gap-12 mt-4">
@@ -142,28 +147,25 @@
                 </div>
             </div>
 
-            {{-- Right: Visual --}}
-            <div class="hidden lg:flex justify-center items-center" style="position:relative;">
-                <div class="hero-circle">
-                    <div class="hero-inner-circle">
-                        <div class="hero-icon-center">🏋️</div>
+            <div class="hidden lg:flex justify-center items-center" style="position:relative; transform: translateY(-100px);">
+                <div class="hero-carousel">
+                    <div class="carousel-track">
+                        <img src="/landingPage/gym1.jpg" class="carousel-img active">
+                        <img src="/landingPage/gym2.jpg" class="carousel-img">
+                        <img src="/landingPage/gym3.jpg" class="carousel-img">
                     </div>
                 </div>
-
-                <div class="badge-float" style="top:10%;left:0;clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,0 100%);">
-                    <span class="badge-val">🔥 12</span>
-                    <span class="badge-lbl">Hari Streak</span>
-                </div>
-                <div class="badge-float" style="bottom:15%;right:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%);">
-                    <span class="badge-val" style="color:#22c55e;">47%</span>
-                    <span class="badge-lbl">Gym Capacity</span>
-                </div>
-                <div class="badge-float" style="bottom:40%;left:-20px;clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);">
-                    <span class="badge-val" style="color:#f59e0b;">+2kg</span>
-                    <span class="badge-lbl">Muscle Gain</span>
-                </div>
             </div>
-
         </div>
-    </div>
 </section>
+
+<script>
+    const images = document.querySelectorAll('.carousel-img');
+    let index = 0;
+
+    setInterval(() => {
+        images[index].classList.remove('active');
+        index = (index + 1) % images.length;
+        images[index].classList.add('active');
+    }, 3000);
+</script>

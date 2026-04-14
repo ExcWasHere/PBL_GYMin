@@ -35,22 +35,22 @@
 
             <div class="section-tag justify-center mb-5">
                 <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
-                Bergabung Sekarang
+                Join With Us!
                 <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
             </div>
 
             <h2 class="cta-title mb-6">
                 SIAP LATIHAN<br>
-                <span style="color:var(--gym-red);">LEBIH EFEKTIF?</span>
+                <span style="color:var(--gym-red);">SMART?</span>
             </h2>
 
             <p class="text-[var(--gym-gray)] text-[1rem] font-light max-w-md mx-auto mb-10 leading-[1.7]">
-                Daftar gratis dan mulai gunakan Gym-In hari ini. Tidak perlu kartu kredit.
+                Daftar gratis dan mulai gunakan Gym-In hari ini!
             </p>
 
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="{{ route('register') }}" class="btn-primary px-10 py-4 text-[1rem]">
-                    Mulai Gratis →
+                    Gym Sekarang Yuk
                 </a>
                 <a href="{{ route('login') }}" class="btn-outline px-9 py-3 text-[0.9rem]">
                     Sudah Punya Akun
