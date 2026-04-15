@@ -122,7 +122,7 @@
                     LATIHAN<br>LEBIH<br><span class="outline">SMART</span>
                 </h1>
                 <p class="hero-desc">
-                    Cek rame-sepinya gym, atur jadwal latihan, reservasi slot, catat progress sampai jaga streak, semua udah ada di satu tempat buat kamu.
+                    Cek rame atau sepinya gym, atur jadwal latihan, reservasi slot, catat progress sampai jaga streak, semua udah ada di satu tempat buat kamu.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 mb-12">

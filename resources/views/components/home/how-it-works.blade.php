@@ -20,9 +20,9 @@
 
 @php
     $steps = [
-        ['num' => '01', 'title' => 'Daftar Akun',     'desc' => 'Buat akun gratis dengan email atau nomor telepon. Proses cepat, kurang dari 1 menit.'],
-        ['num' => '02', 'title' => 'Atur Profil',      'desc' => 'Isi target kebugaran, jadwal favorit, dan level fitness kamu. Sistem akan menyesuaikan rekomendasi.'],
-        ['num' => '03', 'title' => 'Mulai Latihan',    'desc' => 'Cek kepadatan gym, masuk check-in, dan mulai sesi latihan. Streak kamu langsung tercatat!'],
+        ['num' => '01', 'title' => 'Jadi sobat GYM-in',        'desc' => 'Buat akun gratis cukup dengan scan barcode di resepsionis ya.'],
+        ['num' => '02', 'title' => 'Atur Jadwal Latihan',      'desc' => 'Pilih hari dan jam latihan favorit kamu, kamu juga bisa memilih personal trainer yang cocok buat kamu.'],
+        ['num' => '03', 'title' => 'Mulai Latihan',            'desc' => 'Cek kepadatan gym, masuk check-in, dan letsgo nge-GYM pakai GYM-in!'],
     ];
 @endphp
 
@@ -61,10 +61,8 @@
                     <p class="text-[var(--gym-gray)] text-[0.875rem] leading-[1.65] font-light">
                         {{ $step['desc'] }}
                     </p>
-
                 </div>
             @endforeach
         </div>
-
     </div>
 </section>
