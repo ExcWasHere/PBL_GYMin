@@ -165,44 +165,51 @@
         }
 
         #intro-loader {
-    position: fixed;
-    inset: 0;
-    background: var(--gym-black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    transition: opacity 0.6s ease, visibility 0.6s;
-}
+            position: fixed;
+            inset: 0;
+            background: var(--gym-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
 
-#intro-loader.hide {
-    opacity: 0;
-    visibility: hidden;
-}
+        #intro-loader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-#type-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 0.1em;
-    color: var(--gym-white);
-}
+        #type-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 0.1em;
+            color: var(--gym-white);
+        }
 
-#type-text span {
-    color: var(--gym-red);
-}
+        #type-text span {
+            color: var(--gym-red);
+        }
 
-/* cursor blinking */
-.cursor {
-    display: inline-block;
-    margin-left: 6px;
-    animation: blink 1s infinite;
-    color: var(--gym-red);
-}
+        /* cursor blinking */
+        .cursor {
+            display: inline-block;
+            margin-left: 6px;
+            animation: blink 1s infinite;
+            color: var(--gym-red);
+        }
 
-@keyframes blink {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0; }
-}
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
 
         .loader-overlay {
             position: fixed;
@@ -245,13 +252,61 @@
         .hidden {
             display: none;
         }
+
+        .back-btn {
+            position: absolute;
+            top: 28px;
+            left: 28px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+
+            color: var(--gym-gray);
+            text-decoration: none;
+
+            padding-bottom: 4px;
+        }
+
+        .back-btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: var(--gym-red);
+            transition: width 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--gym-white);
+        }
+
+        .back-btn:hover::after {
+            width: 100%;
+        }
+
+        .back-btn:hover .arrow {
+            transform: translateX(-6px);
+            color: var(--gym-red);
+        }
     </style>
 </head>
 
 <body>
     <div id="intro-loader">
-    <h1 id="type-text"></h1>
-</div>
+        <h1 id="type-text"></h1>
+    </div>
+
+    <a href="/" class="back-btn">
+        <span class="arrow">←</span>
+        <span>Back</span>
+    </a>
 
     <div class="auth-box">
         <div class="auth-logo">GYM<span>-IN</span></div>
@@ -265,41 +320,42 @@
         </div>
     </div>
     <script>
-    const text = "GYM-IN";
-    const typeText = document.getElementById("type-text");
-    const introLoader = document.getElementById("intro-loader");
-    let i = 0;
-    function typeWriter() {
-        if (i < text.length) {
-            if (text.substring(0, i + 1).includes("-IN")) {
-                const before = "GYM";
-                const after = "-IN".substring(0, i + 1 - 3);
-                typeText.innerHTML = before + '<span>' + after + '</span>';
+        const text = "GYM-IN";
+        const typeText = document.getElementById("type-text");
+        const introLoader = document.getElementById("intro-loader");
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                if (text.substring(0, i + 1).includes("-IN")) {
+                    const before = "GYM";
+                    const after = "-IN".substring(0, i + 1 - 3);
+                    typeText.innerHTML = before + '<span>' + after + '</span>';
+                } else {
+                    typeText.innerHTML = text.substring(0, i + 1);
+                }
+
+                i++;
+                setTimeout(typeWriter, 120);
             } else {
-                typeText.innerHTML = text.substring(0, i + 1);
+                typeText.innerHTML += '<span class="cursor">|</span>';
+                setTimeout(() => {
+                    introLoader.classList.add("hide");
+                }, 800);
             }
-
-            i++;
-            setTimeout(typeWriter, 120);
-        } else {
-            typeText.innerHTML += '<span class="cursor">|</span>';
-            setTimeout(() => {
-                introLoader.classList.add("hide");
-            }, 800);
         }
-    }
 
-    window.addEventListener("load", () => {
-        setTimeout(typeWriter, 300);
-    });
-
-    const forms = document.querySelectorAll('form');
-    const submitLoader = document.getElementById('loader');
-    forms.forEach(form => {
-        form.addEventListener('submit', () => {
-            submitLoader.classList.remove('hidden');
+        window.addEventListener("load", () => {
+            setTimeout(typeWriter, 300);
         });
-    });
-</script>
+
+        const forms = document.querySelectorAll('form');
+        const submitLoader = document.getElementById('loader');
+        forms.forEach(form => {
+            form.addEventListener('submit', () => {
+                submitLoader.classList.remove('hidden');
+            });
+        });
+    </script>
 </body>
 </html>

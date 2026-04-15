@@ -1,4 +1,4 @@
-<x-layouts.auth title="Daftar — Gym-In">
+<x-layouts.auth title="Regist | Gym-In">
     <p class="auth-title">Buat Akun Baru</p>
 
     @if ($errors->any())
