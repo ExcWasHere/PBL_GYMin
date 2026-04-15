@@ -1,4 +1,4 @@
-<x-layouts.auth title="Masuk — Gym-In">
+<x-layouts.auth title="Login | Gym-In">
     <p class="auth-title">Masuk ke Akun</p>
 
     @if ($errors->any())

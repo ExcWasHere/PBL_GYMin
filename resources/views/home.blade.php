@@ -1,4 +1,4 @@
-<x-layouts.app title="Gym-In | Pusat Kebugaran Smarter">
+<x-layouts.app title="Gym-In">
 
     <x-home.hero />
 
