@@ -7,42 +7,48 @@
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
 
     <div class="card">
-        <div class="card-title">Tambah / Update Log Harian</div>
-        <form method="POST" action="{{ route('progress.store') }}">
+        <div class="card-title" id="form-title">Tambah / Update Log Harian</div>
+        <form method="POST" action="{{ route('progress.store') }}" id="progress-form">
             @csrf
             <div class="form-group">
                 <label class="form-label">Tanggal</label>
-                <input type="date" name="log_date" class="form-input"
+                <input type="date" name="log_date" id="input-log_date" class="form-input"
                     value="{{ old('log_date', now()->toDateString()) }}" required>
                 @error('log_date') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="form-group">
                     <label class="form-label">Berat Badan (kg)</label>
-                    <input type="number" name="weight_kg" class="form-input" step="0.1" min="1" max="300"
+                    <input type="number" name="weight_kg" id="input-weight_kg" class="form-input" step="0.1" min="1" max="300"
                         value="{{ old('weight_kg') }}" placeholder="e.g. 72.5">
                     @error('weight_kg') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="form-group">
                     <label class="form-label">Massa Otot (kg)</label>
-                    <input type="number" name="muscle_mass_kg" class="form-input" step="0.1" min="1" max="200"
+                    <input type="number" name="muscle_mass_kg" id="input-muscle_mass_kg" class="form-input" step="0.1" min="1" max="200"
                         value="{{ old('muscle_mass_kg') }}" placeholder="e.g. 35.0">
                     @error('muscle_mass_kg') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">% Lemak Tubuh</label>
-                <input type="number" name="body_fat_pct" class="form-input" step="0.1" min="0" max="100"
+                <input type="number" name="body_fat_pct" id="input-body_fat_pct" class="form-input" step="0.1" min="0" max="100"
                     value="{{ old('body_fat_pct') }}" placeholder="e.g. 18.5">
                 @error('body_fat_pct') <div class="form-error">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Catatan Latihan</label>
-                <textarea name="workout_notes" class="form-input" placeholder="3x10 bilang antek-antek asing">{{ old('workout_notes') }}</textarea>
-                @error('workout_notes') 
+                <textarea name="workout_notes" id="input-workout_notes" class="form-input" placeholder="3x10 bilang antek-antek asing">{{ old('workout_notes') }}</textarea>
+                @error('workout_notes')
                 <div class="form-error">{{ $message }}</div> @enderror
             </div>
-            <button type="submit" class="btn-primary">Simpan Log</button>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button type="submit" class="btn-primary" id="submit-btn">Simpan Log</button>
+                <button type="button" id="cancel-edit-btn" onclick="resetForm()"
+                    style="display:none;background:none;border:1px solid var(--gym-border);color:var(--gym-gray);padding:9px 18px;cursor:pointer;font-size:0.8rem;font-family:'DM Sans',sans-serif;">
+                    Batal
+                </button>
+            </div>
         </form>
     </div>
 
@@ -114,11 +120,21 @@
                     <td>{{ $log->body_fat_pct ?? '—' }}</td>
                     <td style="max-width:200px;color:var(--gym-gray)">{{ $log->workout_notes ?? '—' }}</td>
                     <td>
-                        <form method="POST" action="{{ route('progress.destroy', $log) }}"
-                              onsubmit="return confirm('Hapus log ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn-danger">Hapus</button>
-                        </form>
+                        <div style="display:flex;gap:8px;">
+                            <button type="button" class="btn-edit"
+                                onclick="fillForm(
+                                    '{{ $log->log_date->format('Y-m-d') }}',
+                                    '{{ $log->weight_kg }}',
+                                    '{{ $log->muscle_mass_kg }}',
+                                    '{{ $log->body_fat_pct }}',
+                                    {{ json_encode($log->workout_notes) }}
+                                )">Edit</button>
+                            <form method="POST" action="{{ route('progress.destroy', $log) }}"
+                                  onsubmit="return confirm('Hapus log ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn-danger">Hapus</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
@@ -128,6 +144,42 @@
 </div>
 
 @push('scripts')
+<style>
+    .btn-edit {
+        background: transparent;
+        color: #fbbf24;
+        border: 1px solid #fbbf24;
+        font-size: 0.75rem;
+        padding: 5px 12px;
+        cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+        transition: background 0.2s;
+    }
+    .btn-edit:hover { background: rgba(251,191,36,0.1); }
+</style>
+<script>
+    function fillForm(date, weight, muscle, fat, notes) {
+        document.getElementById('input-log_date').value     = date;
+        document.getElementById('input-weight_kg').value    = weight || '';
+        document.getElementById('input-muscle_mass_kg').value = muscle || '';
+        document.getElementById('input-body_fat_pct').value = fat || '';
+        document.getElementById('input-workout_notes').value = notes || '';
+
+        document.getElementById('form-title').textContent   = 'Edit Log — ' + date;
+        document.getElementById('submit-btn').textContent   = 'Update Log';
+        document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+
+        document.getElementById('progress-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetForm() {
+        document.getElementById('progress-form').reset();
+        document.getElementById('input-log_date').value     = '{{ now()->toDateString() }}';
+        document.getElementById('form-title').textContent   = 'Tambah / Update Log Harian';
+        document.getElementById('submit-btn').textContent   = 'Simpan Log';
+        document.getElementById('cancel-edit-btn').style.display = 'none';
+    }
+</script>
 @if($logs->count() > 1)
 <script>
     const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m')));
