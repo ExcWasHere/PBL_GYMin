@@ -58,12 +58,11 @@
 
 @php
     $features = [
-        ['num' => '01', 'icon' => '📊', 'title' => 'Monitor Kepadatan',  'desc' => 'Pantau seberapa ramai gym secara real-time. Pilih waktu terbaik untuk latihan tanpa antri alat.'],
-        ['num' => '02', 'icon' => '📅', 'title' => 'Jadwal Latihan',     'desc' => 'Buat dan atur jadwal latihan mingguan kamu. Dapatkan reminder sebelum sesi dimulai.'],
-        ['num' => '03', 'icon' => '🔥', 'title' => 'Streak & Reward',    'desc' => 'Kumpulkan streak kehadiran dan raih poin reward setiap kali kamu konsisten datang latihan.'],
-        ['num' => '04', 'icon' => '📈', 'title' => 'Progress Tracker',   'desc' => 'Catat berat badan, set, dan rep latihan kamu. Visualisasikan perkembangan dari waktu ke waktu.'],
-        ['num' => '05', 'icon' => '💪', 'title' => 'Program Workout',    'desc' => 'Ikuti program latihan terstruktur yang disesuaikan dengan target dan level kebugaranmu.'],
-        ['num' => '06', 'icon' => '🔔', 'title' => 'Notifikasi Pintar',  'desc' => 'Dapat notifikasi ketika gym mulai sepi — waktu terbaik buat kamu yang suka latihan fokus.'],
+        ['num' => '01', 'icon' => '📊', 'title' => 'Monitor Kepadatan',  'desc' => 'Pantau seberapa ramai gym secara real-time, pilih waktu terbaik untuk latihan tanpa antri alat.'],
+        ['num' => '02', 'icon' => '📅', 'title' => 'Reservasi Latihan',     'desc' => 'Buat dan atur jadwal GYM mingguan kamu, dapatkan reminder sebelum hari H.'],
+        ['num' => '03', 'icon' => '🔥', 'title' => 'Streak & Reward',    'desc' => 'Kumpulkan streak kehadiran dan raih poin reward setiap kali kamu konsisten datang nge-GYM.'],
+        ['num' => '04', 'icon' => '📈', 'title' => 'Progress Tracker',   'desc' => 'Catat berat badan, set, dan rep latihan kamu, visualisasikan perkembangan selama kamu nge-GYM.'],
+        ['num' => '05', 'icon' => '💪', 'title' => 'Personal Trainer',    'desc' => 'Pilih program latihan terstruktur dan Personal Trainer secara langsung.'],
     ];
 @endphp
 
