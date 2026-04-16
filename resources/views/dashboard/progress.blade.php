@@ -182,7 +182,7 @@
 </script>
 @if($logs->count() > 1)
 <script>
-    const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m')));
+    const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m/y')));
     const weights = @json($logs->pluck('weight_kg'));
     const muscles = @json($logs->pluck('muscle_mass_kg'));
     const fats    = @json($logs->pluck('body_fat_pct'));
