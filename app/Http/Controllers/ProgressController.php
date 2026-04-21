@@ -16,7 +16,7 @@ class ProgressController extends Controller
         $user = Auth::user();
         $logs = $user->progressLogs()->orderBy('log_date', 'asc')->get();
 
-        return view('dashboard.progress', compact('logs'));
+        return view('components.dashboard.progress', compact('logs'));
     }
 
     public function store(Request $request)

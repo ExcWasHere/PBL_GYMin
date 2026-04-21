@@ -9,7 +9,7 @@ class GymDensityController extends Controller
     private int $maxCapacity = 80;
     public function index()
     {
-        return view('dashboard.gym-density', [
+        return view('components.dashboard.gym-density', [
             'activeVisitors' => 47,
             'maxCapacity'    => $this->maxCapacity,
             'hourlyStats'    => $this->getHourlyStats(),
