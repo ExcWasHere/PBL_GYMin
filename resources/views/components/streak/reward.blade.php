@@ -1,4 +1,4 @@
-<x-layout title="Rewards">
+<x-layouts.dashboard title="Rewards">
     @push('styles')
     <style>
         /* ── Point Banner ── */
@@ -424,7 +424,7 @@
         <div class="streak-pill">
             <div>
                 <div class="streak-num">{{ $userStreak }}</div>
-                <div class="streak-text">Hari<br>Berturut</div>
+                <div class="streak-text">Hari</div>
             </div>
             <svg width="28" height="28" fill="none" stroke="#E8292A" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -661,4 +661,4 @@
         @endif
     </script>
     @endpush
-</x-layout>
+</x-layouts.dashboard>
