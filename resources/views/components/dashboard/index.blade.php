@@ -24,8 +24,8 @@
         <div class="card-title">Quick Menu</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
             <a href="{{ route('gym.density') }}" class="btn-primary" style="text-decoration:none;">Density GYM</a>
-            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">fitur dilo</a>
-            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">fitur keenan</a>
+            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Rewards</a>
+            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Reservation</a>
             <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Progress Tracker</a>
         </div>
     </div>
