@@ -38,7 +38,7 @@
                     TAU KAPAN<br><span style="color:var(--gym-red);">GYM SEPI</span>
                 </h2>
                 <p style="color:var(--gym-gray);font-size:0.95rem;line-height:1.75;font-weight:300;margin-bottom:2rem;">
-                    Ga perlu datang ke gym cuma buat kena php, ternyata semua alat lagi dipakai. Pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
+                    Udah dateng ke Gym tapi kena PHP?, mau pakek alat tapi udah kepakek semua?. Tenang fitur crowd monitor dari GYM-in siap bantu kamu, pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
                 </p>
                 <ul style="display:flex;flex-direction:column;gap:12px;">
                     @foreach($benefits as $item)

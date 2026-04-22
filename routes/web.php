@@ -36,11 +36,11 @@ Route::middleware('auth')->group(function () {
         ->prefix('owner')
         ->name('owner.')
         ->group(function () {
-            Route::get('/dashboard', fn() => view('dashboard.owner'))->name('dashboard');
+            Route::get('/dashboard', fn() => view('components.dashboard.owner'))->name('dashboard');
     });
 
     Route::middleware('role:receptionist')->prefix('receptionist')->name('receptionist.')->group(function () {
-        Route::get('/dashboard', fn() => view('dashboard.receptionist'))->name('dashboard');
+        Route::get('/dashboard', fn() => view('components.dashboard.receptionist'))->name('dashboard');
     });
 
     Route::middleware('role:member')
