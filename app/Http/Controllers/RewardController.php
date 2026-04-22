@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-
 class RewardController extends Controller
 {
     public function index()
     {
-        // 🔥 Dummy user data
         $userPoints = 1200;
         $userStreak = 7;
-
-        // 🎁 Dummy rewards
         $rewards = collect([
             (object)[
                 'id' => 1,
@@ -53,7 +47,6 @@ class RewardController extends Controller
             ],
         ]);
 
-        // 📜 Dummy history
         $redemptionHistory = collect([
             (object)[
                 'reward' => (object)['name' => 'Gym Gloves'],
@@ -79,10 +72,7 @@ class RewardController extends Controller
 
     public function redeem($id)
     {
-        // 🔥 Dummy user points
         $userPoints = 1200;
-
-        // 🎁 Dummy rewards (HARUS sama kayak index biar konsisten)
         $rewards = collect([
             (object)['id'=>1,'name'=>'Whey Protein 1kg','point_cost'=>800],
             (object)['id'=>2,'name'=>'Gym Gloves','point_cost'=>400],
@@ -100,7 +90,6 @@ class RewardController extends Controller
             return redirect()->back()->with('error', 'Poin kamu tidak cukup');
         }
 
-        // 💡 Simulasi potong poin (dummy)
         $remainingPoints = $userPoints - $reward->point_cost;
 
         return redirect()->back()->with('success', 
