@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach($accounts as $account) {
-            User::firstOrCreate(['email' => $account['email']], $account);
+            User::firstOrCreate(
+                ['email' => $account['email']], $account
+            );
         }
 
         $this->call([

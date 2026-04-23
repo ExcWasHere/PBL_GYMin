@@ -24,7 +24,7 @@ class ProgressLogSeeder extends Seeder
             ['log_date' => '2026-04-05', 'weight_kg' => 81.80, 'muscle_mass_kg' => 39.00, 'body_fat_pct' => 25.00, 'workout_notes' => 'Sebat rokok Marlboro 3x8'],
             ['log_date' => '2026-04-06', 'weight_kg' => 79.20, 'muscle_mass_kg' => 40.30, 'body_fat_pct' => 19.50, 'workout_notes' => 'Ngehujat pemerintah 2x9'],
             ['log_date' => '2026-04-07', 'weight_kg' => 76.50, 'muscle_mass_kg' => 37.80, 'body_fat_pct' => 17.00, 'workout_notes' => 'Makan MBG 2x8'],
-            ['log_date' => '2026-04-08', 'weight_kg' => 74.50, 'muscle_mass_kg' => 39.80, 'body_fat_pct' => 12.00, 'workout_notes' => 'Main Roblox 30 menit 2x8'],
+            ['log_date' => '2026-04-08', 'weight_kg' => 74.50, 'muscle_mass_kg' => 40.80, 'body_fat_pct' => 12.00, 'workout_notes' => 'Main Roblox 30 menit 2x8'],
         ];
 
         foreach ($logs as $log) {
