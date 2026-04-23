@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\RewardSeeder;
+use Database\Seeders\ProgressLogSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,5 +42,10 @@ class DatabaseSeeder extends Seeder
         foreach($accounts as $account) {
             User::firstOrCreate(['email' => $account['email']], $account);
         }
+
+        $this->call([
+            RewardSeeder::class,
+            ProgressLogSeeder::class,
+        ]);
     }
 }
