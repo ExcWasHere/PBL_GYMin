@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('point_cost');
             $table->string('category'); // suplemen, aksesoris, diskon, merchandise
-            $table->string('image')->nullable(); // nanti ini string buat path gambarnya bro Dilo
+            $table->string('image')->nullable(); // nanti ini string buat path gambarnya pkai string bro Dilo (cek RewardSeeder)
+            // path img = public/images/rewards/
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_active')->default(true);
             $table->integer('stock')->default(0);
