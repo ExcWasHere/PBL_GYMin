@@ -456,7 +456,7 @@
 
             <div class="reward-img">
                 @if($reward->image)
-                    <img src="{{ asset('storage/' . $reward->image) }}" alt="{{ $reward->name }}" loading="lazy">
+                    <img src="{{ asset($reward->image) }}" alt="{{ $reward->name }}" loading="lazy">
                 @else
                     <svg class="reward-icon-fallback" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="48" height="48">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
