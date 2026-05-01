@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\GymDensityController;
 use App\Http\Controllers\RewardController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -49,11 +50,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/dashboard/progress', [ProgressController::class, 'store'])->name('progress.store');
             Route::delete('/dashboard/progress/{progressLog}', [ProgressController::class, 'destroy'])->name('progress.destroy');
             Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
-            // FITUR : RESERVASI
-            // SEMENTARA
-            Route::get('/reservasi', fn() => view('dashboard.reservasi'))->name('reservasi');
             Route::get('/dashboard/rewards', [RewardController::class, 'index'])->name('rewards.index');
             Route::post('/dashboard/rewards/{id}/redeem', [RewardController::class, 'redeem'])->name('rewards.redeem');
+            Route::get('/reservasi', [ReservationController::class, 'index'])->name('reservasi');
+            Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+            Route::delete('/reservasi/{id}', [ReservationController::class, 'destroy'])->name('reservasi.destroy');
+            Route::get('/reservasi/slots', [ReservationController::class, 'slots'])->name('reservasi.slots');
+            Route::post('/reservasi/chat', [ReservationController::class, 'sendChat'])->name('reservasi.chat.send');
+            Route::get('/reservasi/chat', [ReservationController::class, 'getChat'])->name('reservasi.chat.get');
             // FITUR LAIN^2
     });
 
