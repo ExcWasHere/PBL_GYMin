@@ -37,11 +37,7 @@
             letter-spacing: 0.05em;
         }
 
-        .point-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .point-meta { display: flex; flex-direction: column; gap: 4px; }
 
         .point-label {
             font-size: 0.72rem;
@@ -57,10 +53,9 @@
             letter-spacing: 0.04em;
         }
 
-        .point-value span {
-            color: var(--gym-red);
-        }
+        .point-value span { color: var(--gym-red); }
 
+        /* Streak pill */
         .streak-pill {
             display: flex;
             align-items: center;
@@ -84,6 +79,40 @@
             color: var(--gym-light);
             line-height: 1.4;
         }
+
+        /* Streak mini progress */
+        .streak-milestones {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .milestone-dot {
+            width: 28px;
+            height: 5px;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            position: relative;
+        }
+
+        .milestone-dot.reached {
+            background: var(--gym-red);
+            border-color: var(--gym-red);
+        }
+
+        .milestone-dot .dot-label {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            color: #444;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .milestone-dot.reached .dot-label { color: var(--gym-red); }
 
         /* ── Filter bar ── */
         .filter-bar {
@@ -132,18 +161,10 @@
             overflow: hidden;
         }
 
-        .reward-card:hover {
-            border-color: #333;
-            transform: translateY(-2px);
-        }
+        .reward-card:hover { border-color: #333; transform: translateY(-2px); }
+        .reward-card.insufficient { opacity: 0.55; }
 
-        .reward-card.insufficient {
-            opacity: 0.55;
-        }
-
-        .reward-card.featured {
-            border-color: rgba(232,41,42,0.4);
-        }
+        .reward-card.featured { border-color: rgba(232,41,42,0.4); }
 
         .reward-card.featured::before {
             content: 'HOT';
@@ -166,20 +187,9 @@
             justify-content: center;
             border-bottom: 1px solid var(--gym-border);
             overflow: hidden;
-            position: relative;
         }
 
-        .reward-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .reward-img .reward-icon-fallback {
-            font-size: 3rem;
-            opacity: 0.15;
-        }
+        .reward-img img { width: 100%; height: 100%; object-fit: cover; }
 
         .reward-body {
             padding: 18px 20px;
@@ -219,15 +229,10 @@
             border-top: 1px solid var(--gym-border);
         }
 
-        .reward-cost {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .reward-cost { display: flex; align-items: center; gap: 6px; }
 
-        .reward-cost .cost-icon {
-            width: 16px;
-            height: 16px;
+        .cost-icon {
+            width: 16px; height: 16px;
             background: var(--gym-red);
             border-radius: 50%;
             display: flex;
@@ -236,20 +241,16 @@
             flex-shrink: 0;
         }
 
-        .reward-cost .cost-icon svg {
-            width: 9px;
-            height: 9px;
-            color: white;
-        }
+        .cost-icon svg { width: 9px; height: 9px; color: white; }
 
-        .reward-cost .cost-num {
+        .cost-num {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.25rem;
             letter-spacing: 0.04em;
             line-height: 1;
         }
 
-        .reward-cost .cost-unit {
+        .cost-unit {
             font-size: 0.68rem;
             color: var(--gym-gray);
             text-transform: uppercase;
@@ -273,8 +274,7 @@
 
         .btn-redeem:hover { background: #c0392b; }
 
-        .btn-redeem:disabled,
-        .btn-redeem[disabled] {
+        .btn-redeem:disabled {
             background: #333;
             color: var(--gym-gray);
             cursor: not-allowed;
@@ -309,9 +309,7 @@
             padding: 24px;
         }
 
-        .modal-overlay.show {
-            display: flex;
-        }
+        .modal-overlay.show { display: flex; }
 
         .modal-box {
             background: var(--gym-dark);
@@ -328,11 +326,7 @@
             margin-bottom: 4px;
         }
 
-        .modal-sub {
-            font-size: 0.8rem;
-            color: var(--gym-gray);
-            margin-bottom: 24px;
-        }
+        .modal-sub { font-size: 0.8rem; color: var(--gym-gray); margin-bottom: 24px; }
 
         .modal-detail-row {
             display: flex;
@@ -344,15 +338,10 @@
         }
 
         .modal-detail-row:last-of-type { border-bottom: none; }
-
         .modal-detail-row span:first-child { color: var(--gym-gray); }
         .modal-detail-row span:last-child  { font-weight: 600; }
 
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
 
         .btn-cancel {
             flex: 1;
@@ -366,20 +355,14 @@
             transition: all 0.2s;
         }
 
-        .btn-cancel:hover {
-            border-color: var(--gym-gray);
-            color: var(--gym-white);
-        }
+        .btn-cancel:hover { border-color: var(--gym-gray); color: var(--gym-white); }
 
-        .btn-confirm {
-            flex: 2;
-        }
+        .btn-confirm { flex: 2; }
 
         /* ── Toast ── */
         .toast {
             position: fixed;
-            bottom: 28px;
-            right: 28px;
+            bottom: 28px; right: 28px;
             background: var(--gym-card);
             border: 1px solid var(--gym-border);
             border-left: 3px solid var(--gym-red);
@@ -392,11 +375,7 @@
             min-width: 260px;
         }
 
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
+        .toast.show    { transform: translateY(0); opacity: 1; }
         .toast.success { border-left-color: #4ade80; }
         .toast.error   { border-left-color: #f87171; }
 
@@ -415,16 +394,31 @@
         <div class="point-meta">
             <span class="point-label">Total Poinmu</span>
             <div class="point-value">
-                <span>{{ number_format($userPoints) }}</span> pts
+                <span>{{ number_format($user->points) }}</span> pts
             </div>
             <span style="font-size:0.78rem;color:var(--gym-gray);margin-top:4px">
-                Kumpulkan poin dari streak harian & kunjungan gym
+                Login tiap hari untuk streak bonus • Tukar poin dengan hadiah eksklusif
             </span>
+
+            {{-- Milestone progress bar --}}
+            @php
+                $milestones = [3, 7, 14, 30, 60, 90];
+                $streak     = $user->streak_days;
+            @endphp
+            <div class="streak-milestones" style="margin-top:14px;">
+                @foreach($milestones as $m)
+                    <div class="milestone-dot {{ $streak >= $m ? 'reached' : '' }}">
+                        <span class="dot-label">{{ $m }}d</span>
+                    </div>
+                @endforeach
+                <span style="font-size:0.65rem;color:#444;margin-left:4px;margin-top:-2px;">streak</span>
+            </div>
         </div>
+
         <div class="streak-pill">
             <div>
-                <div class="streak-num">{{ $userStreak }}</div>
-                <div class="streak-text">Hari</div>
+                <div class="streak-num">{{ $user->streak_days }}</div>
+                <div class="streak-text">Hari<br>Streak</div>
             </div>
             <svg width="28" height="28" fill="none" stroke="#E8292A" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -446,11 +440,8 @@
 
     {{-- ── REWARD GRID ── --}}
     <div class="reward-grid" id="rewardGrid">
-
         @forelse ($rewards as $reward)
-        @php
-            $canRedeem = $userPoints >= $reward->point_cost;
-        @endphp
+        @php $canRedeem = $user->points >= $reward->point_cost; @endphp
         <div class="reward-card {{ $reward->is_featured ? 'featured' : '' }} {{ !$canRedeem ? 'insufficient' : '' }}"
              data-category="{{ $reward->category }}">
 
@@ -458,7 +449,7 @@
                 @if($reward->image)
                     <img src="{{ asset($reward->image) }}" alt="{{ $reward->name }}" loading="lazy">
                 @else
-                    <svg class="reward-icon-fallback" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="48" height="48">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="48" height="48" style="opacity:.15">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                             d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
                     </svg>
@@ -486,23 +477,18 @@
                 </div>
 
                 <button
-                    class="btn-redeem btn-primary"
+                    class="btn-redeem"
                     {{ !$canRedeem ? 'disabled' : '' }}
-                    onclick="openModal({{ $reward->id }}, '{{ addslashes($reward->name) }}', {{ $reward->point_cost }}, {{ $userPoints }})">
+                    onclick="openModal({{ $reward->id }}, '{{ addslashes($reward->name) }}', {{ $reward->point_cost }}, {{ $user->points }})">
                     {{ $canRedeem ? 'Tukar' : 'Kurang Poin' }}
                 </button>
             </div>
         </div>
         @empty
         <div style="grid-column: 1/-1; padding: 48px 0; text-align: center; color: var(--gym-gray);">
-            <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin: 0 auto 12px; display: block; opacity: 0.3">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-            </svg>
             <p style="font-size:0.85rem">Belum ada hadiah tersedia saat ini.</p>
         </div>
         @endforelse
-
     </div>
 
     {{-- ── RIWAYAT PENUKARAN ── --}}
@@ -522,35 +508,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($redemptionHistory as $history)
+                    @foreach ($redemptionHistory as $h)
                     <tr>
-                        <td style="color: var(--gym-white); font-weight: 500;">{{ $history->reward->name ?? '-' }}</td>
-                        <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.04em;">
-                            {{ number_format($history->points_spent) }} pts
+                        <td style="color: var(--gym-white); font-weight: 500;">{{ $h->reward_name }}</td>
+                        <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;">
+                            {{ number_format($h->points_spent) }} pts
                         </td>
                         <td style="color: var(--gym-gray); font-size: 0.8rem;">
-                            {{ $history->created_at->format('d M Y') }}
+                            {{ $h->created_at->format('d M Y') }}
                         </td>
                         <td>
-                            @php
-                                $statusColor = match($history->status) {
-                                    'success'  => '#4ade80',
-                                    'pending'  => '#facc15',
-                                    'rejected' => '#f87171',
-                                    default    => 'var(--gym-gray)',
-                                };
-                            @endphp
                             <span style="
-                                font-size: 0.7rem;
-                                font-weight: 700;
-                                letter-spacing: 0.1em;
-                                text-transform: uppercase;
-                                color: {{ $statusColor }};
-                                background: {{ $statusColor }}18;
-                                border: 1px solid {{ $statusColor }}44;
-                                padding: 3px 10px;
-                            ">
-                                {{ ucfirst($history->status) }}
+                                font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+                                text-transform: uppercase; color: #4ade80;
+                                background: #4ade8018; border: 1px solid #4ade8044; padding: 3px 10px;">
+                                Success
                             </span>
                         </td>
                     </tr>
@@ -561,12 +533,45 @@
     </div>
     @endif
 
+    {{-- ── RIWAYAT POIN ── --}}
+    @if($pointHistory->count())
+    <div style="margin-top: 32px;">
+        <div class="section-header">
+            <span class="section-title">Riwayat Poin</span>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Keterangan</th>
+                        <th>Poin</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($pointHistory as $log)
+                    <tr>
+                        <td style="color: var(--gym-light);">{{ $log->description }}</td>
+                        <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+                                   color: {{ $log->points > 0 ? '#4ade80' : '#f87171' }};">
+                            {{ $log->points > 0 ? '+' : '' }}{{ number_format($log->points) }} pts
+                        </td>
+                        <td style="color: var(--gym-gray); font-size: 0.8rem;">
+                            {{ $log->created_at->format('d M Y, H:i') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
 
     {{-- ── CONFIRM MODAL ── --}}
     <div class="modal-overlay" id="redeemModal">
         <div class="modal-box">
             <div class="modal-title">Konfirmasi Penukaran</div>
-            <div class="modal-sub">Pastikan kamu yakin — penukaran tidak dapat dibatalkan.</div>
+            <div class="modal-sub">Penukaran tidak dapat dibatalkan setelah dikonfirmasi.</div>
 
             <div class="modal-detail-row">
                 <span>Hadiah</span>
@@ -589,7 +594,7 @@
                 <button class="btn-cancel" onclick="closeModal()">Batal</button>
                 <form id="redeemForm" method="POST" action="" style="flex:2">
                     @csrf
-                    <button type="submit" class="btn-primary btn-redeem btn-confirm" style="width:100%">
+                    <button type="submit" class="btn-primary btn-redeem btn-confirm" style="width:100%;clip-path:none;">
                         Ya, Tukar Sekarang
                     </button>
                 </form>
@@ -610,38 +615,32 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
                 const filter = btn.dataset.filter;
                 document.querySelectorAll('.reward-card').forEach(card => {
-                    const match = filter === 'all' || card.dataset.category === filter;
-                    card.style.display = match ? '' : 'none';
+                    card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
                 });
             });
         });
 
         // ── Modal
-        let activeRewardId = null;
-
         function openModal(rewardId, rewardName, cost, userPoints) {
-            activeRewardId = rewardId;
-            document.getElementById('modalRewardName').textContent = rewardName;
+            document.getElementById('modalRewardName').textContent  = rewardName;
             document.getElementById('modalCost').textContent        = cost.toLocaleString('id-ID') + ' poin';
             document.getElementById('modalUserPoints').textContent  = userPoints.toLocaleString('id-ID') + ' poin';
             document.getElementById('modalRemaining').textContent   = (userPoints - cost).toLocaleString('id-ID') + ' poin';
-            document.getElementById('redeemForm').action = `/hadiah/${rewardId}/redeem`;
+            document.getElementById('redeemForm').action            = `/dashboard/rewards/${rewardId}/redeem`;
             document.getElementById('redeemModal').classList.add('show');
         }
 
         function closeModal() {
             document.getElementById('redeemModal').classList.remove('show');
-            activeRewardId = null;
         }
 
         document.getElementById('redeemModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
 
-        // ── Toast helper
+        // ── Toast
         function showToast(title, msg, type = '') {
             const toast = document.getElementById('toast');
             document.getElementById('toastTitle').textContent = title;
@@ -652,7 +651,6 @@
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
 
-        // ── Flash message (from session) → toast
         @if (session('success'))
             showToast('Berhasil!', @json(session('success')), 'success');
         @endif

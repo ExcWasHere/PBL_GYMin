@@ -3,38 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reward;
+use App\Models\PointLog;
+use App\Services\StreakService;
+use Illuminate\Support\Facades\Auth;
 
 class RewardController extends Controller
 {
     public function index()
     {
-        $userPoints = 1200;
-        $userStreak = 7;
+        $user       = Auth::user();
+        $rewards    = Reward::where('is_active', true)->orderByDesc('is_featured')->get();
 
-        $rewards = Reward::where('is_active', true)->orderByDesc('is_featured')->get();
-        $redemptionHistory = collect(); // blom ada tabel redemptions
+        $redemptionHistory = PointLog::where('user_id', $user->id)
+            ->where('type', 'redeem')
+            ->with('user')  // jika perlu
+            ->latest()
+            ->get()
+            ->map(function ($log) {
+                // Coba ambil nama reward dari description
+                $log->reward_name = $log->description;
+                $log->points_spent = abs($log->points);
+                $log->status = 'success';
+                return $log;
+            });
+
+        // Point logs untuk history semua tipe
+        $pointHistory = PointLog::where('user_id', $user->id)
+            ->latest()
+            ->take(20)
+            ->get();
 
         return view('components.streak.reward', compact(
-            'userPoints',
-            'userStreak',
+            'user',
             'rewards',
-            'redemptionHistory'
+            'redemptionHistory',
+            'pointHistory',
         ));
     }
 
-    public function redeem($id)
+    public function redeem($id, StreakService $streakService)
     {
-        $userPoints = 1200;
+        $user = \App\Models\User::find(Auth::id());
         $reward = Reward::findOrFail($id);
 
-        if ($userPoints < $reward->point_cost) {
-            return redirect()->back()->with('error', 'Poin kamu tidak cukup');
+        $success = $streakService->deductPoints(
+            $user,
+            $reward->point_cost,
+            "Penukaran: {$reward->name}"
+        );
+
+        if (!$success) {
+            return redirect()->back()->with('error', 'Poin kamu tidak cukup untuk menukar hadiah ini.');
         }
 
-        $remainingPoints = $userPoints - $reward->point_cost;
-
-        return redirect()->back()->with('success',
-            "Berhasil menukar {$reward->name}! Sisa poin: {$remainingPoints}"
+        return redirect()->back()->with(
+            'success',
+            "🎉 Berhasil menukar {$reward->name}! Sisa poin: " . number_format($user->fresh()->points)
         );
     }
 }
