@@ -53,6 +53,7 @@
                     grid-template-columns: 1fr;
                 }
             }
+
             .slot-grid {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
@@ -204,6 +205,7 @@
                     transform: scale(1.4);
                 }
             }
+
             .history-item {
                 display: flex;
                 align-items: center;
@@ -457,9 +459,11 @@
                 font-size: 0.88rem;
                 outline: none;
             }
+
             .chat-input::placeholder {
                 color: var(--gym-gray);
             }
+
             .chat-send {
                 padding: 0 20px;
                 background: var(--gym-red);
@@ -473,9 +477,11 @@
                 text-transform: uppercase;
                 transition: background 0.2s;
             }
+
             .chat-send:hover {
                 background: #c0392b;
             }
+
             .modal-overlay {
                 display: none;
                 position: fixed;
@@ -740,6 +746,7 @@
     </div>
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
         <script>
             function switchTab(t) {
                 document.querySelectorAll('.res-panel').forEach(p => p.classList.remove('active'));
@@ -827,6 +834,7 @@
         </div>
     `;
             }
+
             function openConfirm() {
                 if (selectedSlot === null) {
                     alert('Pilih sesi terlebih dahulu!');
@@ -838,9 +846,11 @@
                 document.getElementById('cfSlot').textContent = `${s.label} – ${s.end}`;
                 document.getElementById('confirmModal').classList.add('open');
             }
+
             function closeConfirm() {
                 document.getElementById('confirmModal').classList.remove('open');
             }
+
             function doReserve() {
                 closeConfirm();
                 const code = 'GYM-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(1000 + Math
@@ -856,42 +866,21 @@
                 document.getElementById('ticketMeta').innerHTML =
                     `${d}<br>Sesi: ${s.label} – ${s.end}<br>Member: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>`;
             }
+
             function drawQR(text) {
                 const canvas = document.getElementById('qrCanvas');
                 if (!canvas) return;
-                const ctx = canvas.getContext('2d');
-                const size = 156;
-                const cell = 6;
-                const cols = Math.floor(size / cell);
-                ctx.clearRect(0, 0, size, size);
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, size, size);
-                let seed = 0;
-                for (let c of text) seed = (seed * 31 + c.charCodeAt(0)) & 0xffff;
-                function rand() {
-                    seed = (seed * 1664525 + 1013904223) & 0xffffffff;
-                    return (seed >>> 16) / 65536;
-                }
-                ctx.fillStyle = '#000000';
-                for (let r = 0; r < cols; r++) {
-                    for (let c = 0; c < cols; c++) {
-                        if (rand() > 0.5) {
-                            ctx.fillRect(c * cell, r * cell, cell, cell);
-                        }
-                    }
-                }
-                const drawFinder = (x, y) => {
-                    ctx.fillStyle = '#000';
-                    ctx.fillRect(x, y, cell * 7, cell * 7);
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(x + cell, y + cell, cell * 5, cell * 5);
-                    ctx.fillStyle = '#000';
-                    ctx.fillRect(x + cell * 2, y + cell * 2, cell * 3, cell * 3);
-                };
-                drawFinder(0, 0);
-                drawFinder(size - cell * 7, 0);
-                drawFinder(0, size - cell * 7);
+                new QRious({
+                    element: canvas,
+                    value: text,
+                    size: 156,
+                    level: 'M',
+                    background: '#ffffff',
+                    foreground: '#000000',
+                    padding: 6,
+                });
             }
+
             function refreshQR() {
                 const code = document.getElementById('ticketCode').textContent.trim();
                 drawQR(code);
@@ -939,6 +928,7 @@
         </div>`;
                 wrap.scrollTop = wrap.scrollHeight;
             }
+
             function selectContact(el, name) {
                 document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
                 el.classList.add('active');

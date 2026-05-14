@@ -321,6 +321,7 @@
             gap: 8px;
             transition: border-color 0.2s, color 0.2s, background 0.2s;
         }
+
         .btn-logout:hover {
             border-color: var(--gym-red);
             color: var(--gym-red);
@@ -362,12 +363,20 @@
                 </a>
             @elseif($role === 'receptionist')
                 <a href="{{ route('receptionist.dashboard') }}"
-                    class="nav-item {{ request()->routeIs('receptionist.*') ? 'active' : '' }}">
+                    class="nav-item {{ request()->routeIs('receptionist.dashboard') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Beranda
+                </a>
+                <a href="{{ route('receptionist.reservation.scan') }}"
+                    class="nav-item {{ request()->routeIs('receptionist.reservation.*') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4H7a3 3 0 00-3 3v1m0 6v1a3 3 0 003 3h1m6 0h1a3 3 0 003-3v-1m0-6V7a3 3 0 00-3-3h-1
+                   M9 9h1v1H9V9zm5 0h1v1h-1V9zm-5 5h1v1H9v-1zm5 0h1v1h-1v-1z" />
+                    </svg>
+                    Scan Reservasi
                 </a>
             @else
                 <a href="{{ route('dashboard') }}"
@@ -386,11 +395,12 @@
                     </svg>
                     Progress Tracker
                 </a>
-                
+
                 <a href="{{ route('gym.density') }}"
                     class="nav-item {{ request()->routeIs('gym.density') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.5 8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1m0-8v8m0-8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1M17.5 8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1m0-8v8m0-8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1 M8.5 12h7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M6.5 8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1m0-8v8m0-8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1M17.5 8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1m0-8v8m0-8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1 M8.5 12h7" />
                     </svg>
                     Density Gym
                 </a>
@@ -398,7 +408,7 @@
                     class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     Reservation
                 </a>
@@ -406,7 +416,7 @@
                     class="nav-item {{ request()->routeIs('rewards.index') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                     </svg>
                     Rewards
                 </a>
@@ -420,7 +430,7 @@
                 <button type="submit" class="btn-logout">
                     <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
                     </svg>
                     Keluar
                 </button>
