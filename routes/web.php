@@ -9,6 +9,7 @@ use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StreakLeaderboardController;
 
 Route::get('/', fn() => view('home'))->name('home');
 
