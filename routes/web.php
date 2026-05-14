@@ -42,6 +42,9 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:receptionist')->prefix('receptionist')->name('receptionist.')->group(function () {
         Route::get('/dashboard', fn() => view('components.dashboard.receptionist'))->name('dashboard');
+            Route::get('/reservasi/scan',    [ReservationController::class, 'scanPage'])->name('reservation.scan');
+            Route::get('/reservasi/lookup',  [ReservationController::class, 'lookup'])->name('reservation.lookup');
+            Route::post('/reservasi/confirm',[ReservationController::class, 'confirm'])->name('reservation.confirm');
     });
 
     Route::middleware('role:member')
