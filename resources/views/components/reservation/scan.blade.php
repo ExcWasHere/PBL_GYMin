@@ -11,7 +11,6 @@
                 .scan-grid { grid-template-columns: 1fr; }
             }
 
-            /* ── Scanner Box ── */
             .scanner-card {
                 background: var(--gym-card);
                 border: 1px solid var(--gym-border);
@@ -97,7 +96,6 @@
                 letter-spacing: 0.04em;
             }
 
-            /* ── Manual input ── */
             .manual-divider {
                 display: flex;
                 align-items: center;
@@ -156,7 +154,6 @@
                 color: var(--gym-white);
             }
 
-            /* ── Result card ── */
             .result-card {
                 background: var(--gym-card);
                 border: 1px solid var(--gym-border);
@@ -272,7 +269,6 @@
                 flex-wrap: wrap;
             }
 
-            /* ── Today log ── */
             .log-card {
                 background: var(--gym-card);
                 border: 1px solid var(--gym-border);
@@ -304,7 +300,6 @@
                 letter-spacing: 0.06em;
             }
 
-            /* Alert */
             .scan-alert {
                 display: none;
                 padding: 12px 16px;
@@ -379,7 +374,6 @@
                 </div>
             </div>
 
-            {{-- Today's log --}}
             <div class="log-card">
                 <div class="card-title">Log Hari Ini</div>
                 <div id="logList">
@@ -405,9 +399,7 @@
             </div>
         </div>
 
-        {{-- RIGHT: Result --}}
         <div>
-            {{-- Placeholder when nothing scanned --}}
             <div id="resultPlaceholder" class="card" style="text-align:center;padding:60px 28px;">
                 <svg width="56" height="56" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     style="color:var(--gym-gray);margin:0 auto 16px;">
@@ -417,8 +409,6 @@
                 </svg>
                 <p style="font-size:0.83rem;color:var(--gym-gray);">Scan atau masukkan kode reservasi<br>untuk melihat detail member.</p>
             </div>
-
-            {{-- Result detail --}}
             <div class="result-card" id="resultCard">
                 <div class="result-header">
                     <div class="result-avatar" id="resAvatar">--</div>
@@ -466,14 +456,11 @@
     </div>
 
     @push('scripts')
-    {{-- jsQR for QR decoding from camera --}}
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script>
         let stream = null;
         let scanLoop = null;
         let currentCode = null;
-
-        /* ── Camera ── */
         async function startCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
@@ -525,15 +512,12 @@
                 }
             }, 250);
         }
-
-        /* ── Manual lookup ── */
         function lookupCode() {
             const code = document.getElementById('manualCode').value.trim().toUpperCase();
             if (!code) { showAlert('Masukkan kode reservasi terlebih dahulu.', 'error'); return; }
             processCode(code);
         }
 
-        /* ── Process code (AJAX ke backend) ── */
         function processCode(code) {
             currentCode = code;
             fetch(`{{ route('receptionist.reservation.lookup') }}?code=${encodeURIComponent(code)}`, {
@@ -548,7 +532,6 @@
                 }
             })
             .catch(() => {
-                /* --- Fallback dummy saat development --- */
                 if (code.startsWith('GYM-')) {
                     renderResult({
                         code:    code,
@@ -564,8 +547,6 @@
                 }
             });
         }
-
-        /* ── Render hasil ── */
         function renderResult(res) {
             document.getElementById('resultPlaceholder').style.display = 'none';
             const card = document.getElementById('resultCard');
@@ -598,8 +579,6 @@
 
             hideAlert();
         }
-
-        /* ── Konfirmasi masuk ── */
         function confirmEntry() {
             if (!currentCode) return;
             fetch('{{ route("receptionist.reservation.confirm") }}', {
@@ -625,7 +604,6 @@
                 }
             })
             .catch(() => {
-                /* Fallback dev */
                 document.getElementById('resStatus').innerHTML =
                     '<span class="status-badge confirmed">✓ Terkonfirmasi</span>';
                 document.getElementById('btnConfirm').style.display = 'none';

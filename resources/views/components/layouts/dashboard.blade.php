@@ -444,6 +444,7 @@
             <span style="font-size:0.8rem;color:var(--gym-gray)">Halo kink {{ Auth::user()->name }}</span>
         </header>
         <div class="page-body">
+            @include('components.streak.popup')
             {{ $slot }}
         </div>
     </div>

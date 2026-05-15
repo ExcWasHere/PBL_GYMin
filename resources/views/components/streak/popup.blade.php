@@ -1,6 +1,7 @@
 @if(session('streak_popup'))
 @php
     $s = session('streak_popup');
+    session()->forget('streak_popup');
     $isMilestone = $s['is_milestone'] ?? false;
     $isReset     = $s['is_reset'] ?? false;
     $streak      = $s['streak'] ?? 1;
@@ -11,20 +12,12 @@
 
 <div class="streak-overlay" id="streakOverlay">
     <div class="streak-modal {{ $isMilestone ? 'is-milestone' : '' }} {{ $isReset ? 'is-reset' : '' }}" id="streakModal">
-
-        {{-- Scanline overlay --}}
         <div class="scanline"></div>
-
-        {{-- Corner decorations --}}
         <div class="corner corner-tl"></div>
         <div class="corner corner-tr"></div>
         <div class="corner corner-bl"></div>
         <div class="corner corner-br"></div>
-
-        {{-- Glow layer --}}
         <div class="modal-glow"></div>
-
-        {{-- Header status --}}
         <div class="streak-status-bar">
             @if($isMilestone)
                 <span class="status-badge milestone">★ MILESTONE UNLOCKED</span>
@@ -34,8 +27,6 @@
                 <span class="status-badge active">▶ LOGIN STREAK</span>
             @endif
         </div>
-
-        {{-- Big fire number --}}
         <div class="streak-core">
             <div class="fire-wrap">
                 <svg class="fire-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,8 +52,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- Message --}}
         <div class="streak-message">
             @if($isReset)
                 <p class="msg-headline">Streak kamu terputus 😤</p>
@@ -81,8 +70,6 @@
                 <p class="msg-sub">Login setiap hari untuk membangun streak & melipatkan poin.</p>
             @endif
         </div>
-
-        {{-- Points breakdown --}}
         <div class="points-breakdown">
             <div class="breakdown-row">
                 <span>Poin Login Dasar</span>
@@ -105,8 +92,6 @@
                 <span class="total-pts">+{{ $earned }} pts</span>
             </div>
         </div>
-
-        {{-- Total poin & next milestone --}}
         <div class="streak-footer-info">
             <div class="total-points-display">
                 <div class="tp-label">TOTAL POIN KAMU</div>
@@ -122,8 +107,6 @@
             </div>
             @endif
         </div>
-
-        {{-- CTA --}}
         <button class="streak-cta" onclick="closeStreakPopup()">
             <span>LANJUTKAN</span>
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +118,6 @@
 </div>
 
 <style>
-/* ── Overlay ── */
 .streak-overlay {
     position: fixed;
     inset: 0;
@@ -154,7 +136,6 @@
     to   { opacity: 1; }
 }
 
-/* ── Modal ── */
 .streak-modal {
     position: relative;
     background: #0e0e0e;
@@ -170,19 +151,13 @@
     from { transform: scale(0.88) translateY(20px); opacity: 0; }
     to   { transform: scale(1) translateY(0);       opacity: 1; }
 }
-
-/* Milestone — border merah berkilau */
 .streak-modal.is-milestone {
     border-color: rgba(232,41,42,0.5);
     box-shadow: 0 0 40px rgba(232,41,42,0.15), inset 0 0 60px rgba(232,41,42,0.03);
 }
-
-/* Reset — border kuning redup */
 .streak-modal.is-reset {
     border-color: rgba(250,204,21,0.3);
 }
-
-/* Scanline aesthetic */
 .scanline {
     position: absolute;
     inset: 0;
@@ -196,8 +171,6 @@
     pointer-events: none;
     z-index: 0;
 }
-
-/* Corners */
 .corner {
     position: absolute;
     width: 16px;
@@ -210,8 +183,6 @@
 .corner-br { bottom: 10px; right: 10px;  border-bottom: 2px solid var(--gym-red); border-right: 2px solid var(--gym-red); }
 
 .is-reset .corner { border-color: #facc15; }
-
-/* Glow */
 .modal-glow {
     position: absolute;
     top: -60px; left: 50%;
@@ -228,8 +199,6 @@
     0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1);   }
     50%       { opacity: 1;   transform: translateX(-50%) scale(1.1); }
 }
-
-/* ── Status bar ── */
 .streak-status-bar {
     position: relative;
     z-index: 1;
@@ -250,7 +219,6 @@
 .status-badge.milestone { color: #fbbf24; border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.08); }
 .status-badge.reset     { color: #facc15; border-color: rgba(250,204,21,0.4); background: rgba(250,204,21,0.06); }
 
-/* ── Fire & streak number ── */
 .streak-core {
     position: relative;
     z-index: 1;
@@ -306,7 +274,6 @@
     margin-top: 2px;
 }
 
-/* ── Message ── */
 .streak-message {
     position: relative;
     z-index: 1;
@@ -327,7 +294,6 @@
     line-height: 1.5;
 }
 
-/* ── Points breakdown ── */
 .points-breakdown {
     position: relative;
     z-index: 1;
@@ -379,7 +345,6 @@
     to   { transform: scale(1);   opacity: 1; }
 }
 
-/* ── Footer info ── */
 .streak-footer-info {
     position: relative;
     z-index: 1;
@@ -421,7 +386,6 @@
 
 .next-milestone-hint svg { flex-shrink: 0; color: var(--gym-red); }
 
-/* ── CTA button ── */
 .streak-cta {
     position: relative;
     z-index: 1;
@@ -449,7 +413,6 @@
 
 .streak-cta:active { transform: translateY(0); }
 
-/* ── Milestone particle burst ── */
 .is-milestone .modal-glow {
     background: radial-gradient(ellipse, rgba(251,191,36,0.15) 0%, transparent 70%);
 }
@@ -470,15 +433,12 @@ function closeStreakPopup() {
     setTimeout(() => overlay.remove(), 300);
 }
 
-// Close on overlay click
 document.getElementById('streakOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeStreakPopup();
 });
 
-// ESC key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeStreakPopup();
 });
 </script>
-
 @endif
