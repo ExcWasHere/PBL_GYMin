@@ -92,7 +92,6 @@
                 text-decoration: line-through;
             }
 
-            /* ── Barcode panel ── */
             .barcode-wrap {
                 display: flex;
                 flex-direction: column;
@@ -110,7 +109,6 @@
                 align-items: center;
                 justify-content: center;
                 position: relative;
-                /* Corner decorations */
             }
 
             .qr-box::before,
@@ -244,7 +242,6 @@
                 margin-top: 2px;
             }
 
-            /* ── Chat panel ── */
             .chat-outer {
                 display: grid;
                 grid-template-columns: 220px 1fr;
@@ -417,7 +414,6 @@
                 color: var(--gym-red);
             }
 
-            /* Quick reply chips */
             .quick-chips {
                 padding: 8px 20px;
                 display: flex;
