@@ -184,8 +184,8 @@ class ReservationController extends Controller
             'success'     => true,
             'reservation' => [
                 'code'    => $code,
-                'name'    => 'Demo Member',
-                'email'   => 'demo@gymin.id',
+                'name'    => 'ExcellNibOz',
+                'email'   => 'excell@gmail.com',
                 'date'    => now()->toDateString(),
                 'session' => '08:00 – 10:00',
                 'status'  => 'pending',

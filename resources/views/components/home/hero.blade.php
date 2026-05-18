@@ -239,7 +239,7 @@
             </h1>
 
             <div class="feature-pills">
-                <span class="pill"><span class="pill-dot"></span>Pantau kepadatan gym real-time</span>
+                <span class="pill"><span class="pill-dot"></span>Pantau kepadatan gym secara langsung</span>
                 <span class="pill"><span class="pill-dot"></span>Jadwal & reservasi slot</span>
                 <span class="pill"><span class="pill-dot"></span>Catat progress latihan</span>
                 <span class="pill"><span class="pill-dot"></span>Jaga streak harian</span>

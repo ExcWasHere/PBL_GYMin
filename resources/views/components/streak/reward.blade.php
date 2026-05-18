@@ -397,7 +397,7 @@
                 <span>{{ number_format($user->points) }}</span> pts
             </div>
             <span style="font-size:0.78rem;color:var(--gym-gray);margin-top:4px">
-                Login tiap hari untuk streak bonus • Tukar poin dengan hadiah eksklusif
+                Tukarkan poin dengan hadiah eksklusif
             </span>
 
             {{-- Milestone progress bar --}}

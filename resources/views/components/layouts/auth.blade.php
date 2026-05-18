@@ -305,7 +305,7 @@
 
     <a href="/" class="back-btn">
         <span class="arrow">←</span>
-        <span>Back</span>
+        <span>Kembali</span>
     </a>
 
     <div class="auth-box">

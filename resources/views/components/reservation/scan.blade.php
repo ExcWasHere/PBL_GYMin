@@ -535,11 +535,11 @@
                 if (code.startsWith('GYM-')) {
                     renderResult({
                         code:    code,
-                        name:    'Demo Member',
-                        email:   'demo@gymin.id',
+                        name:    'ExcellNiBoz',
+                        email:   'excell@gmail.com',
                         date:    code.slice(4, 12).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
                         session: '08:00 – 10:00',
-                        status:  'pending',
+                        status:  'sukses',
                         notes:   'Tidak ada catatan.',
                     });
                 } else {
@@ -597,7 +597,7 @@
                     document.getElementById('resStatus').innerHTML =
                         '<span class="status-badge confirmed">✓ Terkonfirmasi</span>';
                     document.getElementById('btnConfirm').style.display = 'none';
-                    showAlert('Member berhasil masuk! Selamat datang 💪', 'success');
+                    showAlert('Member berhasil masuk! Selamat datang ExcellNiBoz', 'success');
                     addToLog(data.reservation ?? { code: currentCode, name: document.getElementById('resName').textContent });
                 } else {
                     showAlert(data.message ?? 'Gagal konfirmasi.', 'error');

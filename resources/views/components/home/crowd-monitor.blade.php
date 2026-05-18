@@ -32,7 +32,7 @@
             <div class="reveal">
                 <div class="section-tag">
                     <span style="width:24px;height:1px;background:var(--gym-red);display:inline-block;"></span>
-                    Kepadatan Realtime
+                    Kepadatan Terkini
                 </div>
                 <h2 class="section-title" style="margin-bottom:1.25rem;">
                     TAU KAPAN<br><span style="color:var(--gym-red);">GYM SEPI</span>

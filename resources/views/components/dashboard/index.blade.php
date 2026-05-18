@@ -21,12 +21,12 @@
     </div>
 
     <div class="card">
-        <div class="card-title">Quick Menu</div>
+        <div class="card-title">Pintasan</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a href="{{ route('gym.density') }}" class="btn-primary" style="text-decoration:none;">Density GYM</a>
-            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Rewards</a>
-            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Reservation</a>
-            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Progress Tracker</a>
+            <a href="{{ route('gym.density') }}" class="btn-primary" style="text-decoration:none;">Kepadatan Gym</a>
+            <a href="{{ route('rewards.index') }}" class="btn-primary" style="text-decoration:none;">Hadiah</a>
+            <a href="{{ route('reservasi') }}" class="btn-primary" style="text-decoration:none;">Reservasi</a>
+            <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Catatan Progres</a>
         </div>
     </div>
 </x-layouts.dashboard>
