@@ -1,12 +1,11 @@
 <style>
     .hero {
-        min-height: calc(100vh - 80px);
+        min-height: 100vh;
         display: flex;
         align-items: center;
         position: relative;
         overflow: hidden;
-        padding-top: 100px;
-        padding-bottom: 60px;
+        padding: 120px 24px 60px;
     }
 
     .hero::after {
@@ -14,52 +13,62 @@
         position: absolute;
         top: 0;
         right: 0;
-        width: 45%;
+        width: 50%;
         height: 100%;
         background: linear-gradient(135deg, transparent 30%, rgba(232, 41, 42, 0.06) 100%);
         clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
         pointer-events: none;
     }
 
+    .hero-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
     .hero-eyebrow {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.2em;
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
         color: var(--gym-red);
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.2rem;
     }
 
     .hero-eyebrow::before {
         content: '';
         display: block;
-        width: 32px;
+        width: 28px;
         height: 1px;
         background: var(--gym-red);
     }
 
     .hero-title {
         font-family: 'Bebas Neue', sans-serif;
-        font-size: clamp(4rem, 10vw, 9rem);
-        line-height: 0.92;
+        font-size: clamp(3.6rem, 8vw, 8rem);
+        line-height: 0.9;
         letter-spacing: 0.02em;
+        color: var(--gym-white);
         margin-bottom: 1.8rem;
     }
 
     .hero-title .outline {
-        -webkit-text-stroke: 1px rgba(245, 245, 240, 0.3);
+        -webkit-text-stroke: 1.5px rgba(245, 245, 240, 0.25);
         color: transparent;
     }
 
-    /* Pills */
     .feature-pills {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2.2rem;
     }
 
     .pill {
@@ -67,7 +76,7 @@
         align-items: center;
         gap: 7px;
         background: rgba(255, 255, 255, 0.04);
-        border: 0.5px solid rgba(255, 255, 255, 0.12);
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
         border-radius: 100px;
         padding: 7px 14px;
         font-size: 0.78rem;
@@ -78,7 +87,7 @@
 
     .pill:hover {
         background: rgba(232, 41, 42, 0.1);
-        border-color: rgba(232, 41, 42, 0.35);
+        border-color: rgba(232, 41, 42, 0.3);
         color: var(--gym-white);
     }
 
@@ -90,46 +99,46 @@
         flex-shrink: 0;
     }
 
-    /* Stats */
+    .hero-cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2.8rem;
+    }
+
     .stat-item {
         border-left: 2px solid var(--gym-red);
-        padding-left: 24px;
+        padding-left: 18px;
     }
 
     .stat-number {
         font-family: 'Bebas Neue', sans-serif;
-        font-size: 2.4rem;
+        font-size: 2.1rem;
         line-height: 1;
         color: var(--gym-white);
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
 
     .stat-label {
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
+        font-size: 0.65rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--gym-gray);
-        margin-top: 4px;
     }
 
-    /* Carousel */
     .hero-carousel {
-        width: 420px;
-        height: 420px;
+        width: min(400px, 100%);
+        aspect-ratio: 1;
         border-radius: 50%;
         overflow: hidden;
-        position: relative;
         border: 1px solid var(--gym-border);
-    }
-
-    .carousel-track {
-        width: 100%;
-        height: 100%;
         position: relative;
     }
 
     .carousel-img {
         position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -141,110 +150,128 @@
         opacity: 1;
     }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .hero-carousel {
-            width: 340px;
-            height: 340px;
-        }
-    }
-
-    @media (max-width: 768px) {
+    /* TABLET */
+    @media (max-width: 900px) {
         .hero {
-            padding-top: 80px;
-            padding-bottom: 48px;
+            padding: 100px 20px 50px;
         }
 
         .hero::after {
             display: none;
         }
 
+        .hero-inner {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .hero-visual {
+            order: -1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-carousel {
+            width: min(280px, 80vw);
+        }
+
         .hero-title {
-            font-size: clamp(3.2rem, 14vw, 5rem);
+            font-size: clamp(3rem, 14vw, 5rem);
+        }
+    }
+
+    /* MOBILE */
+    @media (max-width: 540px) {
+        .hero {
+            padding: 90px 16px 48px;
+            align-items: flex-start;
+        }
+
+        .hero-inner {
+            gap: 28px;
+        }
+
+        .hero-carousel {
+            width: min(220px, 70vw);
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 18vw, 4rem);
             margin-bottom: 1.2rem;
         }
 
         .feature-pills {
             gap: 8px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.6rem;
         }
 
         .pill {
             font-size: 0.72rem;
-            padding: 6px 12px;
+            padding: 6px 11px;
+        }
+
+        .hero-cta {
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary,
+        .btn-outline {
+            font-size: 0.78rem;
+            padding: 11px 20px;
+        }
+
+        .hero-stats {
+            gap: 20px;
         }
 
         .stat-number {
-            font-size: 1.9rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .hero {
-            padding-top: 72px;
-            padding-bottom: 40px;
-        }
-
-        .hero-title {
-            font-size: clamp(2.8rem, 16vw, 4rem);
-        }
-
-        .stat-number {
-            font-size: 1.6rem;
-        }
-
-        .stat-label {
-            font-size: 0.62rem;
+            font-size: 1.7rem;
         }
     }
 </style>
 
 <section class="hero">
-    <div class="max-w-7xl mx-auto px-6 w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="hero-eyebrow">Gym Management Platform</div>
-                <h1 class="hero-title">
-                    LATIHAN<br>LEBIH<br><span class="outline">SMART</span>
-                </h1>
+    <div class="hero-inner">
+        <div>
+            <div class="hero-eyebrow">Gym Management Platform</div>
+            <h1 class="hero-title">
+                LATIHAN<br>LEBIH<br><span class="outline">SMART</span>
+            </h1>
 
-                <div class="feature-pills">
-                    <span class="pill"><span class="pill-dot"></span>Pantau kepadatan gym real-time</span>
-                    <span class="pill"><span class="pill-dot"></span>Reservasi dengan QR</span>
-                    <span class="pill"><span class="pill-dot"></span>Diary Latihan</span>
-                    <span class="pill"><span class="pill-dot"></span>Reward setiap latihan</span>
-                    <span class="pill"><span class="pill-dot"></span>Semua dalam satu app</span>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-4 mb-12">
-                    <a href="{{ route('register') }}" class="btn-primary" style="padding:14px 32px;font-size:0.9rem;">GYM Yuk!</a>
-                    <a href="#features" class="btn-outline" style="padding:13px 28px;font-size:0.85rem;">Lihat Fitur</a>
-                </div>
-
-                <div class="flex gap-8 sm:gap-12 mt-4 flex-wrap">
-                    <div class="stat-item">
-                        <div class="stat-number">2.4K+</div>
-                        <div class="stat-label">Member Aktif</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">98%</div>
-                        <div class="stat-label">Kepuasan User</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">24/7</div>
-                        <div class="stat-label">Live Monitor</div>
-                    </div>
-                </div>
+            <div class="feature-pills">
+                <span class="pill"><span class="pill-dot"></span>Pantau kepadatan gym real-time</span>
+                <span class="pill"><span class="pill-dot"></span>Jadwal & reservasi slot</span>
+                <span class="pill"><span class="pill-dot"></span>Catat progress latihan</span>
+                <span class="pill"><span class="pill-dot"></span>Jaga streak harian</span>
+                <span class="pill"><span class="pill-dot"></span>Semua dalam satu app</span>
             </div>
 
-            <div class="hidden lg:flex justify-center items-center" style="position:relative; transform: translateY(-100px);">
-                <div class="hero-carousel">
-                    <div class="carousel-track">
-                        <img src="/landingPage/gym1.jpg" class="carousel-img active" alt="Gym">
-                        <img src="/landingPage/gym2.jpg" class="carousel-img" alt="Gym">
-                        <img src="/landingPage/gym3.jpg" class="carousel-img" alt="Gym">
-                    </div>
+            <div class="hero-cta">
+                <a href="{{ route('register') }}" class="btn-primary">Gym Yuk →</a>
+                <a href="#features" class="btn-outline">Lihat Fitur</a>
+            </div>
+
+            <div class="flex gap-8 flex-wrap hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">2.4K+</div>
+                    <div class="stat-label">Member Aktif</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Kepuasan User</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Live Monitor</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-carousel">
+                <img src="/landingPage/gym1.jpg" class="carousel-img active" alt="Gym">
+                <img src="/landingPage/gym2.jpg" class="carousel-img" alt="Gym">
+                <img src="/landingPage/gym3.jpg" class="carousel-img" alt="Gym">
             </div>
         </div>
     </div>
