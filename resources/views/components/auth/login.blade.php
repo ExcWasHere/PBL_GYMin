@@ -11,10 +11,10 @@
         @csrf
         <div class="form-group">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input" required placeholder="e.g. prabowo@monokotilmail.com">
+            <input type="email" name="email" class="form-input" required placeholder="pengguna@gmail.com">
         </div>
         <div class="form-group">
-            <label class="form-label">Password</label>
+            <label class="form-label">Kata Sandi</label>
             <input type="password" name="password" class="form-input" required placeholder="**********">
         </div>
         <div class="form-group">

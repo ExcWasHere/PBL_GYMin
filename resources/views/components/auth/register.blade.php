@@ -15,18 +15,18 @@
         @csrf
         <div class="form-group">
             <label class="form-label">Nama Lengkap</label>
-            <input type="text" name="name" class="form-input" placeholder="Prabowo Okegas">
+            <input type="text" name="name" class="form-input" placeholder="Mamank Kuliner">
         </div>
         <div class="form-group">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input" placeholder="prabowo@bijisatumail.com" required>
+            <input type="email" name="email" class="form-input" placeholder="pengguna@gmail.com" required>
         </div>
         <div class="form-group">
-            <label class="form-label">Password</label>
+            <label class="form-label">Kata Sandi</label>
             <input type="password" name="password" class="form-input" placeholder="**********" required>
         </div>
         <div class="form-group">
-            <label class="form-label">Konfirmasi Password</label>
+            <label class="form-label">Konfirmasi Kata Sandi</label>
             <input type="password" name="password_confirmation" class="form-input" placeholder="**********" required>
         </div>
         <button type="submit" class="btn-primary">Daftar</button>

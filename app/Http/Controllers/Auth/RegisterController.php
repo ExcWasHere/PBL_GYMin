@@ -12,7 +12,7 @@ class RegisterController extends Controller
 {
     public function show()
     {
-        return view('auth.register');
+        return view('components.auth.register');
     }
 
     public function store(Request $request)

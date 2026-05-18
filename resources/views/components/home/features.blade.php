@@ -58,7 +58,7 @@
 
 @php
     $features = [
-        ['num' => '01', 'icon' => '📊', 'title' => 'Monitor Kepadatan',  'desc' => 'Pantau seberapa ramai gym secara real-time, pilih waktu terbaik untuk latihan tanpa antri alat.'],
+        ['num' => '01', 'icon' => '📊', 'title' => 'Monitor Kepadatan',  'desc' => 'Pantau seberapa ramai gym secara langsung, pilih waktu terbaik untuk latihan tanpa antri alat.'],
         ['num' => '02', 'icon' => '📅', 'title' => 'Reservasi Latihan',     'desc' => 'Buat dan atur jadwal GYM mingguan kamu, dapatkan reminder sebelum hari H.'],
         ['num' => '03', 'icon' => '🔥', 'title' => 'Streak & Reward',    'desc' => 'Kumpulkan streak kehadiran dan raih poin reward setiap kali kamu konsisten datang nge-GYM.'],
         ['num' => '04', 'icon' => '📈', 'title' => 'Progress Tracker',   'desc' => 'Catat berat badan, set, dan rep latihan kamu, visualisasikan perkembangan selama kamu nge-GYM.'],

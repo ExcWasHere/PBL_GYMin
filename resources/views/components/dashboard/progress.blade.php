@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Catatan Latihan</label>
-                <textarea name="workout_notes" id="input-workout_notes" class="form-input" placeholder="3x10 bilang antek-antek asing">{{ old('workout_notes') }}</textarea>
+                <textarea name="workout_notes" id="input-workout_notes" class="form-input" placeholder="3x10 bilang Semangat Kapten">{{ old('workout_notes') }}</textarea>
                 @error('workout_notes')
                 <div class="form-error">{{ $message }}</div> @enderror
             </div>

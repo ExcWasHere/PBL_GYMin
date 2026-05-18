@@ -376,7 +376,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4H7a3 3 0 00-3 3v1m0 6v1a3 3 0 003 3h1m6 0h1a3 3 0 003-3v-1m0-6V7a3 3 0 00-3-3h-1
                    M9 9h1v1H9V9zm5 0h1v1h-1V9zm-5 5h1v1H9v-1zm5 0h1v1h-1v-1z" />
                     </svg>
-                    Scan Reservasi
+                    Pindai Reservasi
                 </a>
             @else
                 <a href="{{ route('dashboard') }}"
@@ -393,7 +393,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
-                    Progress Tracker
+                    Catatan Progres
                 </a>
 
                 <a href="{{ route('gym.density') }}"
@@ -402,7 +402,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M6.5 8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1m0-8v8m0-8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1M17.5 8h1a1 1 0 011 1v6a1 1 0 01-1 1h-1m0-8v8m0-8h-1a1 1 0 00-1 1v6a1 1 0 001 1h1 M8.5 12h7" />
                     </svg>
-                    Density Gym
+                    Kepadatan Gym
                 </a>
                 <a href="{{ route('reservasi') }}"
                     class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
@@ -410,7 +410,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Reservation
+                    Reservasi
                 </a>
                 <a href="{{ route('rewards.index') }}"
                     class="nav-item {{ request()->routeIs('rewards.index') ? 'active' : '' }}">
@@ -418,7 +418,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                     </svg>
-                    Rewards
+                    Hadiah
                 </a>
             @endif
         </nav>
@@ -441,7 +441,7 @@
     <div class="main-content">
         <header class="topbar">
             <span class="topbar-title">{{ $title ?? 'Dashboard' }}</span>
-            <span style="font-size:0.8rem;color:var(--gym-gray)">Halo kink {{ Auth::user()->name }}</span>
+            <span style="font-size:0.8rem;color:var(--gym-gray)">Halo {{ Auth::user()->name }}</span>
         </header>
         <div class="page-body">
             @include('components.streak.popup')
