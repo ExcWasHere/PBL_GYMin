@@ -182,6 +182,12 @@
                 color: #a5b4fc;
             }
 
+            .status-badge.cancelled {
+                background: rgba(232, 41, 42, 0.12);
+                border: 1px solid rgba(232, 41, 42, 0.4);
+                color: #f87171;
+            }
+
             .pulse {
                 width: 7px;
                 height: 7px;
@@ -195,12 +201,12 @@
                 0%,
                 100% {
                     opacity: 1;
-                    transform: scale(1);
+                    transform: scale(1)
                 }
 
                 50% {
                     opacity: 0.4;
-                    transform: scale(1.4);
+                    transform: scale(1.4)
                 }
             }
 
@@ -242,6 +248,7 @@
                 margin-top: 2px;
             }
 
+            /* Chat */
             .chat-outer {
                 display: grid;
                 grid-template-columns: 220px 1fr;
@@ -296,19 +303,14 @@
                 width: 32px;
                 height: 32px;
                 border-radius: 50%;
-                background: var(--gym-border);
+                background: rgba(232, 41, 42, 0.25);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 0.75rem;
                 font-weight: 700;
-                color: var(--gym-white);
-                flex-shrink: 0;
-            }
-
-            .chat-avatar.admin {
-                background: rgba(232, 41, 42, 0.25);
                 color: var(--gym-red);
+                flex-shrink: 0;
             }
 
             .chat-contact-info .name {
@@ -385,7 +387,6 @@
             .msg.me .msg-bubble {
                 background: rgba(232, 41, 42, 0.15);
                 border-color: rgba(232, 41, 42, 0.3);
-                color: var(--gym-white);
             }
 
             .msg-time {
@@ -537,42 +538,61 @@
                 border-color: var(--gym-white);
                 color: var(--gym-white);
             }
+
+            .empty-state {
+                text-align: center;
+                padding: 40px 20px;
+                color: var(--gym-gray);
+                font-size: 0.83rem;
+            }
         </style>
     @endpush
 
+    @if (session('success'))
+        <div class="alert-success" style="margin-bottom:20px;">{{ session('success') }}</div>
+    @endif
+    @if ($errors->any())
+        <div class="alert-error" style="margin-bottom:20px;">{{ $errors->first() }}</div>
+    @endif
+
     <div class="res-tabs">
-        <button class="res-tab active" onclick="switchTab('book')">Buat Reservasi</button>
-        <button class="res-tab" onclick="switchTab('ticket')">Tiket Saya</button>
-        <button class="res-tab" onclick="switchTab('chat')">Chat Admin</button>
+        <button class="res-tab active" onclick="switchTab('book', this)">Buat Reservasi</button>
+        <button class="res-tab" onclick="switchTab('ticket', this)">Tiket Saya</button>
+        <button class="res-tab" onclick="switchTab('chat', this)">Chat Admin</button>
     </div>
+
     <div class="res-panel active" id="panel-book">
         <div class="res-grid">
             <div class="card">
                 <div class="card-title">Detail Reservasi</div>
-                <div class="form-group">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-input" value="{{ Auth::user()->name }}" readonly
-                        style="opacity:0.6;cursor:not-allowed;">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tanggal Kunjungan</label>
-                    <input type="date" class="form-input" id="resDate" min="{{ date('Y-m-d') }}"
-                        value="{{ date('Y-m-d') }}" onchange="renderSlots()">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Pilih Sesi</label>
-                    <div class="slot-grid" id="slotGrid">
+                <form method="POST" action="{{ route('reservasi.store') }}" id="reservasiForm">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-input" value="{{ Auth::user()->name }}" readonly
+                            style="opacity:0.6;cursor:not-allowed;">
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Catatan (opsional)</label>
-                    <textarea class="form-input" id="resNote" rows="3" placeholder="Contoh: saya ingin sesi squat rack..."></textarea>
-                </div>
-                <button class="btn-primary" onclick="openConfirm()">Konfirmasi Reservasi</button>
+                    <div class="form-group">
+                        <label class="form-label">Tanggal Kunjungan</label>
+                        <input type="date" class="form-input" id="resDate" name="session_date"
+                            min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" onchange="fetchSlots(this.value)">
+                    </div>
+                    <input type="hidden" name="session_start" id="hiddenStart">
+                    <input type="hidden" name="session_end" id="hiddenEnd">
+                    <div class="form-group">
+                        <label class="form-label">Pilih Sesi</label>
+                        <div class="slot-grid" id="slotGrid">
+                            <div style="color:var(--gym-gray);font-size:0.78rem;grid-column:1/-1">Memuat slot...</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Catatan (opsional)</label>
+                        <textarea class="form-input" name="notes" rows="3" placeholder="Contoh: saya ingin sesi squat rack...">{{ old('notes') }}</textarea>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="openConfirm()">Konfirmasi Reservasi</button>
+                </form>
             </div>
+
             <div style="display:flex;flex-direction:column;gap:16px;">
                 <div class="card">
                     <div class="card-title">Cara Reservasi</div>
@@ -586,10 +606,10 @@
                         @endforeach
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-title">Info Kapasitas Hari Ini</div>
-                    <div style="margin-top:4px;display:flex;flex-direction:column;gap:10px;" id="capacityInfo">
+                    <div id="capacityInfo" style="margin-top:4px;display:flex;flex-direction:column;gap:10px;">
+                        <div style="color:var(--gym-gray);font-size:0.78rem;">Memuat...</div>
                     </div>
                 </div>
             </div>
@@ -600,137 +620,122 @@
         <div class="res-grid">
             <div class="card">
                 <div class="card-title">Tiket Aktif</div>
-                <div class="barcode-wrap" id="barcodeWrap">
-                    <div class="qr-box">
-                        <canvas id="qrCanvas" class="qr-img" width="156" height="156"></canvas>
+                @if ($activeTicket)
+                    <div class="barcode-wrap">
+                        <div class="qr-box">
+                            <canvas id="qrCanvas" class="qr-img" width="156" height="156"></canvas>
+                        </div>
+                        <div class="barcode-id">{{ $activeTicket->code }}</div>
+                        <span class="status-badge {{ $activeTicket->status }}">
+                            @if ($activeTicket->status === 'pending')
+                                <span class="pulse"></span> Menunggu Scan
+                            @else
+                                ✓ Terkonfirmasi
+                            @endif
+                        </span>
+                        <div class="barcode-meta">
+                            {{ \Carbon\Carbon::parse($activeTicket->session_date)->translatedFormat('l, d F Y') }}<br>
+                            Sesi: {{ $activeTicket->session_start }} – {{ $activeTicket->session_end }}<br>
+                            Member: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>
+                        </div>
+                        <button class="btn-primary" onclick="drawQR('{{ $activeTicket->code }}')"
+                            style="font-size:0.72rem;padding:8px 18px;">
+                            Perbarui QR Code
+                        </button>
                     </div>
-                    <div class="barcode-id" id="ticketCode">GYM-20250429-0831</div>
-                    <div class="status-badge pending">
-                        <span class="pulse"></span> Menunggu Scan
+                @else
+                    <div class="empty-state">
+                        <div style="font-size:2rem;margin-bottom:8px;">🎟️</div>
+                        Belum ada tiket aktif.<br>
+                        Buat reservasi dulu ya!
                     </div>
-                    <div class="barcode-meta" id="ticketMeta">
-                        Selasa, 29 April 2025<br>
-                        Sesi: 08:00 – 10:00<br>
-                        Member: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>
-                    </div>
-                    <button class="btn-primary" onclick="refreshQR()" style="font-size:0.72rem;padding:8px 18px;">
-                        Perbarui QR Code
-                    </button>
-                </div>
+                @endif
             </div>
+
             <div class="card">
                 <div class="card-title">Riwayat Reservasi</div>
-                <div id="historyList">
-                    @php
-                        $history = [
-                            ['APR', '28', 'Sesi Pagi', '06:00–08:00', 'confirmed'],
-                            ['APR', '25', 'Sesi Siang', '10:00–12:00', 'done'],
-                            ['APR', '21', 'Sesi Sore', '16:00–18:00', 'done'],
-                            ['APR', '18', 'Sesi Malam', '18:00–20:00', 'done'],
-                        ];
-                    @endphp
-                    @foreach ($history as [$mon, $day, $label, $time, $status])
-                        <div class="history-item">
-                            <div>
-                                <div class="history-date">{{ $day }}</div>
-                                <div
-                                    style="font-size:0.65rem;color:var(--gym-gray);text-transform:uppercase;letter-spacing:.06em">
-                                    {{ $mon }}</div>
+                @forelse ($history as $res)
+                    <div class="history-item">
+                        <div>
+                            <div class="history-date">{{ \Carbon\Carbon::parse($res->session_date)->format('d') }}
                             </div>
-                            <div class="history-info">
-                                <div class="history-title">{{ $label }}</div>
-                                <div class="history-sub">{{ $time }}</div>
+                            <div
+                                style="font-size:0.65rem;color:var(--gym-gray);text-transform:uppercase;letter-spacing:.06em">
+                                {{ \Carbon\Carbon::parse($res->session_date)->format('M') }}
                             </div>
-                            <span class="status-badge {{ $status }}">
-                                {{ $status === 'confirmed' ? 'Terkonfirmasi' : 'Selesai' }}
-                            </span>
                         </div>
-                    @endforeach
-                </div>
+                        <div class="history-info">
+                            <div class="history-title">Sesi {{ $res->session_start }} – {{ $res->session_end }}</div>
+                            <div class="history-sub">{{ $res->session_date->translatedFormat('l, d F Y') }}</div>
+                        </div>
+                        <span class="status-badge {{ $res->status }}">
+                            @if ($res->status === 'confirmed')
+                                Terkonfirmasi
+                            @elseif ($res->status === 'done')
+                                Selesai
+                            @elseif ($res->status === 'cancelled')
+                                Dibatalkan
+                            @else
+                                {{ $res->status }}
+                            @endif
+                        </span>
+                    </div>
+                @empty
+                    <div class="empty-state">Belum ada riwayat reservasi.</div>
+                @endforelse
             </div>
         </div>
     </div>
-
     <div class="res-panel" id="panel-chat">
-        <div class="chat-outer">
-            <div class="chat-sidebar">
-                <div class="chat-sidebar-title">Kontak</div>
-                <div class="chat-contact active" onclick="selectContact(this,'Admin Gym')">
-                    <div class="chat-avatar admin">AG</div>
-                    <div class="chat-contact-info">
-                        <div class="name">Admin Gym</div>
-                        <div class="role">Receptionist</div>
+        @if ($receptionist)
+            <div class="chat-outer">
+                <div class="chat-sidebar">
+                    <div class="chat-sidebar-title">Kontak</div>
+                    <div class="chat-contact active">
+                        <div class="chat-avatar">{{ strtoupper(substr($receptionist->name, 0, 2)) }}</div>
+                        <div class="chat-contact-info">
+                            <div class="name">{{ $receptionist->name }}</div>
+                            <div class="role">Receptionist</div>
+                        </div>
                     </div>
                 </div>
-                <div class="chat-contact" onclick="selectContact(this,'Trainer Budi')">
-                    <div class="chat-avatar" style="background:rgba(99,102,241,.25);color:#a5b4fc">TB</div>
-                    <div class="chat-contact-info">
-                        <div class="name">Trainer Budi</div>
-                        <div class="role">Personal Trainer</div>
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <span class="chat-header-name">
+                            {{ $receptionist->name }} <span class="online-dot"></span>
+                        </span>
+                        <span style="font-size:0.72rem;color:var(--gym-gray)">Online</span>
                     </div>
-                </div>
-                <div class="chat-contact" onclick="selectContact(this,'CS Support')">
-                    <div class="chat-avatar" style="background:rgba(34,197,94,.2);color:#4ade80">CS</div>
-                    <div class="chat-contact-info">
-                        <div class="name">CS Support</div>
-                        <div class="role">Customer Service</div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div style="text-align:center;color:var(--gym-gray);font-size:0.78rem;padding:20px;">
+                            Memuat pesan...
+                        </div>
+                    </div>
+                    <div class="quick-chips">
+                        <button class="chip" onclick="sendChip(this)">Slot tersedia hari ini?</button>
+                        <button class="chip" onclick="sendChip(this)">Konfirmasi reservasi saya</button>
+                        <button class="chip" onclick="sendChip(this)">Jadwal trainer?</button>
+                        <button class="chip" onclick="sendChip(this)">Perpanjang membership</button>
+                    </div>
+                    <div class="chat-input-row">
+                        <input class="chat-input" id="chatInput" type="text" placeholder="Tulis pesan..."
+                            onkeydown="if(event.key==='Enter')sendMsg()">
+                        <button class="chat-send" onclick="sendMsg()">Kirim</button>
                     </div>
                 </div>
             </div>
-            <div class="chat-main">
-                <div class="chat-header">
-                    <span class="chat-header-name" id="chatContactName">
-                        Admin Gym <span class="online-dot"></span>
-                    </span>
-                    <span style="font-size:0.72rem;color:var(--gym-gray)">Online</span>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="msg">
-                        <div class="msg-avatar admin-av">AG</div>
-                        <div>
-                            <div class="msg-bubble">Halo kak! Ada yang bisa dibantu terkait reservasi atau info gym
-                                hari ini? 💪</div>
-                            <div class="msg-time">09:01</div>
-                        </div>
-                    </div>
-                    <div class="msg me">
-                        <div class="msg-avatar" style="background:var(--gym-red);color:#fff">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</div>
-                        <div>
-                            <div class="msg-bubble">Halo min, mau tanya slot sesi sore masih ada ga?</div>
-                            <div class="msg-time">09:03</div>
-                        </div>
-                    </div>
-                    <div class="msg">
-                        <div class="msg-avatar admin-av">AG</div>
-                        <div>
-                            <div class="msg-bubble">Masih ada kak! Sesi 16:00–18:00 tinggal 4 slot. Mau dibantu
-                                reservasi sekarang?</div>
-                            <div class="msg-time">09:04</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="quick-chips">
-                    <button class="chip" onclick="sendChip(this)">Slot tersedia hari ini?</button>
-                    <button class="chip" onclick="sendChip(this)">Konfirmasi reservasi saya</button>
-                    <button class="chip" onclick="sendChip(this)">Jadwal trainer?</button>
-                    <button class="chip" onclick="sendChip(this)">Perpanjang membership</button>
-                </div>
-
-                <div class="chat-input-row">
-                    <input class="chat-input" id="chatInput" type="text" placeholder="Tulis pesan..."
-                        onkeydown="if(event.key==='Enter')sendMsg()">
-                    <button class="chat-send" onclick="sendMsg()">Kirim</button>
-                </div>
+        @else
+            <div class="card empty-state">
+                Admin belum tersedia. Hubungi gym secara langsung.
             </div>
-        </div>
+        @endif
     </div>
+
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-box">
             <div class="modal-title">Konfirmasi Reservasi</div>
-            <div class="modal-sub" id="confirmText">
-                Kamu akan mereservasi sesi <strong id="cfDate">—</strong>,
+            <div class="modal-sub">
+                Kamu akan mereservasi sesi tanggal <strong id="cfDate">—</strong>,
                 pukul <strong id="cfSlot">—</strong>.<br>
                 Pastikan kamu hadir tepat waktu. Reservasi hangus jika tidak scan dalam 15 menit pertama.
             </div>
@@ -743,92 +748,114 @@
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
+
         <script>
-            function switchTab(t) {
+            const RECEPTIONIST_ID = {{ $receptionist?->id ?? 'null' }};
+            const MY_ID = {{ Auth::id() }};
+            const MY_INITIALS = '{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}';
+            const HISTORY_URL = '{{ route('chat.history') }}';
+            const SEND_URL = '{{ route('chat.send') }}';
+            const SLOTS_URL = '{{ route('reservasi.slots') }}';
+            const CSRF = '{{ csrf_token() }}';
+            try {
+                window.Echo = new Echo({
+                    broadcaster: 'reverb',
+                    key: '{{ config('broadcasting.connections.reverb.key') }}',
+                    wsHost: '{{ config('broadcasting.connections.reverb.options.host') }}',
+                    wsPort: {{ config('broadcasting.connections.reverb.options.port') }},
+                    wssPort: {{ config('broadcasting.connections.reverb.options.port') }},
+                    forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
+                    enabledTransports: ['ws', 'wss'],
+                });
+
+                if (RECEPTIONIST_ID) {
+                    const chMin = Math.min(MY_ID, RECEPTIONIST_ID);
+                    const chMax = Math.max(MY_ID, RECEPTIONIST_ID);
+                    window.Echo.channel(`chat.${chMin}.${chMax}`)
+                        .listen('.message.sent', (data) => {
+                            if (data.sender_id !== MY_ID) {
+                                appendMsg(data.message, 'them', data.time ?? timeNow());
+                            }
+                        });
+                }
+            } catch (e) {
+                console.warn('Reverb tidak tersedia:', e.message);
+            }
+
+            function switchTab(t, btn) {
                 document.querySelectorAll('.res-panel').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.res-tab').forEach(b => b.classList.remove('active'));
                 document.getElementById('panel-' + t).classList.add('active');
-                event.currentTarget.classList.add('active');
-                if (t === 'ticket') drawQR(document.getElementById('ticketCode').textContent.trim());
+                btn.classList.add('active');
+                if (t === 'ticket') {
+                    const code = document.getElementById('qrCanvas')?.closest('.barcode-wrap')
+                        ?.querySelector('.barcode-id')?.textContent?.trim();
+                    if (code) drawQR(code);
+                }
+                if (t === 'chat') loadChatHistory();
             }
-            const SESSIONS = [{
-                    label: '06:00',
-                    end: '08:00',
-                    taken: false
-                },
-                {
-                    label: '08:00',
-                    end: '10:00',
-                    taken: false
-                },
-                {
-                    label: '10:00',
-                    end: '12:00',
-                    taken: true
-                },
-                {
-                    label: '12:00',
-                    end: '14:00',
-                    taken: false
-                },
-                {
-                    label: '14:00',
-                    end: '16:00',
-                    taken: true
-                },
-                {
-                    label: '16:00',
-                    end: '18:00',
-                    taken: false
-                },
-                {
-                    label: '18:00',
-                    end: '20:00',
-                    taken: false
-                },
-                {
-                    label: '20:00',
-                    end: '22:00',
-                    taken: false
-                },
-            ];
-            let selectedSlot = null;
+            var selectedSlot = null;
+            var slotsData = [];
+
+            async function fetchSlots(date) {
+                selectedSlot = null;
+                document.getElementById('slotGrid').innerHTML =
+                    '<div style="color:var(--gym-gray);font-size:.78rem;grid-column:1/-1">Memuat slot...</div>';
+                try {
+                    const res = await fetch(`${SLOTS_URL}?date=${date}`);
+                    const data = await res.json();
+                    slotsData = data;
+                    renderSlots();
+                    renderCapacity();
+                } catch {
+                    document.getElementById('slotGrid').innerHTML =
+                        '<div style="color:#f87171;font-size:.78rem;grid-column:1/-1">Gagal memuat slot.</div>';
+                }
+            }
 
             function renderSlots() {
                 const grid = document.getElementById('slotGrid');
                 grid.innerHTML = '';
-                SESSIONS.forEach((s, i) => {
+                slotsData.forEach((s, i) => {
                     const btn = document.createElement('button');
-                    btn.className = 'slot-btn' + (s.taken ? ' taken' : '') + (selectedSlot === i ? ' selected' : '');
-                    btn.textContent = s.label;
-                    if (!s.taken) btn.onclick = () => selectSlot(i);
+                    btn.type = 'button';
+                    btn.className = 'slot-btn' +
+                        (s.is_full ? ' taken' : '') +
+                        (selectedSlot === i ? ' selected' : '');
+                    btn.textContent = s.start;
+                    btn.title = s.is_full ? 'Penuh' : `${s.available} slot tersedia`;
+                    if (!s.is_full) btn.onclick = () => selectSlot(i);
                     grid.appendChild(btn);
                 });
-                renderCapacity();
             }
 
             function selectSlot(i) {
                 selectedSlot = i;
+                document.getElementById('hiddenStart').value = slotsData[i].start;
+                document.getElementById('hiddenEnd').value = slotsData[i].end;
                 renderSlots();
             }
 
             function renderCapacity() {
                 const el = document.getElementById('capacityInfo');
-                const available = SESSIONS.filter(s => !s.taken).length;
-                const total = SESSIONS.length;
-                const pct = Math.round((SESSIONS.filter(s => s.taken).length / total) * 100);
+                const max = 20;
+                const taken = slotsData.reduce((a, s) => a + s.taken, 0);
+                const total = slotsData.length * max;
+                const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
+                const avail = slotsData.filter(s => !s.is_full).length;
                 el.innerHTML = `
-        <div style="display:flex;justify-content:space-between;font-size:.8rem;">
-            <span style="color:var(--gym-gray)">Slot Tersedia</span>
-            <span style="color:var(--gym-white);font-weight:600">${available} / ${total}</span>
-        </div>
-        <div style="height:6px;background:var(--gym-border);">
-            <div style="height:100%;width:${pct}%;background:var(--gym-red);transition:width .4s;"></div>
-        </div>
-        <div style="font-size:.72rem;color:var(--gym-gray);">
-            ${pct}% kapasitas terisi — ${pct < 50 ? ' Sepi' : pct < 80 ? ' Ramai' : ' Penuh'}
-        </div>
-    `;
+                    <div style="display:flex;justify-content:space-between;font-size:.8rem;">
+                        <span style="color:var(--gym-gray)">Slot Tersedia</span>
+                        <span style="color:var(--gym-white);font-weight:600">${avail} / ${slotsData.length} sesi</span>
+                    </div>
+                    <div style="height:6px;background:var(--gym-border);">
+                        <div style="height:100%;width:${pct}%;background:var(--gym-red);transition:width .4s;"></div>
+                    </div>
+                    <div style="font-size:.72rem;color:var(--gym-gray);">
+                        ${pct}% kapasitas terisi —${pct < 50 ? ' Sepi' : pct < 80 ? ' Ramai' : ' Penuh'}
+                    </div>`;
             }
 
             function openConfirm() {
@@ -836,10 +863,10 @@
                     alert('Pilih sesi terlebih dahulu!');
                     return;
                 }
-                const s = SESSIONS[selectedSlot];
+                const s = slotsData[selectedSlot];
                 const d = document.getElementById('resDate').value;
                 document.getElementById('cfDate').textContent = d;
-                document.getElementById('cfSlot').textContent = `${s.label} – ${s.end}`;
+                document.getElementById('cfSlot').textContent = `${s.start} – ${s.end}`;
                 document.getElementById('confirmModal').classList.add('open');
             }
 
@@ -849,23 +876,12 @@
 
             function doReserve() {
                 closeConfirm();
-                const code = 'GYM-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(1000 + Math
-                    .random() * 9000);
-                document.getElementById('ticketCode').textContent = code;
-                document.querySelectorAll('.res-panel').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.res-tab').forEach(b => b.classList.remove('active'));
-                document.getElementById('panel-ticket').classList.add('active');
-                document.querySelectorAll('.res-tab')[1].classList.add('active');
-                drawQR(code);
-                const s = SESSIONS[selectedSlot];
-                const d = document.getElementById('resDate').value;
-                document.getElementById('ticketMeta').innerHTML =
-                    `${d}<br>Sesi: ${s.label} – ${s.end}<br>Member: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>`;
+                document.getElementById('reservasiForm').submit();
             }
 
             function drawQR(text) {
                 const canvas = document.getElementById('qrCanvas');
-                if (!canvas) return;
+                if (!canvas || !text) return;
                 new QRious({
                     element: canvas,
                     value: text,
@@ -873,66 +889,101 @@
                     level: 'M',
                     background: '#ffffff',
                     foreground: '#000000',
-                    padding: 6,
+                    padding: 6
                 });
             }
 
-            function refreshQR() {
-                const code = document.getElementById('ticketCode').textContent.trim();
-                drawQR(code);
+            async function loadChatHistory() {
+                if (!RECEPTIONIST_ID) return;
+                const wrap = document.getElementById('chatMessages');
+                wrap.innerHTML =
+                    '<div style="text-align:center;color:var(--gym-gray);font-size:.78rem;padding:20px;">Memuat pesan...</div>';
+                try {
+                    const res = await fetch(`${HISTORY_URL}?with=${RECEPTIONIST_ID}`);
+                    const data = await res.json();
+                    wrap.innerHTML = '';
+                    if (!data.data.length) {
+                        wrap.innerHTML =
+                            '<div style="text-align:center;color:var(--gym-gray);font-size:.78rem;padding:20px;">Belum ada pesan. Mulai percakapan!</div>';
+                        return;
+                    }
+                    data.data.forEach(m => {
+                        const who = m.sender_id === MY_ID ? 'me' : 'them';
+                        const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : '';
+                        appendMsg(m.message, who, time);
+                    });
+                } catch {
+                    wrap.innerHTML =
+                        '<div style="text-align:center;color:#f87171;font-size:.78rem;padding:20px;">Gagal memuat pesan.</div>';
+                }
             }
-            const adminReplies = [
-                'Tentu kak, kami siap membantu! Ada hal lain yang ingin ditanyakan?',
-                'Reservasi kamu sudah tercatat ya kak 😊',
-                'Silakan datang 10 menit sebelum sesi dimulai untuk scan QR.',
-                'Jika ada kendala, jangan ragu menghubungi kami kembali!',
-                'Kapasitas hari ini masih ada, langsung bisa datang ya kak.',
-            ];
-            let replyIndex = 0;
 
-            function sendMsg() {
+            async function sendMsg() {
+                if (!RECEPTIONIST_ID) return;
                 const input = document.getElementById('chatInput');
                 const text = input.value.trim();
                 if (!text) return;
-                appendMsg(text, 'me');
                 input.value = '';
-                setTimeout(() => appendMsg(adminReplies[replyIndex++ % adminReplies.length], 'them'), 800);
+                appendMsg(text, 'me', timeNow());
+                try {
+                    await fetch(SEND_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': CSRF
+                        },
+                        body: JSON.stringify({
+                            receiver_id: RECEPTIONIST_ID,
+                            message: text
+                        }),
+                    });
+                } catch {
+                    alert('Gagal mengirim pesan. Coba lagi.');
+                }
             }
 
             function sendChip(btn) {
-                appendMsg(btn.textContent, 'me');
-                setTimeout(() => appendMsg(adminReplies[replyIndex++ % adminReplies.length], 'them'), 800);
+                document.getElementById('chatInput').value = btn.textContent;
+                sendMsg();
             }
 
-            function appendMsg(text, who) {
+            function appendMsg(text, who, time) {
                 const wrap = document.getElementById('chatMessages');
-                const initials = who === 'me' ?
-                    '{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}' :
-                    'AG';
-                const avClass = who === 'me' ?
+                const isMe = who === 'me';
+                const initials = isMe ? MY_INITIALS : '{{ strtoupper(substr($receptionist?->name ?? 'AD', 0, 2)) }}';
+                const avStyle = isMe ?
                     'style="background:var(--gym-red);color:#fff"' :
                     'class="admin-av"';
-                const now = new Date();
-                const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
                 wrap.innerHTML += `
-        <div class="msg ${who === 'me' ? 'me' : ''}">
-            <div class="msg-avatar ${avClass}">${initials}</div>
-            <div>
-                <div class="msg-bubble">${text}</div>
-                <div class="msg-time">${time}</div>
-            </div>
-        </div>`;
+                    <div class="msg ${isMe ? 'me' : ''}">
+                        <div class="msg-avatar ${avStyle}">${initials}</div>
+                        <div>
+                            <div class="msg-bubble">${escHtml(text)}</div>
+                            <div class="msg-time">${time ?? ''}</div>
+                        </div>
+                    </div>`;
                 wrap.scrollTop = wrap.scrollHeight;
             }
 
-            function selectContact(el, name) {
-                document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
-                el.classList.add('active');
-                document.getElementById('chatContactName').innerHTML = name + ' <span class="online-dot"></span>';
+            function escHtml(s) {
+                return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             }
+
+            function timeNow() {
+                return new Date().toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
             document.addEventListener('DOMContentLoaded', () => {
-                renderSlots();
-                drawQR(document.getElementById('ticketCode').textContent.trim());
+                fetchSlots(document.getElementById('resDate').value);
+                @if ($activeTicket)
+                    drawQR('{{ $activeTicket->code }}');
+                @endif
             });
         </script>
     @endpush

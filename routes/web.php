@@ -7,13 +7,13 @@ use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\GymDensityController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StreakLeaderboardController;
 
 Route::get('/', fn() => view('home'))->name('home');
 
-// auth gawe guest tok
+// Guest only
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
@@ -21,48 +21,57 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
 });
 
-// klo authenticated atau klo udah login (middleware untuk user yg udah login doang)
+// Authenticated
 Route::middleware('auth')->group(function () {
+
     Route::post('/logout', LogoutController::class)->name('logout');
 
-    // klo user buka dashboard, check rolenya pke auth role
     Route::get('/dashboard', function () {
-        return match (Auth::user()->role) { //arahkn sesuai role
-            'owner' => redirect()->route('owner.dashboard'),
+        return match (Auth::user()->role) {
+            'owner'        => redirect()->route('owner.dashboard'),
             'receptionist' => redirect()->route('receptionist.dashboard'),
-            default => view('components.dashboard.index'),
+            default        => view('components.dashboard.index'),
         };
     })->name('dashboard');
-    
-    Route::middleware('role:owner')
-        ->prefix('owner')
-        ->name('owner.')
-        ->group(function () {
-            Route::get('/dashboard', fn() => view('components.dashboard.owner'))->name('dashboard');
+
+    // websocket guys
+    Route::get('/chat/history', [ChatController::class, 'history'])->name('chat.history');
+    Route::post('/chat/send',   [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/chat/unread',  [ChatController::class, 'unreadCount'])->name('chat.unread');
+
+    // Owner
+    Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
+        Route::get('/dashboard', fn() => view('components.dashboard.owner'))->name('dashboard');
     });
 
+    // Receptionist
     Route::middleware('role:receptionist')->prefix('receptionist')->name('receptionist.')->group(function () {
         Route::get('/dashboard', fn() => view('components.dashboard.receptionist'))->name('dashboard');
-            Route::get('/reservasi/scan',    [ReservationController::class, 'scanPage'])->name('reservation.scan');
-            Route::get('/reservasi/lookup',  [ReservationController::class, 'lookup'])->name('reservation.lookup');
-            Route::post('/reservasi/confirm',[ReservationController::class, 'confirm'])->name('reservation.confirm');
+        Route::get('/scan',         [ReservationController::class, 'scanPage'])->name('reservation.scan');
+        Route::get('/scan/lookup',  [ReservationController::class, 'lookup'])->name('reservation.lookup');
+        Route::post('/scan/confirm',[ReservationController::class, 'confirm'])->name('reservation.confirm');
+        Route::get('/chat',         [ChatController::class, 'index'])->name('chat');
     });
 
-    Route::middleware('role:member')
-        ->group(function () {
-            Route::get('/dashboard/progress', [ProgressController::class, 'index'])->name('progress.index');
-            Route::post('/dashboard/progress', [ProgressController::class, 'store'])->name('progress.store');
-            Route::delete('/dashboard/progress/{progressLog}', [ProgressController::class, 'destroy'])->name('progress.destroy');
-            Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
-            Route::get('/dashboard/rewards', [RewardController::class, 'index'])->name('rewards.index');
-            Route::post('/dashboard/rewards/{id}/redeem', [RewardController::class, 'redeem'])->name('rewards.redeem');
-            Route::get('/reservasi', [ReservationController::class, 'index'])->name('reservasi');
-            Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
-            Route::delete('/reservasi/{id}', [ReservationController::class, 'destroy'])->name('reservasi.destroy');
-            Route::get('/reservasi/slots', [ReservationController::class, 'slots'])->name('reservasi.slots');
-            Route::post('/reservasi/chat', [ReservationController::class, 'sendChat'])->name('reservasi.chat.send');
-            Route::get('/reservasi/chat', [ReservationController::class, 'getChat'])->name('reservasi.chat.get');
-            // FITUR LAIN^2
+    // Member
+    Route::middleware('role:member')->group(function () {
+        // Progress
+        Route::get('/dashboard/progress',                    [ProgressController::class, 'index'])->name('progress.index');
+        Route::post('/dashboard/progress',                   [ProgressController::class, 'store'])->name('progress.store');
+        Route::delete('/dashboard/progress/{progressLog}',   [ProgressController::class, 'destroy'])->name('progress.destroy');
+
+        // Gym density
+        Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
+
+        // Rewards
+        Route::get('/dashboard/rewards',              [RewardController::class, 'index'])->name('rewards.index');
+        Route::post('/dashboard/rewards/{id}/redeem', [RewardController::class, 'redeem'])->name('rewards.redeem');
+
+        // Reservasi slot
+        Route::get('/reservasi',          [ReservationController::class, 'index'])->name('reservasi');
+        Route::get('/reservasi/slots',    [ReservationController::class, 'slots'])->name('reservasi.slots');
+        Route::post('/reservasi',         [ReservationController::class, 'store'])->name('reservasi.store');
+        Route::delete('/reservasi/{id}',  [ReservationController::class, 'destroy'])->name('reservasi.destroy');
     });
 
 });
