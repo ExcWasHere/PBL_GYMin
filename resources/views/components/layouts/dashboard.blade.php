@@ -10,7 +10,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
         rel="stylesheet">
-    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script> --}}
+    {{--
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script> --}}
     <script src="{{ asset('js/chart.umd.min.js') }}"></script>
     <style>
         :root {
@@ -231,6 +232,7 @@
         .btn-danger:hover {
             background: rgba(229, 85, 85, 0.1);
         }
+
         .alert-success {
             background: rgba(34, 197, 94, 0.1);
             border: 1px solid rgba(34, 197, 94, 0.3);
@@ -248,6 +250,7 @@
             font-size: 0.85rem;
             margin-bottom: 20px;
         }
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -273,6 +276,7 @@
         .data-table tr:last-child td {
             border-bottom: none;
         }
+
         .stat-card {
             background: var(--gym-card);
             border: 1px solid var(--gym-border);
@@ -358,9 +362,8 @@
                 <a href="{{ route('receptionist.dashboard') }}"
                     class="nav-item {{ request()->routeIs('receptionist.dashboard') ? 'active' : '' }}">
                     {{-- Icon: home --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
@@ -369,9 +372,8 @@
 
                 <a href="{{ route('receptionist.reservation.scan') }}"
                     class="nav-item {{ request()->routeIs('receptionist.reservation.*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="5" height="5" rx="1" />
                         <rect x="16" y="3" width="5" height="5" rx="1" />
                         <rect x="3" y="16" width="5" height="5" rx="1" />
@@ -391,32 +393,29 @@
                 <a href="{{ route('receptionist.chat') }}"
                     class="nav-item {{ request()->routeIs('receptionist.chat') ? 'active' : '' }}"
                     style="position:relative;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
                     Chat Anggota
-                    <span id="sidebarChatBadge"
-                        style="
-            display:none;
-            position:absolute;
-            right:14px;
-            top:50%;
-            transform:translateY(-50%);
-            background:var(--gym-red);
-            color:#fff;
-            font-size:0.6rem;
-            font-weight:700;
-            padding:2px 6px;
-            border-radius:999px;
-            min-width:18px;
-            text-align:center;
-        ">0</span>
+                    <span id="sidebarChatBadge" style="
+                        display:none;
+                        position:absolute;
+                        right:14px;
+                        top:50%;
+                        transform:translateY(-50%);
+                        background:var(--gym-red);
+                        color:#fff;
+                        font-size:0.6rem;
+                        font-weight:700;
+                        padding:2px 6px;
+                        border-radius:999px;
+                        min-width:18px;
+                        text-align:center;
+                    ">0</span>
                 </a>
             @else
-                <a href="{{ route('dashboard') }}"
-                    class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -440,8 +439,7 @@
                     </svg>
                     Kepadatan Gym
                 </a>
-                <a href="{{ route('reservasi') }}"
-                    class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
+                <a href="{{ route('reservasi') }}" class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -455,6 +453,16 @@
                             d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                     </svg>
                     Hadiah
+                </a>
+                <a href="{{ route('personal-trainer.index') }}"
+                    class="nav-item {{ request()->routeIs('personal-trainer.*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                        <path d="M15 11l1.5 2.5L19 12" />
+                    </svg>
+                    Pelatih
                 </a>
             @endif
         </nav>

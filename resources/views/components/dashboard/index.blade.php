@@ -27,6 +27,7 @@
             <a href="{{ route('rewards.index') }}" class="btn-primary" style="text-decoration:none;">Hadiah</a>
             <a href="{{ route('reservasi') }}" class="btn-primary" style="text-decoration:none;">Reservasi</a>
             <a href="{{ route('progress.index') }}" class="btn-primary" style="text-decoration:none;">Catatan Progres</a>
+            <a href="{{ route('personal-trainer.index') }}" class="btn-primary" style="text-decoration:none;">Pelatih</a>
         </div>
     </div>
 </x-layouts.dashboard>
