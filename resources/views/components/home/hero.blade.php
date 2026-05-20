@@ -62,6 +62,7 @@
     .hero-title .outline {
         -webkit-text-stroke: 1.5px rgba(245, 245, 240, 0.25);
         color: transparent;
+        font-style: italic
     }
 
     .feature-pills {
@@ -233,7 +234,6 @@
 <section class="hero">
     <div class="hero-inner">
         <div>
-            <div class="hero-eyebrow">Gym Management Platform</div>
             <h1 class="hero-title">
                 LATIHAN<br>LEBIH<br><span class="outline">SMART</span>
             </h1>
@@ -241,7 +241,7 @@
             <div class="feature-pills">
                 <span class="pill"><span class="pill-dot"></span>Pantau kepadatan gym secara langsung</span>
                 <span class="pill"><span class="pill-dot"></span>Jadwal & reservasi slot</span>
-                <span class="pill"><span class="pill-dot"></span>Catat progress latihan</span>
+                <span class="pill"><span class="pill-dot"></span>Catat perkembangan latihan</span>
                 <span class="pill"><span class="pill-dot"></span>Jaga streak harian</span>
                 <span class="pill"><span class="pill-dot"></span>Semua dalam satu app</span>
             </div>
@@ -254,11 +254,11 @@
             <div class="flex gap-8 flex-wrap hero-stats">
                 <div class="stat-item">
                     <div class="stat-number">2.4K+</div>
-                    <div class="stat-label">Member Aktif</div>
+                    <div class="stat-label">Pengguna Aktif</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">98%</div>
-                    <div class="stat-label">Kepuasan User</div>
+                    <div class="stat-label">Kepuasan Pengguna</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">24/7</div>

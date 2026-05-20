@@ -37,7 +37,7 @@
             <div class="md:col-span-2 pr-8">
                 <div class="footer-logo mb-4">GYM<span>-IN</span></div>
                 <p style="color:var(--gym-gray);font-size:0.875rem;line-height:1.75;font-weight:300;max-width:300px;margin-bottom:1.5rem;">
-                    Platform manajemen gym pintar yang membantu member berlatih lebih efektif, efisien, dan konsisten.
+                    Platform manajemen gym pintar yang membantu anggota berlatih lebih efektif, efisien, dan konsisten.
                 </p>
             </div>
             <div>

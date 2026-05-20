@@ -20,9 +20,9 @@
 
 @php
     $steps = [
-        ['num' => '01', 'title' => 'Jadi sobat GYM-in',        'desc' => 'Buat akun gratis cukup dengan scan barcode di resepsionis ya.'],
-        ['num' => '02', 'title' => 'Atur Jadwal Latihan',      'desc' => 'Pilih hari dan jam latihan favorit kamu, kamu juga bisa memilih personal trainer yang cocok buat kamu.'],
-        ['num' => '03', 'title' => 'Mulai Latihan',            'desc' => 'Cek kepadatan gym, masuk check-in, dan letsgo nge-GYM pakai GYM-in!'],
+        ['num' => '01', 'title' => 'Jadi sobat GYM-in',        'desc' => 'Buat akun gratis cukup dengan pindai kode QR di resepsionis.'],
+        ['num' => '02', 'title' => 'Atur Jadwal Latihan',      'desc' => 'Pilih hari dan jam latihan favorit kamu, kamu juga bisa memilih Pelatih yang cocok buat kamu.'],
+        ['num' => '03', 'title' => 'Mulai Latihan',            'desc' => 'Cek kepadatan gym, lakukan reservasi, dan ayo nge-GYM pakai GYM-in!'],
     ];
 @endphp
 

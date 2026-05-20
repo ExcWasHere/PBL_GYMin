@@ -69,7 +69,7 @@
     <div class="scan-grid">
         <div style="display:flex;flex-direction:column;gap:16px;">
             <div class="scanner-card">
-                <div class="card-title">Scan QR Code Member</div>
+                <div class="card-title">Pindai kode QR Anggota</div>
                 <div id="scanAlert" class="scan-alert"></div>
                 <div class="scanner-viewport" id="scannerViewport">
                     <div class="scanner-idle" id="scannerIdle">
@@ -305,7 +305,7 @@
                             '<span class="status-badge confirmed">✓ Terkonfirmasi</span>';
                         document.getElementById('btnConfirm').style.display = 'none';
                         const name = data.reservation?.name ?? document.getElementById('resName').textContent;
-                        showAlert(`Member berhasil masuk! Selamat datang ${name} 💪`, 'success');
+                        showAlert(`Anggota berhasil masuk! Selamat datang ${name} 💪`, 'success');
                         addToLog({ code: currentCode, name });
                     } else {
                         showAlert(data.message ?? 'Gagal konfirmasi.', 'error');

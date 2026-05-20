@@ -636,11 +636,11 @@
                         <div class="barcode-meta">
                             {{ \Carbon\Carbon::parse($activeTicket->session_date)->translatedFormat('l, d F Y') }}<br>
                             Sesi: {{ $activeTicket->session_start }} – {{ $activeTicket->session_end }}<br>
-                            Member: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>
+                            Anggota: <strong style="color:var(--gym-white)">{{ Auth::user()->name }}</strong>
                         </div>
                         <button class="btn-primary" onclick="drawQR('{{ $activeTicket->code }}')"
                             style="font-size:0.72rem;padding:8px 18px;">
-                            Perbarui QR Code
+                            Perbarui Kode QR
                         </button>
                     </div>
                 @else
@@ -714,8 +714,8 @@
                     <div class="quick-chips">
                         <button class="chip" onclick="sendChip(this)">Slot tersedia hari ini?</button>
                         <button class="chip" onclick="sendChip(this)">Konfirmasi reservasi saya</button>
-                        <button class="chip" onclick="sendChip(this)">Jadwal trainer?</button>
-                        <button class="chip" onclick="sendChip(this)">Perpanjang membership</button>
+                        <button class="chip" onclick="sendChip(this)">Jadwal Pelatih?</button>
+                        <button class="chip" onclick="sendChip(this)">Perpanjang Keanggotaan</button>
                     </div>
                     <div class="chat-input-row">
                         <input class="chat-input" id="chatInput" type="text" placeholder="Tulis pesan..."

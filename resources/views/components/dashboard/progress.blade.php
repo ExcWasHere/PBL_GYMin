@@ -7,7 +7,7 @@
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
 
     <div class="card">
-        <div class="card-title" id="form-title">Tambah / Update Log Harian</div>
+        <div class="card-title" id="form-title">Tambah / Perbarui Catatan Harian</div>
         <form method="POST" action="{{ route('progress.store') }}" id="progress-form">
             @csrf
             <div class="form-group">
@@ -175,7 +175,7 @@
     function resetForm() {
         document.getElementById('progress-form').reset();
         document.getElementById('input-log_date').value     = '{{ now()->toDateString() }}';
-        document.getElementById('form-title').textContent   = 'Tambah / Update Log Harian';
+        document.getElementById('form-title').textContent   = 'Tambah / Perbarui Catatan Harian';
         document.getElementById('submit-btn').textContent   = 'Simpan Log';
         document.getElementById('cancel-edit-btn').style.display = 'none';
     }
