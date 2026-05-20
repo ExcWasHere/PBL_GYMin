@@ -198,7 +198,6 @@
             min-height: 80px;
         }
 
-        /* Buttons */
         .btn-primary {
             background: var(--gym-red);
             color: white;
@@ -232,8 +231,6 @@
         .btn-danger:hover {
             background: rgba(229, 85, 85, 0.1);
         }
-
-        /* Alert */
         .alert-success {
             background: rgba(34, 197, 94, 0.1);
             border: 1px solid rgba(34, 197, 94, 0.3);
@@ -251,8 +248,6 @@
             font-size: 0.85rem;
             margin-bottom: 20px;
         }
-
-        /* Table */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -278,8 +273,6 @@
         .data-table tr:last-child td {
             border-bottom: none;
         }
-
-        /* Stat cards */
         .stat-card {
             background: var(--gym-card);
             border: 1px solid var(--gym-border);
@@ -364,19 +357,62 @@
             @elseif($role === 'receptionist')
                 <a href="{{ route('receptionist.dashboard') }}"
                     class="nav-item {{ request()->routeIs('receptionist.dashboard') ? 'active' : '' }}">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    {{-- Icon: home --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Beranda
                 </a>
+
                 <a href="{{ route('receptionist.reservation.scan') }}"
                     class="nav-item {{ request()->routeIs('receptionist.reservation.*') ? 'active' : '' }}">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4H7a3 3 0 00-3 3v1m0 6v1a3 3 0 003 3h1m6 0h1a3 3 0 003-3v-1m0-6V7a3 3 0 00-3-3h-1
-                   M9 9h1v1H9V9zm5 0h1v1h-1V9zm-5 5h1v1H9v-1zm5 0h1v1h-1v-1z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="3" y="3" width="5" height="5" rx="1" />
+                        <rect x="16" y="3" width="5" height="5" rx="1" />
+                        <rect x="3" y="16" width="5" height="5" rx="1" />
+                        <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+                        <path d="M21 21v.01" />
+                        <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+                        <path d="M3 12h.01" />
+                        <path d="M12 3h.01" />
+                        <path d="M12 16v.01" />
+                        <path d="M16 12h1" />
+                        <path d="M21 12v.01" />
+                        <path d="M12 21v-1" />
                     </svg>
                     Pindai Reservasi
+                </a>
+
+                <a href="{{ route('receptionist.chat') }}"
+                    class="nav-item {{ request()->routeIs('receptionist.chat') ? 'active' : '' }}"
+                    style="position:relative;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    Chat Member
+                    <span id="sidebarChatBadge"
+                        style="
+            display:none;
+            position:absolute;
+            right:14px;
+            top:50%;
+            transform:translateY(-50%);
+            background:var(--gym-red);
+            color:#fff;
+            font-size:0.6rem;
+            font-weight:700;
+            padding:2px 6px;
+            border-radius:999px;
+            min-width:18px;
+            text-align:center;
+        ">0</span>
                 </a>
             @else
                 <a href="{{ route('dashboard') }}"

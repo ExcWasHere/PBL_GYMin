@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservation;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -19,38 +21,35 @@ class ReservationController extends Controller
         ['start' => '18:00', 'end' => '20:00'],
         ['start' => '20:00', 'end' => '22:00'],
     ];
-    const MAX_CAPACITY = 20;
 
+    const MAX_CAPACITY = 20;
     public function index()
     {
-        $activeTicket = [
-            'code'          => 'GYM-' . today()->format('Ymd') . '-' . strtoupper(Str::random(4)),
-            'session_date'  => today()->toDateString(),
-            'session_start' => '08:00',
-            'session_end'   => '10:00',
-            'status'        => 'pending',
-        ];
-
-        $history = [
-            ['session_date' => today()->subDays(1)->toDateString(),  'session_start' => '06:00', 'session_end' => '08:00', 'status' => 'confirmed'],
-            ['session_date' => today()->subDays(4)->toDateString(),  'session_start' => '10:00', 'session_end' => '12:00', 'status' => 'done'],
-            ['session_date' => today()->subDays(8)->toDateString(),  'session_start' => '16:00', 'session_end' => '18:00', 'status' => 'done'],
-            ['session_date' => today()->subDays(11)->toDateString(), 'session_start' => '18:00', 'session_end' => '20:00', 'status' => 'done'],
-        ];
-
-        $slotAvailability = $this->getDummySlotAvailability();
-
-        $messages = [
-            ['sender_id' => 0,          'message' => 'Halo kak! Ada yang bisa dibantu terkait reservasi? 💪', 'created_at' => now()->subMinutes(30)],
-            ['sender_id' => Auth::id(), 'message' => 'Halo min, slot sesi sore masih ada ga?',                'created_at' => now()->subMinutes(28)],
-            ['sender_id' => 0,          'message' => 'Masih ada kak! Sesi 16:00–18:00 tinggal 4 slot.',       'created_at' => now()->subMinutes(27)],
-        ];
+        $user = Auth::user();
+        $activeTicket = Reservation::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('session_date', '>=', today())
+            ->orderBy('session_date')
+            ->orderBy('session_start')
+            ->first();
+        $history = Reservation::where('user_id', $user->id)
+            ->whereNotIn('status', ['pending', 'confirmed'])
+            ->orWhere(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->where('session_date', '<', today());
+            })
+            ->orderByDesc('session_date')
+            ->orderByDesc('session_start')
+            ->limit(20)
+            ->get();
+        $slotAvailability = $this->getSlotAvailability(today()->toDateString());
+        $receptionist = User::where('role', 'receptionist')->first();
 
         return view('components.reservation.reservasi', compact(
             'activeTicket',
             'history',
             'slotAvailability',
-            'messages'
+            'receptionist',
         ));
     }
 
@@ -63,21 +62,38 @@ class ReservationController extends Controller
             'notes'         => ['nullable', 'string', 'max:500'],
         ]);
 
+        $taken = Reservation::where('session_date', $request->session_date)
+            ->where('session_start', $request->session_start)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->count();
+
+        if ($taken >= self::MAX_CAPACITY) {
+            return back()->withErrors(['session_start' => 'Sesi ini sudah penuh.'])->withInput();
+        }
+
+        $existing = Reservation::where('user_id', Auth::id())
+            ->where('session_date', $request->session_date)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+
+        if ($existing) {
+            return back()->withErrors(['session_date' => 'Kamu sudah punya reservasi aktif di tanggal ini.'])->withInput();
+        }
+
         $code = 'GYM-'
             . Carbon::parse($request->session_date)->format('Ymd')
             . '-'
             . strtoupper(Str::random(4));
 
-        // save ke DB
-        // \App\Models\Reservation::create([
-        //     'user_id'       => Auth::id(),
-        //     'code'          => $code,
-        //     'session_date'  => $request->session_date,
-        //     'session_start' => $request->session_start,
-        //     'session_end'   => $request->session_end,
-        //     'notes'         => $request->notes,
-        //     'status'        => 'pending',
-        // ]);
+        Reservation::create([
+            'user_id'       => Auth::id(),
+            'code'          => $code,
+            'session_date'  => $request->session_date,
+            'session_start' => $request->session_start,
+            'session_end'   => $request->session_end,
+            'notes'         => $request->notes,
+            'status'        => 'pending',
+        ]);
 
         return redirect()->route('reservasi')
             ->with('success', "Reservasi berhasil! Kode kamu: {$code}");
@@ -85,10 +101,15 @@ class ReservationController extends Controller
 
     public function destroy($id)
     {
-        // delete DB
-        // \App\Models\Reservation::where('id', $id)
-        //     ->where('user_id', Auth::id())
-        //     ->delete();
+        $reservation = Reservation::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        if (! $reservation->isPending()) {
+            return back()->withErrors(['error' => 'Hanya reservasi pending yang bisa dibatalkan.']);
+        }
+
+        $reservation->update(['status' => 'cancelled']);
 
         return back()->with('success', 'Reservasi berhasil dibatalkan.');
     }
@@ -99,45 +120,18 @@ class ReservationController extends Controller
             'date' => ['required', 'date', 'after_or_equal:today'],
         ]);
 
-        return response()->json($this->getDummySlotAvailability());
-    }
-
-    public function sendChat(Request $request)
-    {
-        $request->validate([
-            'message'     => ['required', 'string', 'max:1000'],
-            'receiver_id' => ['required', 'integer'],
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'data'    => [
-                'sender_id'   => Auth::id(),
-                'receiver_id' => $request->receiver_id,
-                'message'     => $request->message,
-                'created_at'  => now()->toDateTimeString(),
-            ],
-        ]);
-    }
-
-    public function getChat(Request $request)
-    {
-        $request->validate([
-            'receiver_id' => ['required', 'integer'],
-        ]);
-
-        $messages = [
-            ['sender_id' => 0,          'message' => 'Halo kak! Ada yang bisa dibantu? 💪',     'created_at' => now()->subMinutes(30)->toDateTimeString()],
-            ['sender_id' => Auth::id(), 'message' => 'Halo min, slot sesi sore masih ada ga?',  'created_at' => now()->subMinutes(28)->toDateTimeString()],
-            ['sender_id' => 0,          'message' => 'Masih ada kak! Tinggal 4 slot.',          'created_at' => now()->subMinutes(27)->toDateTimeString()],
-        ];
-
-        return response()->json(['success' => true, 'data' => $messages]);
+        return response()->json($this->getSlotAvailability($request->date));
     }
 
     public function scanPage()
     {
-        return view('components.reservation.scan');
+        $todayLogs = Reservation::with('user')
+            ->where('session_date', today())
+            ->where('status', 'confirmed')
+            ->orderByDesc('confirmed_at')
+            ->get();
+
+        return view('components.reservation.scan', compact('todayLogs'));
     }
 
     public function lookup(Request $request)
@@ -148,48 +142,34 @@ class ReservationController extends Controller
 
         $code = strtoupper(trim($request->code));
 
-        if (!preg_match('/^GYM-\d{8}-[A-Z0-9]{4}$/', $code)) {
+        if (! preg_match('/^GYM-\d{8}-[A-Z0-9]{4}$/', $code)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Format kode tidak valid.',
             ], 422);
         }
 
-        // query DB
-        // $reservation = \App\Models\Reservation::with('user')
-        //     ->where('code', $code)
-        //     ->first();
-        //
-        // if (!$reservation) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Kode reservasi tidak ditemukan.',
-        //     ], 404);
-        // }
-        //
-        // return response()->json([
-        //     'success'     => true,
-        //     'reservation' => [
-        //         'code'    => $reservation->code,
-        //         'name'    => $reservation->user->name,
-        //         'email'   => $reservation->user->email,
-        //         'date'    => $reservation->session_date,
-        //         'session' => $reservation->session_start . ' – ' . $reservation->session_end,
-        //         'status'  => $reservation->status,
-        //         'notes'   => $reservation->notes,
-        //     ],
-        // ]);
+        $reservation = Reservation::with('user')
+            ->where('code', $code)
+            ->first();
+
+        if (! $reservation) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode reservasi tidak ditemukan.',
+            ], 404);
+        }
 
         return response()->json([
             'success'     => true,
             'reservation' => [
-                'code'    => $code,
-                'name'    => 'ExcellNibOz',
-                'email'   => 'excell@gmail.com',
-                'date'    => now()->toDateString(),
-                'session' => '08:00 – 10:00',
-                'status'  => 'pending',
-                'notes'   => null,
+                'code'    => $reservation->code,
+                'name'    => $reservation->user->name,
+                'email'   => $reservation->user->email,
+                'date'    => $reservation->session_date->toDateString(),
+                'session' => $reservation->session_label,
+                'status'  => $reservation->status,
+                'notes'   => $reservation->notes,
             ],
         ]);
     }
@@ -202,63 +182,55 @@ class ReservationController extends Controller
 
         $code = strtoupper(trim($request->code));
 
-        // kalo DB udah ready, kita update
-        // $reservation = \App\Models\Reservation::where('code', $code)->first();
-        //
-        // if (!$reservation) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Kode reservasi tidak ditemukan.',
-        //     ], 404);
-        // }
-        //
-        // if ($reservation->status !== 'pending') {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Reservasi ini sudah di-scan atau tidak aktif.',
-        //     ], 422);
-        // }
-        //
-        // $reservation->update([
-        //     'status'       => 'confirmed',
-        //     'confirmed_at' => now(),
-        //     'confirmed_by' => Auth::id(),
-        // ]);
-        //
-        // return response()->json([
-        //     'success'     => true,
-        //     'reservation' => [
-        //         'code'   => $reservation->code,
-        //         'name'   => $reservation->user->name,
-        //         'status' => 'confirmed',
-        //     ],
-        // ]);
+        $reservation = Reservation::with('user')->where('code', $code)->first();
+
+        if (! $reservation) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode reservasi tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($reservation->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reservasi ini sudah di-scan atau tidak aktif.',
+            ], 422);
+        }
+
+        $reservation->update([
+            'status'       => 'confirmed',
+            'confirmed_at' => now(),
+            'confirmed_by' => Auth::id(),
+        ]);
 
         return response()->json([
             'success'     => true,
             'reservation' => [
-                'code'   => $code,
-                'name'   => 'Demo Member',
+                'code'   => $reservation->code,
+                'name'   => $reservation->user->name,
                 'status' => 'confirmed',
             ],
         ]);
     }
 
-    private function getDummySlotAvailability(): array
+    private function getSlotAvailability(string $date): array
     {
-        $dummyTaken = [
-            '10:00' => 20,
-            '14:00' => 15,
-            '18:00' => 8,
-        ];
+        $counts = Reservation::where('session_date', $date)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->selectRaw('session_start, COUNT(*) as total')
+            ->groupBy('session_start')
+            ->pluck('total', 'session_start')
+            ->toArray();
 
-        return collect(self::SESSIONS)->map(function ($slot) use ($dummyTaken) {
-            $taken = $dummyTaken[$slot['start']] ?? rand(0, 10);
+        return collect(self::SESSIONS)->map(function ($slot) use ($counts) {
+            $taken = $counts[$slot['start']] ?? 0;
+
             return [
                 'start'     => $slot['start'],
                 'end'       => $slot['end'],
-                'taken'     => $taken,
-                'available' => self::MAX_CAPACITY - $taken,
+                'taken'     => (int) $taken,
+                'available' => self::MAX_CAPACITY - (int) $taken,
                 'is_full'   => $taken >= self::MAX_CAPACITY,
             ];
         })->toArray();
