@@ -31,7 +31,7 @@
 </style>
 
 @php
-    $items = ['Jadwal Latihan', 'Streak & Reward', 'Kepadatan Terkini', 'Progress Tracker', 'Program Workout', 'Notifikasi Pintar', 'Riwayat Latihan', 'Multi-Device'];
+    $items = ['Jadwal Latihan', 'Runtutan & Hadiah', 'Kepadatan Terkini', 'Perkembangan Latihan', 'Program Latihan', 'Notifikasi Pintar', 'Riwayat Latihan', 'Fleksibel'];
 @endphp
 
 <div class="marquee-wrap my-12">

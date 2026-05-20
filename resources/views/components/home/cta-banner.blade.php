@@ -41,7 +41,7 @@
 
             <h2 class="cta-title mb-6">
                 SIAP LATIHAN<br>
-                <span style="color:var(--gym-red);">SMART?</span>
+                <span style="color:var(--gym-red); ">SMART?</span>
             </h2>
 
             <p class="text-[var(--gym-gray)] text-[1rem] font-light max-w-md mx-auto mb-10 leading-[1.7]">
@@ -50,7 +50,7 @@
 
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="{{ route('register') }}" class="btn-primary px-10 py-4 text-[1rem]">
-                    Gym Sekarang Yuk
+                    Gym Sekarang, Yuk
                 </a>
                 <a href="{{ route('login') }}" class="btn-outline px-9 py-3 text-[0.9rem]">
                     Sudah Punya Akun

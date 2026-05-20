@@ -35,10 +35,10 @@
                     Kepadatan Terkini
                 </div>
                 <h2 class="section-title" style="margin-bottom:1.25rem;">
-                    TAU KAPAN<br><span style="color:var(--gym-red);">GYM SEPI</span>
+                    TAHU KAPAN<br><span style="color:var(--gym-red);">GYM SEPI</span>
                 </h2>
                 <p style="color:var(--gym-gray);font-size:0.95rem;line-height:1.75;font-weight:300;margin-bottom:2rem;">
-                    Udah dateng ke Gym tapi kena PHP?, mau pakek alat tapi udah kepakek semua?. Tenang fitur crowd monitor dari GYM-in siap bantu kamu, pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
+                    Udah dateng ke Gym tapi kena PHP?, mau pakek alat tapi udah terpakai semua?. Tenang fitur monitor kepadatan dari GYM-in siap bantu kamu, pantau tingkat kepadatan per jam dan pilih waktu terbaik untuk latihan kamu.
                 </p>
                 <ul style="display:flex;flex-direction:column;gap:12px;">
                     @foreach($benefits as $item)
@@ -54,7 +54,7 @@
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
                         <div>
                             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;">Status Gym Hari Ini</div>
-                            <div style="font-size:0.72rem;color:var(--gym-gray);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Live 18:30 WIB</div>
+                            <div style="font-size:0.72rem;color:var(--gym-gray);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Terkini 18:30 WIB</div>
                         </div>
                         <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#22c55e;font-weight:500;">
                             <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;"></span>

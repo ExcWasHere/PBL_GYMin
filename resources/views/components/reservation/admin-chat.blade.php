@@ -58,10 +58,10 @@
     <div class="admin-chat-wrap">
         <div class="ac-sidebar">
             <div class="ac-sidebar-hd">
-                <span>Member</span>
+                <span>Anggota</span>
                 <span id="totalUnreadBadge" style="display:none;" class="ac-badge">0</span>
             </div>
-            <input class="ac-search" type="text" placeholder="Cari member..."
+            <input class="ac-search" type="text" placeholder="Cari anggota..."
                 oninput="filterContacts(this.value)">
             <div class="ac-contacts" id="contactList">
                 @forelse ($contacts as $c)
@@ -79,7 +79,7 @@
                     </div>
                 @empty
                     <div class="ac-empty" id="noContacts">
-                        Belum ada member yang menghubungi.
+                        Belum ada anggota yang menghubungi.
                     </div>
                 @endforelse
             </div>
@@ -92,12 +92,12 @@
                     stroke-linejoin="round">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
-                <p>Pilih member untuk memulai chat</p>
+                <p>Pilih anggota untuk memulai chat</p>
             </div>
             <div id="acChatArea" style="display:none;flex-direction:column;height:100%;">
                 <div class="ac-header">
                     <span class="ac-header-name" id="acHeaderName">—</span>
-                    <span style="font-size:0.72rem;color:var(--gym-gray)">Member</span>
+                    <span style="font-size:0.72rem;color:var(--gym-gray)">Anggota</span>
                 </div>
                 <div class="ac-messages" id="acMessages"></div>
                 <div class="ac-input-row">

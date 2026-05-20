@@ -6,7 +6,7 @@
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
         <div class="stat-card">
-            <div class="stat-label">Total Member</div>
+            <div class="stat-label">Total Anggota</div>
             <div class="stat-value">
                 {{ \App\Models\User::where('role','member')->count() }}<span class="stat-unit">orang</span>
             </div>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="card">
-        <div class="card-title">Daftar Member</div>
+        <div class="card-title">Daftar Anggota</div>
         <table class="data-table">
             <thead>
                 <tr>
