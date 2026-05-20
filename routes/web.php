@@ -72,6 +72,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/reservasi/slots',    [ReservationController::class, 'slots'])->name('reservasi.slots');
         Route::post('/reservasi',         [ReservationController::class, 'store'])->name('reservasi.store');
         Route::delete('/reservasi/{id}',  [ReservationController::class, 'destroy'])->name('reservasi.destroy');
+
+        // Personal Trainer
+        Route::get('/personal-trainer', fn() => view('components.personal-trainer.personal-trainer'))->name('personal-trainer.index');
     });
 
 });
