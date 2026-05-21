@@ -2,54 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Reservation;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class GymDensityController extends Controller
 {
     private int $maxCapacity = 80;
+
     public function index()
     {
         return view('components.dashboard.gym-density', [
-            'activeVisitors' => 47,
-            'maxCapacity'    => $this->maxCapacity,
-            'hourlyStats'    => $this->getHourlyStats(),
-            'zones'          => $this->getZoneStats(),
-            'quietHours'     => '06:00-08:00 & 13:00-15:00',
-            'peakHours'      => '17:00-19:00 setiap hari kerja',
+            'maxCapacity' => $this->maxCapacity,
+            ...$this->buildDensityData(),
         ]);
+    }
+
+    public function live(): JsonResponse
+    {
+        return response()->json($this->buildDensityData());
+    }
+
+    private function buildDensityData(): array
+    {
+        $now  = Carbon::now();
+        $time = $now->format('H:i');
+        $activeVisitors = Reservation::where('session_date', today())
+            ->where('status', 'confirmed')
+            ->where('session_start', '<=', $time)
+            ->where('session_end',   '>', $time)
+            ->count();
+
+        return [
+            'activeVisitors' => $activeVisitors,
+            'hourlyStats'    => $this->getHourlyStats(),
+            'quietHours'     => $this->getQuietHours(),
+            'peakHours'      => $this->getPeakHours(),
+            'lastUpdated'    => $now->format('H:i:s'),
+        ];
     }
 
     private function getHourlyStats(): array
     {
-        return [
-            ['hour' => '05:00', 'count' => 5],
-            ['hour' => '06:00', 'count' => 12],
-            ['hour' => '07:00', 'count' => 20],
-            ['hour' => '08:00', 'count' => 48],
-            ['hour' => '09:00', 'count' => 38],
-            ['hour' => '10:00', 'count' => 36],
-            ['hour' => '11:00', 'count' => 30],
-            ['hour' => '12:00', 'count' => 64],
-            ['hour' => '13:00', 'count' => 40],
-            ['hour' => '14:00', 'count' => 35],
-            ['hour' => '15:00', 'count' => 44],
-            ['hour' => '16:00', 'count' => 58],
-            ['hour' => '17:00', 'count' => 72],
-            ['hour' => '18:00', 'count' => 59],
-            ['hour' => '19:00', 'count' => 45],
-            ['hour' => '20:00', 'count' => 24],
-            ['hour' => '21:00', 'count' => 10],
-            ['hour' => '22:00', 'count' => 3],
-        ];
+        $counts = Reservation::where('session_date', today())
+            ->where('status', 'confirmed')
+            ->selectRaw('session_start, COUNT(*) as count')
+            ->groupBy('session_start')
+            ->pluck('count', 'session_start')
+            ->toArray();
+
+        $slots = [];
+        for ($h = 5; $h <= 22; $h++) {
+            $key     = sprintf('%02d:00', $h);
+            $slots[] = [
+                'hour'  => $key,
+                'count' => (int) ($counts[$key] ?? 0),
+            ];
+        }
+
+        return $slots;
     }
 
-    private function getZoneStats(): array
+    private function getQuietHours(): string
     {
-        return [
-            ['name' => 'Cardio',      'current' => 18, 'max' => 25],
-            ['name' => 'Free Weight', 'current' => 12, 'max' => 20],
-            ['name' => 'Mesin',       'current' => 11, 'max' => 15],
-            ['name' => 'Loker',       'current' => 6,  'max' => 20],
-        ];
+        $counts = Reservation::where('session_date', today())
+            ->where('status', 'confirmed')
+            ->selectRaw('session_start, COUNT(*) as count')
+            ->groupBy('session_start')
+            ->pluck('count', 'session_start')
+            ->toArray();
+
+        $threshold = $this->maxCapacity * 0.3;
+
+        $quiet = collect($counts)
+            ->filter(fn($c) => $c < $threshold)
+            ->keys()
+            ->sort()
+            ->values();
+
+        if ($quiet->isEmpty()) return 'Belum ada data cukup';
+
+        return $quiet->first() . ' – ' . $quiet->last();
+    }
+
+    private function getPeakHours(): string
+    {
+        $counts = Reservation::where('session_date', today())
+            ->where('status', 'confirmed')
+            ->selectRaw('session_start, COUNT(*) as count')
+            ->groupBy('session_start')
+            ->orderByDesc('count')
+            ->pluck('count', 'session_start')
+            ->toArray();
+
+        if (empty($counts)) return 'Belum ada data cukup';
+
+        $threshold = $this->maxCapacity * 0.6;
+
+        $peak = collect($counts)
+            ->filter(fn($c) => $c >= $threshold)
+            ->keys()
+            ->sort()
+            ->values();
+
+        if ($peak->isEmpty()) {
+            $top = array_key_first($counts);
+            return "{$top} (tersibuk hari ini)";
+        }
+
+        return $peak->first() . ' – ' . $peak->last();
     }
 }

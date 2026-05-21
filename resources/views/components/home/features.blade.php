@@ -132,11 +132,6 @@
     <div class="container-custom">
 
         <div class="max-w-2xl mb-20 reveal">
-            <div class="section-tag">
-                <span class="w-6 h-px bg-[var(--gym-red)] inline-block"></span>
-                Fitur Unggulan
-            </div>
-
             <h2 class="section-title">
                 SEMUA YANG KAMU<br>
                 <span style="color:var(--gym-red);">BUTUHKAN</span>
