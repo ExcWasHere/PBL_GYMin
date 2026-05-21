@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
 
         // Gym density
         Route::get('/dashboard/gym-density', [GymDensityController::class, 'index'])->name('gym.density');
+        Route::get('/dashboard/gym-density/live', [GymDensityController::class, 'live'])->name('gym.density.live');
 
         // Rewards
         Route::get('/dashboard/rewards',              [RewardController::class, 'index'])->name('rewards.index');
