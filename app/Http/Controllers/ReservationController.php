@@ -36,10 +36,9 @@ class ReservationController extends Controller
             ->first();
 
         $history = Reservation::where('user_id', $user->id)
-            ->whereNotIn('status', ['pending', 'confirmed'])
-            ->orWhere(function ($q) use ($user) {
-                $q->where('user_id', $user->id)
-                  ->where('session_date', '<', today());
+            ->where(function ($q) {
+                $q->whereNotIn('status', ['pending', 'confirmed'])
+                    ->orWhere('session_date', '<', today());
             })
             ->orderByDesc('session_date')
             ->orderByDesc('session_start')
@@ -170,7 +169,7 @@ class ReservationController extends Controller
             'reservation' => [
                 'code'       => $reservation->code,
                 'name'       => $reservation->user->name,
-                'gender'     => $reservation->user->gender_label,
+                'gender'     => $reservation->user->gender,
                 'email'      => $reservation->user->email,
                 'date'       => $reservation->session_date->toDateString(),
                 'session'    => $reservation->session_label,
