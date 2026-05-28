@@ -14,6 +14,7 @@ class Reservation extends Model
         'session_start',
         'session_end',
         'notes',
+        'fee',
         'status',
         'confirmed_at',
         'confirmed_by',
@@ -51,7 +52,7 @@ class Reservation extends Model
 
     public function getSessionLabelAttribute(): string
     {
-        return $this->session_start . ' – ' . $this->session_end;
+        return $this->session_start . ' - ' . $this->session_end;
     }
 
     public function isPending(): bool
