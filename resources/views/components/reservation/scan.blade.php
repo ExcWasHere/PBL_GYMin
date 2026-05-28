@@ -48,6 +48,37 @@
             .status-badge.invalid   { background: rgba(232,41,42,0.12); border: 1px solid rgba(232,41,42,0.4); color: #f87171; }
             .pulse { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulseAnim 1.4s ease-in-out infinite; }
             @keyframes pulseAnim { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+            .fee-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(34,34,34,0.6);
+                font-size: 0.83rem;
+                background: rgba(251,191,36,0.04);
+                margin: 0 -4px;
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            .fee-amount {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 1.15rem;
+                letter-spacing: 0.06em;
+                color: #fbbf24;
+            }
+            .gender-badge-sm {
+                display: inline-block;
+                padding: 2px 9px;
+                font-size: 0.68rem;
+                font-weight: 600;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .gender-badge-sm.male   { background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.4); color: #60a5fa; }
+            .gender-badge-sm.female { background: rgba(244,114,182,0.15); border: 1px solid rgba(244,114,182,0.4); color: #f472b6; }
+            .gender-badge-sm.other  { background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.4); color: #a78bfa; }
 
             .log-card  { background: var(--gym-card); border: 1px solid var(--gym-border); padding: 24px; }
             .log-item  { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-bottom: 1px solid rgba(34,34,34,0.6); }
@@ -103,7 +134,6 @@
 
                 <div class="cam-btn-row">
                     <button class="btn-sm" id="btnStartCam" onclick="startCamera()">
-                        {{-- Icon camera Lucide --}}
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px">
@@ -125,6 +155,7 @@
                     <button class="btn-sm" onclick="lookupCode()">Cek</button>
                 </div>
             </div>
+
             <div class="log-card">
                 <div class="card-title">Log Hari Ini</div>
                 <div id="logList">
@@ -146,6 +177,7 @@
                 </div>
             </div>
         </div>
+
         <div>
             <div id="resultPlaceholder" class="card" style="text-align:center;padding:60px 28px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24"
@@ -169,6 +201,7 @@
                         <div class="result-code" id="resCode">—</div>
                     </div>
                 </div>
+
                 <div class="detail-row">
                     <span class="detail-label">Tanggal Reservasi</span>
                     <span class="detail-value" id="resDate">—</span>
@@ -182,12 +215,32 @@
                     <span class="detail-value" id="resEmail">—</span>
                 </div>
                 <div class="detail-row">
+                    <span class="detail-label">Gender</span>
+                    <span id="resGender">—</span>
+                </div>
+                <div class="detail-row">
                     <span class="detail-label">Status</span>
                     <span id="resStatus">—</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Catatan</span>
-                    <span class="detail-value" id="resNotes" style="font-size:.8rem;max-width:240px;text-align:right;">—</span>
+                    <span class="detail-value" id="resNotes"
+                        style="font-size:.8rem;max-width:240px;text-align:right;">—</span>
+                </div>
+                <div class="fee-row">
+                    <span class="detail-label" style="display:flex;align-items:center;gap:6px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                            fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                        Biaya Sesi
+                    </span>
+                    <div style="text-align:right;">
+                        <div class="fee-amount" id="resFeeAmount">—</div>
+                        <div style="font-size:0.68rem;color:var(--gym-gray);">Bayar di kasir</div>
+                    </div>
                 </div>
                 <div class="action-row">
                     <button class="btn-sm" id="btnConfirm" onclick="confirmEntry()"
@@ -206,7 +259,9 @@
             const LOOKUP_URL  = '{{ route("receptionist.reservation.lookup") }}';
             const CONFIRM_URL = '{{ route("receptionist.reservation.confirm") }}';
             const CSRF        = '{{ csrf_token() }}';
+
             let stream = null, scanLoop = null, currentCode = null;
+
             async function startCamera() {
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -245,6 +300,7 @@
                     if (code) { stopCamera(); processCode(code.data); }
                 }, 250);
             }
+
             function lookupCode() {
                 const code = document.getElementById('manualCode').value.trim().toUpperCase();
                 if (!code) { showAlert('Masukkan kode reservasi terlebih dahulu.', 'error'); return; }
@@ -264,10 +320,16 @@
                     showAlert('Gagal menghubungi server.', 'error');
                 }
             }
+            const GENDER_MAP = {
+                male:   { label: 'Laki-laki', cls: 'male' },
+                female: { label: 'Perempuan', cls: 'female' },
+                other:  { label: 'Lainnya',   cls: 'other' },
+            };
 
             function renderResult(res) {
                 document.getElementById('resultPlaceholder').style.display = 'none';
                 document.getElementById('resultCard').classList.add('show');
+
                 const initials = res.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
                 document.getElementById('resAvatar').textContent  = initials;
                 document.getElementById('resName').textContent    = res.name;
@@ -276,7 +338,12 @@
                 document.getElementById('resDate').textContent    = res.date;
                 document.getElementById('resSession').textContent = res.session;
                 document.getElementById('resNotes').textContent   = res.notes || '—';
-
+                const genderEl  = document.getElementById('resGender');
+                const genderInfo = GENDER_MAP[res.gender];
+                genderEl.innerHTML = genderInfo
+                    ? `<span class="gender-badge-sm ${genderInfo.cls}">${genderInfo.label}</span>`
+                    : '<span style="color:var(--gym-gray)">—</span>';
+                document.getElementById('resFeeAmount').textContent = res.fee_label ?? '—';
                 const statusMap = {
                     pending:   '<span class="status-badge pending"><span class="pulse"></span>Menunggu Scan</span>',
                     confirmed: '<span class="status-badge confirmed">✓ Terkonfirmasi</span>',
@@ -286,17 +353,22 @@
                 document.getElementById('resStatus').innerHTML = statusMap[res.status] ?? statusMap.pending;
 
                 const btn = document.getElementById('btnConfirm');
-                btn.style.display  = res.status === 'pending' ? 'inline-block' : 'none';
-                btn.disabled       = false;
+                btn.style.display = res.status === 'pending' ? 'inline-block' : 'none';
+                btn.disabled      = false;
                 hideAlert();
             }
+
             async function confirmEntry() {
                 if (!currentCode) return;
                 document.getElementById('btnConfirm').disabled = true;
                 try {
                     const res  = await fetch(CONFIRM_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                        method:  'POST',
+                        headers: {
+                            'Content-Type':  'application/json',
+                            'X-CSRF-TOKEN':  CSRF,
+                            'Accept':        'application/json',
+                        },
                         body: JSON.stringify({ code: currentCode }),
                     });
                     const data = await res.json();
@@ -316,10 +388,10 @@
                     document.getElementById('btnConfirm').disabled = false;
                 }
             }
+
             function addToLog({ code, name }) {
                 const empty = document.getElementById('logEmpty');
                 if (empty) empty.remove();
-
                 const now  = new Date();
                 const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
                 const el   = document.createElement('div');

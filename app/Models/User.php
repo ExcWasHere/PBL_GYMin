@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,8 +14,10 @@ use App\Models\ChatMessage;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
     protected $fillable = [
         'name',
+        'gender',
         'email',
         'password',
         'role',
@@ -22,20 +25,29 @@ class User extends Authenticatable
         'streak_days',
         'longest_streak',
         'last_login_date',
-        'total_logins'
+        'total_logins',
     ];
 
     protected $hidden = [
         'password',
-        'remember_token'
+        'remember_token',
     ];
 
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function getGenderLabelAttribute(): string
+    {
+        return match ($this->gender) {
+            'male'   => 'Laki-laki',
+            'female' => 'Perempuan',
+            default  => '-',
+        };
     }
 
     public function progressLogs()

@@ -23,15 +23,18 @@ class ReservationController extends Controller
     ];
 
     const MAX_CAPACITY = 20;
+    const SESSION_FEE = 25000;
     public function index()
     {
         $user = Auth::user();
+
         $activeTicket = Reservation::where('user_id', $user->id)
             ->whereIn('status', ['pending', 'confirmed'])
             ->where('session_date', '>=', today())
             ->orderBy('session_date')
             ->orderBy('session_start')
             ->first();
+
         $history = Reservation::where('user_id', $user->id)
             ->whereNotIn('status', ['pending', 'confirmed'])
             ->orWhere(function ($q) use ($user) {
@@ -42,8 +45,9 @@ class ReservationController extends Controller
             ->orderByDesc('session_start')
             ->limit(20)
             ->get();
+
         $slotAvailability = $this->getSlotAvailability(today()->toDateString());
-        $receptionist = User::where('role', 'receptionist')->first();
+        $receptionist     = User::where('role', 'receptionist')->first();
 
         return view('components.reservation.reservasi', compact(
             'activeTicket',
@@ -77,7 +81,9 @@ class ReservationController extends Controller
             ->exists();
 
         if ($existing) {
-            return back()->withErrors(['session_date' => 'Kamu sudah punya reservasi aktif di tanggal ini.'])->withInput();
+            return back()->withErrors([
+                'session_date' => 'Kamu sudah punya reservasi aktif di tanggal ini.',
+            ])->withInput();
         }
 
         $code = 'GYM-'
@@ -92,11 +98,12 @@ class ReservationController extends Controller
             'session_start' => $request->session_start,
             'session_end'   => $request->session_end,
             'notes'         => $request->notes,
+            'fee'           => self::SESSION_FEE,
             'status'        => 'pending',
         ]);
 
         return redirect()->route('reservasi')
-            ->with('success', "Reservasi berhasil! Kode kamu: {$code}");
+            ->with('success', "Reservasi berhasil! Kode kamu: {$code}. Biaya sesi: Rp " . number_format(self::SESSION_FEE, 0, ',', '.') . " (dibayar di kasir).");
     }
 
     public function destroy($id)
@@ -149,9 +156,7 @@ class ReservationController extends Controller
             ], 422);
         }
 
-        $reservation = Reservation::with('user')
-            ->where('code', $code)
-            ->first();
+        $reservation = Reservation::with('user')->where('code', $code)->first();
 
         if (! $reservation) {
             return response()->json([
@@ -163,13 +168,16 @@ class ReservationController extends Controller
         return response()->json([
             'success'     => true,
             'reservation' => [
-                'code'    => $reservation->code,
-                'name'    => $reservation->user->name,
-                'email'   => $reservation->user->email,
-                'date'    => $reservation->session_date->toDateString(),
-                'session' => $reservation->session_label,
-                'status'  => $reservation->status,
-                'notes'   => $reservation->notes,
+                'code'       => $reservation->code,
+                'name'       => $reservation->user->name,
+                'gender'     => $reservation->user->gender_label,
+                'email'      => $reservation->user->email,
+                'date'       => $reservation->session_date->toDateString(),
+                'session'    => $reservation->session_label,
+                'status'     => $reservation->status,
+                'notes'      => $reservation->notes,
+                'fee'        => $reservation->fee ?? self::SESSION_FEE,
+                'fee_label'  => $reservation->fee_label,
             ],
         ]);
     }
@@ -180,8 +188,7 @@ class ReservationController extends Controller
             'code' => ['required', 'string', 'max:30'],
         ]);
 
-        $code = strtoupper(trim($request->code));
-
+        $code        = strtoupper(trim($request->code));
         $reservation = Reservation::with('user')->where('code', $code)->first();
 
         if (! $reservation) {
@@ -207,9 +214,10 @@ class ReservationController extends Controller
         return response()->json([
             'success'     => true,
             'reservation' => [
-                'code'   => $reservation->code,
-                'name'   => $reservation->user->name,
-                'status' => 'confirmed',
+                'code'      => $reservation->code,
+                'name'      => $reservation->user->name,
+                'status'    => 'confirmed',
+                'fee_label' => $reservation->fee_label,
             ],
         ]);
     }
@@ -232,6 +240,7 @@ class ReservationController extends Controller
                 'taken'     => (int) $taken,
                 'available' => self::MAX_CAPACITY - (int) $taken,
                 'is_full'   => $taken >= self::MAX_CAPACITY,
+                'fee'       => self::SESSION_FEE,
             ];
         })->toArray();
     }

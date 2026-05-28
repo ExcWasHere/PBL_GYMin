@@ -62,8 +62,6 @@
                     Sudah Punya Akun
                 </a>
             </div>
-
         </div>
-
     </div>
 </section>
