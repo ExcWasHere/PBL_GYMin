@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Http\Controllers\ReservationController;
 
 class Reservation extends Model
 {
@@ -58,5 +59,15 @@ class Reservation extends Model
     public function isPending(): bool
     {
         return $this->status === 'pending';
+    }
+
+    public function getFeeAttribute($value)
+    {
+        return $value ?? ReservationController::SESSION_FEE;
+    }
+
+    public function getFeeLabelAttribute(): string
+    {
+        return 'Rp ' . number_format($this->fee ?? 25000, 0, ',', '.');
     }
 }

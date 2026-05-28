@@ -42,26 +42,22 @@ class GymDensityController extends Controller
         ];
     }
 
-    private function getHourlyStats(): array
-    {
-        $counts = Reservation::where('session_date', today())
-            ->where('status', 'confirmed')
-            ->selectRaw('session_start, COUNT(*) as count')
-            ->groupBy('session_start')
-            ->pluck('count', 'session_start')
-            ->toArray();
+private function getHourlyStats(): array
+{
+    $counts = Reservation::where('session_date', today())
+        ->where('status', 'confirmed')
+        ->selectRaw("TO_CHAR(session_start::time, 'HH24:MI') as slot, COUNT(*) as count")
+        ->groupBy('slot')
+        ->pluck('count', 'slot')
+        ->toArray();
 
-        $slots = [];
-        for ($h = 5; $h <= 22; $h++) {
-            $key     = sprintf('%02d:00', $h);
-            $slots[] = [
-                'hour'  => $key,
-                'count' => (int) ($counts[$key] ?? 0),
-            ];
-        }
+    $validSlots = ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00', '22:00', '00:00'];
 
-        return $slots;
-    }
+    return collect($validSlots)->map(fn($key) => [
+        'hour'  => $key,
+        'count' => (int) ($counts[$key] ?? 0),
+    ])->all();
+}
 
     private function getQuietHours(): string
     {
@@ -82,7 +78,7 @@ class GymDensityController extends Controller
 
         if ($quiet->isEmpty()) return 'Belum ada data cukup';
 
-        return $quiet->first() . ' – ' . $quiet->last();
+        return $quiet->first() . ' - ' . $quiet->last();
     }
 
     private function getPeakHours(): string
@@ -110,6 +106,6 @@ class GymDensityController extends Controller
             return "{$top} (tersibuk hari ini)";
         }
 
-        return $peak->first() . ' – ' . $peak->last();
+        return $peak->first() . ' - ' . $peak->last();
     }
 }
