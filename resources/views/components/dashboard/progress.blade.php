@@ -61,7 +61,7 @@
         @endphp
         <div class="stat-card">
             <div class="stat-label">Berat Saat Ini</div>
-            <div class="stat-value">{{ $latest?->weight_kg ?? '—' }}<span class="stat-unit">kg</span></div>
+            <div class="stat-value">{{ $latest?->weight_kg ?? '' }}<span class="stat-unit">kg</span></div>
             @if($weightDiff !== null)
                 <div style="font-size:0.78rem;margin-top:4px;color:{{ $weightDiff <= 0 ? '#4ade80' : '#f87171' }}">
                     {{ $weightDiff > 0 ? '+' : '' }}{{ $weightDiff }} kg sejak awal
@@ -70,11 +70,11 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">Massa Otot Saat Ini</div>
-            <div class="stat-value">{{ $latest?->muscle_mass_kg ?? '—' }}<span class="stat-unit">kg</span></div>
+            <div class="stat-value">{{ $latest?->muscle_mass_kg ?? '' }}<span class="stat-unit">kg</span></div>
         </div>
         <div class="stat-card">
             <div class="stat-label">% Lemak Saat Ini</div>
-            <div class="stat-value">{{ $latest?->body_fat_pct ?? '—' }}<span class="stat-unit">%</span></div>
+            <div class="stat-value">{{ $latest?->body_fat_pct ?? '' }}<span class="stat-unit">%</span></div>
         </div>
         <div class="stat-card">
             <div class="stat-label">Total Entri Log</div>
@@ -115,10 +115,10 @@
                 @foreach($logs->sortByDesc('log_date') as $log)
                 <tr>
                     <td>{{ $log->log_date->format('d M Y') }}</td>
-                    <td>{{ $log->weight_kg ?? '—' }}</td>
-                    <td>{{ $log->muscle_mass_kg ?? '—' }}</td>
-                    <td>{{ $log->body_fat_pct ?? '—' }}</td>
-                    <td style="max-width:200px;color:var(--gym-gray)">{{ $log->workout_notes ?? '—' }}</td>
+                    <td>{{ $log->weight_kg ?? '-' }}</td>
+                    <td>{{ $log->muscle_mass_kg ?? '-' }}</td>
+                    <td>{{ $log->body_fat_pct ?? '-' }}</td>
+                    <td style="max-width:200px;color:var(--gym-gray)">{{ $log->workout_notes ?? '-' }}</td>
                     <td>
                         <div style="display:flex;gap:8px;">
                             <button type="button" class="btn-edit"
@@ -165,7 +165,7 @@
         document.getElementById('input-body_fat_pct').value = fat || '';
         document.getElementById('input-workout_notes').value = notes || '';
 
-        document.getElementById('form-title').textContent   = 'Edit Log — ' + date;
+        document.getElementById('form-title').textContent   = 'Edit Log - ' + date;
         document.getElementById('submit-btn').textContent   = 'Update Log';
         document.getElementById('cancel-edit-btn').style.display = 'inline-block';
 

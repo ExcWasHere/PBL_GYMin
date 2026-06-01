@@ -196,36 +196,36 @@
                 <div class="result-header">
                     <div class="result-avatar" id="resAvatar">--</div>
                     <div>
-                        <div class="result-name" id="resName">—</div>
+                        <div class="result-name" id="resName">-</div>
                         <div class="result-role">Member</div>
-                        <div class="result-code" id="resCode">—</div>
+                        <div class="result-code" id="resCode">-</div>
                     </div>
                 </div>
 
                 <div class="detail-row">
                     <span class="detail-label">Tanggal Reservasi</span>
-                    <span class="detail-value" id="resDate">—</span>
+                    <span class="detail-value" id="resDate">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Sesi</span>
-                    <span class="detail-value" id="resSession">—</span>
+                    <span class="detail-value" id="resSession">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Email</span>
-                    <span class="detail-value" id="resEmail">—</span>
+                    <span class="detail-value" id="resEmail">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Gender</span>
-                    <span id="resGender">—</span>
+                    <span id="resGender">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Status</span>
-                    <span id="resStatus">—</span>
+                    <span id="resStatus">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Catatan</span>
                     <span class="detail-value" id="resNotes"
-                        style="font-size:.8rem;max-width:240px;text-align:right;">—</span>
+                        style="font-size:.8rem;max-width:240px;text-align:right;">-</span>
                 </div>
                 <div class="fee-row">
                     <span class="detail-label" style="display:flex;align-items:center;gap:6px;">
@@ -238,7 +238,7 @@
                         Biaya Sesi
                     </span>
                     <div style="text-align:right;">
-                        <div class="fee-amount" id="resFeeAmount">—</div>
+                        <div class="fee-amount" id="resFeeAmount">-</div>
                         <div style="font-size:0.68rem;color:var(--gym-gray);">Bayar di kasir</div>
                     </div>
                 </div>
@@ -337,13 +337,13 @@
                 document.getElementById('resEmail').textContent   = res.email;
                 document.getElementById('resDate').textContent    = res.date;
                 document.getElementById('resSession').textContent = res.session;
-                document.getElementById('resNotes').textContent   = res.notes || '—';
+                document.getElementById('resNotes').textContent   = res.notes || '-';
                 const genderEl  = document.getElementById('resGender');
                 const genderInfo = GENDER_MAP[res.gender];
                 genderEl.innerHTML = genderInfo
                     ? `<span class="gender-badge-sm ${genderInfo.cls}">${genderInfo.label}</span>`
-                    : '<span style="color:var(--gym-gray)">—</span>';
-                document.getElementById('resFeeAmount').textContent = res.fee_label ?? '—';
+                    : '<span style="color:var(--gym-gray)">-</span>';
+                document.getElementById('resFeeAmount').textContent = res.fee_label ?? '-';
                 const statusMap = {
                     pending:   '<span class="status-badge pending"><span class="pulse"></span>Menunggu Scan</span>',
                     confirmed: '<span class="status-badge confirmed">✓ Terkonfirmasi</span>',

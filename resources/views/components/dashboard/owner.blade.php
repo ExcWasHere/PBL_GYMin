@@ -307,7 +307,7 @@
                             @if ($u->gender)
                                 <span class="gender-badge {{ $u->gender }}">{{ $u->gender_label }}</span>
                             @else
-                                <span class="gender-badge none">—</span>
+                                <span class="gender-badge none"></span>
                             @endif
                         </td>
                         <td style="color:var(--gym-gray)">{{ $u->email }}</td>

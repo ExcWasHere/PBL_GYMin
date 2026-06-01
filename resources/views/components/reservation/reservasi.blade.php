@@ -579,7 +579,7 @@
                                 <rect x="2" y="5" width="20" height="14" rx="2"/>
                                 <line x1="2" y1="10" x2="22" y2="10"/>
                             </svg>
-                            {{ $activeTicket->fee_label }} — Bayar di Kasir
+                            {{ $activeTicket->fee_label }} - Bayar di Kasir
                         </div>
                         <div class="fee-note">Tunjukkan tiket ini ke resepsionis &amp; lakukan pembayaran.</div>
                         <div class="barcode-meta">
@@ -680,8 +680,8 @@
         <div class="modal-box">
             <div class="modal-title">Konfirmasi Reservasi</div>
             <div class="modal-sub">
-                Kamu akan mereservasi sesi tanggal <strong id="cfDate">—</strong>,
-                pukul <strong id="cfSlot">—</strong>.
+                Kamu akan mereservasi sesi tanggal <strong id="cfDate">-</strong>,
+                pukul <strong id="cfSlot">-</strong>.
             </div>
             <div class="modal-fee">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -818,7 +818,7 @@
                         <div style="height:100%;width:${pct}%;background:var(--gym-red);transition:width .4s;"></div>
                     </div>
                     <div style="font-size:.72rem;color:var(--gym-gray);">
-                        ${pct}% kapasitas terisi —${pct < 50 ? ' Sepi' : pct < 80 ? ' Ramai' : ' Penuh'}
+                        ${pct}% kapasitas terisi -${pct < 50 ? ' Sepi' : pct < 80 ? ' Ramai' : ' Penuh'}
                     </div>`;
             }
 
