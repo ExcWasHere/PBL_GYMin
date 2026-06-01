@@ -96,7 +96,7 @@
             </div>
             <div id="acChatArea" style="display:none;flex-direction:column;height:100%;">
                 <div class="ac-header">
-                    <span class="ac-header-name" id="acHeaderName">—</span>
+                    <span class="ac-header-name" id="acHeaderName">-</span>
                     <span style="font-size:0.72rem;color:var(--gym-gray)">Anggota</span>
                 </div>
                 <div class="ac-messages" id="acMessages"></div>

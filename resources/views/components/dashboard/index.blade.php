@@ -15,7 +15,7 @@
         <div class="stat-card">
             <div class="stat-label">Berat Terakhir</div>
             <div class="stat-value">
-                {{ $latest?->weight_kg ?? '—' }}<span class="stat-unit">kg</span>
+                {{ $latest?->weight_kg ?? '' }}<span class="stat-unit">kg</span>
             </div>
         </div>
     </div>

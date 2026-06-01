@@ -411,10 +411,10 @@ const trainers = [
         bio: "Sinta berspesialisasi dalam program penurunan berat badan yang efektif dan berkelanjutan. Pendekatannya menggabungkan HIIT, steady-state cardio, dan edukasi nutrisi untuk hasil yang optimal dan tidak yo-yo.",
         tags: ["HIIT", "Fat Loss", "Metabolic Training", "Nutrition Basics"],
         schedule: [
-            { day: "Selasa", time: "07.00 – 11.00" },
-            { day: "Kamis", time: "07.00 – 11.00" },
-            { day: "Sabtu", time: "13.00 – 17.00" },
-            { day: "Minggu", time: "08.00 – 11.00" },
+            { day: "Selasa", time: "07.00 - 11.00" },
+            { day: "Kamis", time: "07.00 - 11.00" },
+            { day: "Sabtu", time: "13.00 - 17.00" },
+            { day: "Minggu", time: "08.00 - 11.00" },
         ]
     },
     {
@@ -484,12 +484,12 @@ const trainers = [
         rating: "4.8",
         photo: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&h=400&fit=crop&auto=format",
         wa: "6281234567895",
-        bio: "Mira mengkhususkan diri dalam program strength & conditioning untuk berbagai tujuan — dari persiapan kompetisi olahraga hingga program kebugaran umum. Ia dikenal dengan penjelasannya yang detail dan motivasinya yang tinggi.",
+        bio: "Mira mengkhususkan diri dalam program strength & conditioning untuk berbagai tujuan - dari persiapan kompetisi olahraga hingga program kebugaran umum. Ia dikenal dengan penjelasannya yang detail dan motivasinya yang tinggi.",
         tags: ["Functional Training", "Athletic Performance", "Core Strength", "Injury Prevention"],
         schedule: [
-            { day: "Selasa", time: "13.00 – 18.00" },
-            { day: "Kamis", time: "13.00 – 18.00" },
-            { day: "Minggu", time: "07.00 – 11.00" },
+            { day: "Selasa", time: "13.00 - 18.00" },
+            { day: "Kamis", time: "13.00 - 18.00" },
+            { day: "Minggu", time: "07.00 - 11.00" },
         ]
     },
 ];

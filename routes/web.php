@@ -8,6 +8,7 @@ use App\Http\Controllers\GymDensityController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\OwnerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,9 @@ Route::middleware('auth')->group(function () {
     // Owner
     Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
         Route::get('/dashboard', fn() => view('components.dashboard.owner'))->name('dashboard');
+        Route::get('/hire',                                 [OwnerController::class, 'hirePage'])->name('hire');
+        Route::post('/hire/receptionist',                   [OwnerController::class, 'hireReceptionist'])->name('hire.receptionist');
+        Route::delete('/hire/receptionist/{user}',          [OwnerController::class, 'deleteReceptionist'])->name('hire.delete');
     });
 
     // Receptionist

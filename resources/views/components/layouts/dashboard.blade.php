@@ -351,19 +351,29 @@
 
             @if ($role === 'owner')
                 <a href="{{ route('owner.dashboard') }}"
-                    class="nav-item {{ request()->routeIs('owner.*') ? 'active' : '' }}">
+                    class="nav-item {{ request()->routeIs('owner.dashboard') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Beranda
                 </a>
+
+                <a href="{{ route('owner.hire') }}"
+                    class="nav-item {{ request()->routeIs('owner.hire*') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    Kelola Staff
+                </a>
             @elseif($role === 'receptionist')
                 <a href="{{ route('receptionist.dashboard') }}"
                     class="nav-item {{ request()->routeIs('receptionist.dashboard') ? 'active' : '' }}">
                     {{-- Icon: home --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
@@ -372,8 +382,9 @@
 
                 <a href="{{ route('receptionist.reservation.scan') }}"
                     class="nav-item {{ request()->routeIs('receptionist.reservation.*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <rect x="3" y="3" width="5" height="5" rx="1" />
                         <rect x="16" y="3" width="5" height="5" rx="1" />
                         <rect x="3" y="16" width="5" height="5" rx="1" />
@@ -393,12 +404,14 @@
                 <a href="{{ route('receptionist.chat') }}"
                     class="nav-item {{ request()->routeIs('receptionist.chat') ? 'active' : '' }}"
                     style="position:relative;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
                     Chat Anggota
-                    <span id="sidebarChatBadge" style="
+                    <span id="sidebarChatBadge"
+                        style="
                         display:none;
                         position:absolute;
                         right:14px;
@@ -415,7 +428,8 @@
                     ">0</span>
                 </a>
             @else
-                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}"
+                    class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -439,7 +453,8 @@
                     </svg>
                     Kepadatan Gym
                 </a>
-                <a href="{{ route('reservasi') }}" class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
+                <a href="{{ route('reservasi') }}"
+                    class="nav-item {{ request()->routeIs('reservasi') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -456,8 +471,9 @@
                 </a>
                 <a href="{{ route('personal-trainer.index') }}"
                     class="nav-item {{ request()->routeIs('personal-trainer.*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4" />
                         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
                         <path d="M15 11l1.5 2.5L19 12" />
