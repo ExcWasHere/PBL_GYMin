@@ -400,7 +400,16 @@
                     </svg>
                     Pindai Reservasi
                 </a>
-
+                <a href="{{ route('receptionist.redeem.scan') }}"
+                    class="nav-item {{ request()->routeIs('receptionist.redeem.*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M12 8v13m0-13V6a2 2 0 1 1 2 2h-2zm0 0V5.5A2.5 2.5 0 1 0 9.5 8H12zm-7 4h14M5 12a2 2 0 1 1 0-4h14a2 2 0 1 1 0 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+                    </svg>
+                    Pindai Hadiah
+                </a>
                 <a href="{{ route('receptionist.chat') }}"
                     class="nav-item {{ request()->routeIs('receptionist.chat') ? 'active' : '' }}"
                     style="position:relative;">
@@ -409,7 +418,7 @@
                         stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
-                    Chat Anggota
+                    Pesan Masuk
                     <span id="sidebarChatBadge"
                         style="
                         display:none;
@@ -497,7 +506,6 @@
             </form>
         </div>
     </aside>
-
     <div class="main-content">
         <header class="topbar">
             <span class="topbar-title">{{ $title ?? 'Dashboard' }}</span>
@@ -509,26 +517,26 @@
         </div>
     </div>
     @auth
-    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
-    <script>
-        if (!window.Echo) {
-            try {
-                window.Echo = new Echo({
-                    broadcaster:       'reverb',
-                    key:               '{{ config("broadcasting.connections.reverb.key") }}',
-                    wsHost:            '{{ config("broadcasting.connections.reverb.options.host") }}',
-                    wsPort:            {{ config("broadcasting.connections.reverb.options.port") }},
-                    wssPort:           {{ config("broadcasting.connections.reverb.options.port") }},
-                    forceTLS:          {{ config("broadcasting.connections.reverb.options.scheme") === "https" ? "true" : "false" }},
-                    enabledTransports: ['ws', 'wss'],
-                });
-            } catch (e) {
-                console.warn('Reverb init gagal:', e.message);
+        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
+        <script>
+            if (!window.Echo) {
+                try {
+                    window.Echo = new Echo({
+                        broadcaster: 'reverb',
+                        key: '{{ config('broadcasting.connections.reverb.key') }}',
+                        wsHost: '{{ config('broadcasting.connections.reverb.options.host') }}',
+                        wsPort: {{ config('broadcasting.connections.reverb.options.port') }},
+                        wssPort: {{ config('broadcasting.connections.reverb.options.port') }},
+                        forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
+                        enabledTransports: ['ws', 'wss'],
+                    });
+                } catch (e) {
+                    console.warn('Reverb init gagal:', e.message);
+                }
             }
-        }
-    </script>
-    @include('components.streak.streak-listener')
+        </script>
+        @include('components.streak.streak-listener')
     @endauth
     @stack('scripts')
 </body>
