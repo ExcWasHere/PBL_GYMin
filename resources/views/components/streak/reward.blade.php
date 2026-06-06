@@ -1,395 +1,471 @@
 <x-layouts.dashboard title="Rewards">
     @push('styles')
-    <style>
-        /* ── Point Banner ── */
-        .point-banner {
-            background: var(--gym-card);
-            border: 1px solid var(--gym-border);
-            padding: 28px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-            margin-bottom: 32px;
-            position: relative;
-            overflow: hidden;
-        }
+        <style>
+            .point-banner {
+                background: var(--gym-card);
+                border: 1px solid var(--gym-border);
+                padding: 28px 32px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 24px;
+                margin-bottom: 32px;
+                position: relative;
+                overflow: hidden;
+            }
 
-        .point-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gym-red);
-        }
+            .point-banner::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: var(--gym-red);
+            }
 
-        .point-banner::after {
-            content: 'POINTS';
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 9rem;
-            color: rgba(232,41,42,0.04);
-            position: absolute;
-            right: -8px;
-            bottom: -16px;
-            line-height: 1;
-            pointer-events: none;
-            letter-spacing: 0.05em;
-        }
+            .point-banner::after {
+                content: 'POINTS';
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 9rem;
+                color: rgba(232, 41, 42, 0.04);
+                position: absolute;
+                right: -8px;
+                bottom: -16px;
+                line-height: 1;
+                pointer-events: none;
+                letter-spacing: 0.05em;
+            }
 
-        .point-meta { display: flex; flex-direction: column; gap: 4px; }
+            .point-meta {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
 
-        .point-label {
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--gym-gray);
-        }
+            .point-label {
+                font-size: 0.72rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--gym-gray);
+            }
 
-        .point-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.6rem;
-            line-height: 1;
-            letter-spacing: 0.04em;
-        }
+            .point-value {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 3.6rem;
+                line-height: 1;
+                letter-spacing: 0.04em;
+            }
 
-        .point-value span { color: var(--gym-red); }
+            .point-value span {
+                color: var(--gym-red);
+            }
 
-        /* Streak pill */
-        .streak-pill {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(232,41,42,0.08);
-            border: 1px solid rgba(232,41,42,0.2);
-            padding: 12px 20px;
-        }
+            /* Streak pill */
+            .streak-pill {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(232, 41, 42, 0.08);
+                border: 1px solid rgba(232, 41, 42, 0.2);
+                padding: 12px 20px;
+            }
 
-        .streak-pill .streak-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: var(--gym-red);
-            line-height: 1;
-        }
+            .streak-pill .streak-num {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 2rem;
+                color: var(--gym-red);
+                line-height: 1;
+            }
 
-        .streak-pill .streak-text {
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--gym-light);
-            line-height: 1.4;
-        }
+            .streak-pill .streak-text {
+                font-size: 0.75rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--gym-light);
+                line-height: 1.4;
+            }
 
-        /* Streak mini progress */
-        .streak-milestones {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-            align-items: center;
-        }
+            /* Streak mini progress */
+            .streak-milestones {
+                display: flex;
+                gap: 6px;
+                margin-top: 10px;
+                align-items: center;
+            }
 
-        .milestone-dot {
-            width: 28px;
-            height: 5px;
-            background: #1e1e1e;
-            border: 1px solid #2a2a2a;
-            position: relative;
-        }
+            .milestone-dot {
+                width: 28px;
+                height: 5px;
+                background: #1e1e1e;
+                border: 1px solid #2a2a2a;
+                position: relative;
+            }
 
-        .milestone-dot.reached {
-            background: var(--gym-red);
-            border-color: var(--gym-red);
-        }
+            .milestone-dot.reached {
+                background: var(--gym-red);
+                border-color: var(--gym-red);
+            }
 
-        .milestone-dot .dot-label {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.55rem;
-            color: #444;
-            letter-spacing: 0.04em;
-            white-space: nowrap;
-        }
+            .milestone-dot .dot-label {
+                position: absolute;
+                bottom: -18px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 0.55rem;
+                color: #444;
+                letter-spacing: 0.04em;
+                white-space: nowrap;
+            }
 
-        .milestone-dot.reached .dot-label { color: var(--gym-red); }
+            .milestone-dot.reached .dot-label {
+                color: var(--gym-red);
+            }
 
-        /* ── Filter bar ── */
-        .filter-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
+            /* ── Filter bar ── */
+            .filter-bar {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 24px;
+                flex-wrap: wrap;
+            }
 
-        .filter-tag {
-            padding: 6px 16px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border: 1px solid var(--gym-border);
-            color: var(--gym-gray);
-            background: transparent;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.2s;
-        }
+            .filter-tag {
+                padding: 6px 16px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                border: 1px solid var(--gym-border);
+                color: var(--gym-gray);
+                background: transparent;
+                cursor: pointer;
+                font-family: 'DM Sans', sans-serif;
+                transition: all 0.2s;
+            }
 
-        .filter-tag:hover,
-        .filter-tag.active {
-            border-color: var(--gym-red);
-            color: var(--gym-white);
-            background: rgba(232,41,42,0.1);
-        }
+            .filter-tag:hover,
+            .filter-tag.active {
+                border-color: var(--gym-red);
+                color: var(--gym-white);
+                background: rgba(232, 41, 42, 0.1);
+            }
 
-        /* ── Reward Grid ── */
-        .reward-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-        }
+            /* ── Reward Grid ── */
+            .reward-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 16px;
+            }
 
-        .reward-card {
-            background: var(--gym-card);
-            border: 1px solid var(--gym-border);
-            display: flex;
-            flex-direction: column;
-            transition: border-color 0.25s, transform 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
+            .reward-card {
+                background: var(--gym-card);
+                border: 1px solid var(--gym-border);
+                display: flex;
+                flex-direction: column;
+                transition: border-color 0.25s, transform 0.2s;
+                position: relative;
+                overflow: hidden;
+            }
 
-        .reward-card:hover { border-color: #333; transform: translateY(-2px); }
-        .reward-card.insufficient { opacity: 0.55; }
+            .reward-card:hover {
+                border-color: #333;
+                transform: translateY(-2px);
+            }
 
-        .reward-card.featured { border-color: rgba(232,41,42,0.4); }
+            .reward-card.insufficient {
+                opacity: 0.55;
+            }
 
-        .reward-card.featured::before {
-            content: 'HOT';
-            position: absolute;
-            top: 0; right: 0;
-            background: var(--gym-red);
-            color: white;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            padding: 3px 10px;
-        }
+            .reward-card.featured {
+                border-color: rgba(232, 41, 42, 0.4);
+            }
 
-        .reward-img {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid var(--gym-border);
-            overflow: hidden;
-        }
+            .reward-card.featured::before {
+                content: 'HOT';
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: var(--gym-red);
+                color: white;
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 0.75rem;
+                letter-spacing: 0.1em;
+                padding: 3px 10px;
+            }
 
-        .reward-img img { width: 100%; height: 100%; object-fit: cover; }
+            .reward-img {
+                width: 100%;
+                aspect-ratio: 16/9;
+                background: #1a1a1a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-bottom: 1px solid var(--gym-border);
+                overflow: hidden;
+            }
 
-        .reward-body {
-            padding: 18px 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+            .reward-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
-        .reward-category {
-            font-size: 0.68rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--gym-red);
-            font-weight: 600;
-        }
+            .reward-body {
+                padding: 18px 20px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
 
-        .reward-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-            line-height: 1.3;
-            color: var(--gym-white);
-        }
+            .reward-category {
+                font-size: 0.68rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--gym-red);
+                font-weight: 600;
+            }
 
-        .reward-desc {
-            font-size: 0.8rem;
-            color: var(--gym-gray);
-            line-height: 1.5;
-            flex: 1;
-        }
+            .reward-name {
+                font-size: 0.95rem;
+                font-weight: 600;
+                line-height: 1.3;
+                color: var(--gym-white);
+            }
 
-        .reward-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 20px;
-            border-top: 1px solid var(--gym-border);
-        }
+            .reward-desc {
+                font-size: 0.8rem;
+                color: var(--gym-gray);
+                line-height: 1.5;
+                flex: 1;
+            }
 
-        .reward-cost { display: flex; align-items: center; gap: 6px; }
+            .reward-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 20px;
+                border-top: 1px solid var(--gym-border);
+            }
 
-        .cost-icon {
-            width: 16px; height: 16px;
-            background: var(--gym-red);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
+            .reward-cost {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
 
-        .cost-icon svg { width: 9px; height: 9px; color: white; }
+            .cost-icon {
+                width: 16px;
+                height: 16px;
+                background: var(--gym-red);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
 
-        .cost-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.25rem;
-            letter-spacing: 0.04em;
-            line-height: 1;
-        }
+            .cost-icon svg {
+                width: 9px;
+                height: 9px;
+                color: white;
+            }
 
-        .cost-unit {
-            font-size: 0.68rem;
-            color: var(--gym-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
+            .cost-num {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 1.25rem;
+                letter-spacing: 0.04em;
+                line-height: 1;
+            }
 
-        .btn-redeem {
-            background: var(--gym-red);
-            color: white;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 600;
-            font-size: 0.72rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 8px 16px;
-            border: none;
-            cursor: pointer;
-            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-            transition: background 0.2s;
-        }
+            .cost-unit {
+                font-size: 0.68rem;
+                color: var(--gym-gray);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
 
-        .btn-redeem:hover { background: #c0392b; }
+            .btn-redeem {
+                background: var(--gym-red);
+                color: white;
+                font-family: 'DM Sans', sans-serif;
+                font-weight: 600;
+                font-size: 0.72rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 8px 16px;
+                border: none;
+                cursor: pointer;
+                clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+                transition: background 0.2s;
+            }
 
-        .btn-redeem:disabled {
-            background: #333;
-            color: var(--gym-gray);
-            cursor: not-allowed;
-            clip-path: none;
-        }
+            .btn-redeem:hover {
+                background: #c0392b;
+            }
 
-        /* ── History Section ── */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
+            .btn-redeem:disabled {
+                background: #333;
+                color: var(--gym-gray);
+                cursor: not-allowed;
+                clip-path: none;
+            }
 
-        .section-title {
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--gym-gray);
-            font-weight: 600;
-        }
+            /* ── History Section ── */
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+            }
 
-        /* ── Modal ── */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
+            .section-title {
+                font-size: 0.72rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--gym-gray);
+                font-weight: 600;
+            }
 
-        .modal-overlay.show { display: flex; }
+            /* ── Modal ── */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.75);
+                z-index: 200;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            }
 
-        .modal-box {
-            background: var(--gym-dark);
-            border: 1px solid var(--gym-border);
-            width: 100%;
-            max-width: 400px;
-            padding: 28px;
-        }
+            .modal-overlay.show {
+                display: flex;
+            }
 
-        .modal-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 0.06em;
-            margin-bottom: 4px;
-        }
+            .modal-box {
+                background: var(--gym-dark);
+                border: 1px solid var(--gym-border);
+                width: 100%;
+                max-width: 400px;
+                padding: 28px;
+            }
 
-        .modal-sub { font-size: 0.8rem; color: var(--gym-gray); margin-bottom: 24px; }
+            .modal-title {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 1.4rem;
+                letter-spacing: 0.06em;
+                margin-bottom: 4px;
+            }
 
-        .modal-detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gym-border);
-            font-size: 0.85rem;
-        }
+            .modal-sub {
+                font-size: 0.8rem;
+                color: var(--gym-gray);
+                margin-bottom: 24px;
+            }
 
-        .modal-detail-row:last-of-type { border-bottom: none; }
-        .modal-detail-row span:first-child { color: var(--gym-gray); }
-        .modal-detail-row span:last-child  { font-weight: 600; }
+            .modal-detail-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--gym-border);
+                font-size: 0.85rem;
+            }
 
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+            .modal-detail-row:last-of-type {
+                border-bottom: none;
+            }
 
-        .btn-cancel {
-            flex: 1;
-            background: transparent;
-            border: 1px solid var(--gym-border);
-            color: var(--gym-gray);
-            padding: 10px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+            .modal-detail-row span:first-child {
+                color: var(--gym-gray);
+            }
 
-        .btn-cancel:hover { border-color: var(--gym-gray); color: var(--gym-white); }
+            .modal-detail-row span:last-child {
+                font-weight: 600;
+            }
 
-        .btn-confirm { flex: 2; }
+            .modal-actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+            }
 
-        /* ── Toast ── */
-        .toast {
-            position: fixed;
-            bottom: 28px; right: 28px;
-            background: var(--gym-card);
-            border: 1px solid var(--gym-border);
-            border-left: 3px solid var(--gym-red);
-            padding: 14px 20px;
-            font-size: 0.85rem;
-            z-index: 300;
-            transform: translateY(80px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            min-width: 260px;
-        }
+            .btn-cancel {
+                flex: 1;
+                background: transparent;
+                border: 1px solid var(--gym-border);
+                color: var(--gym-gray);
+                padding: 10px;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.8rem;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
 
-        .toast.show    { transform: translateY(0); opacity: 1; }
-        .toast.success { border-left-color: #4ade80; }
-        .toast.error   { border-left-color: #f87171; }
+            .btn-cancel:hover {
+                border-color: var(--gym-gray);
+                color: var(--gym-white);
+            }
 
-        .toast-title { font-weight: 600; margin-bottom: 2px; }
-        .toast-msg   { color: var(--gym-gray); font-size: 0.78rem; }
+            .btn-confirm {
+                flex: 2;
+            }
 
-        @media (max-width: 640px) {
-            .point-banner { flex-direction: column; align-items: flex-start; }
-            .reward-grid  { grid-template-columns: 1fr; }
-        }
-    </style>
+            /* ── Toast ── */
+            .toast {
+                position: fixed;
+                bottom: 28px;
+                right: 28px;
+                background: var(--gym-card);
+                border: 1px solid var(--gym-border);
+                border-left: 3px solid var(--gym-red);
+                padding: 14px 20px;
+                font-size: 0.85rem;
+                z-index: 300;
+                transform: translateY(80px);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                min-width: 260px;
+            }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast.success {
+                border-left-color: #4ade80;
+            }
+
+            .toast.error {
+                border-left-color: #f87171;
+            }
+
+            .toast-title {
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+
+            .toast-msg {
+                color: var(--gym-gray);
+                font-size: 0.78rem;
+            }
+
+            @media (max-width: 640px) {
+                .point-banner {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .reward-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
     @endpush
-
-    {{-- ── POINT BANNER ── --}}
     <div class="point-banner">
         <div class="point-meta">
             <span class="point-label">Total Poinmu</span>
@@ -399,14 +475,12 @@
             <span style="font-size:0.78rem;color:var(--gym-gray);margin-top:4px">
                 Tukarkan poin dengan hadiah eksklusif
             </span>
-
-            {{-- Milestone progress bar --}}
             @php
                 $milestones = [3, 7, 14, 30, 60, 90];
-                $streak     = $user->streak_days;
+                $streak = $user->streak_days;
             @endphp
             <div class="streak-milestones" style="margin-top:14px;">
-                @foreach($milestones as $m)
+                @foreach ($milestones as $m)
                     <div class="milestone-dot {{ $streak >= $m ? 'reached' : '' }}">
                         <span class="dot-label">{{ $m }}d</span>
                     </div>
@@ -422,14 +496,12 @@
             </div>
             <svg width="28" height="28" fill="none" stroke="#E8292A" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                    d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                    d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
             </svg>
         </div>
     </div>
-
-    {{-- ── FILTER BAR ── --}}
     <div class="filter-bar">
         <button class="filter-tag active" data-filter="all">Semua</button>
         <button class="filter-tag" data-filter="suplemen">Suplemen</button>
@@ -437,137 +509,132 @@
         <button class="filter-tag" data-filter="diskon">Diskon</button>
         <button class="filter-tag" data-filter="merchandise">Merchandise</button>
     </div>
-
-    {{-- ── REWARD GRID ── --}}
     <div class="reward-grid" id="rewardGrid">
         @forelse ($rewards as $reward)
-        @php $canRedeem = $user->points >= $reward->point_cost; @endphp
-        <div class="reward-card {{ $reward->is_featured ? 'featured' : '' }} {{ !$canRedeem ? 'insufficient' : '' }}"
-             data-category="{{ $reward->category }}">
+            @php $canRedeem = $user->points >= $reward->point_cost; @endphp
+            <div class="reward-card {{ $reward->is_featured ? 'featured' : '' }} {{ !$canRedeem ? 'insufficient' : '' }}"
+                data-category="{{ $reward->category }}">
 
-            <div class="reward-img">
-                @if($reward->image)
-                    <img src="{{ asset($reward->image) }}" alt="{{ $reward->name }}" loading="lazy">
-                @else
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="48" height="48" style="opacity:.15">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-                    </svg>
-                @endif
-            </div>
-
-            <div class="reward-body">
-                <div class="reward-category">{{ ucfirst($reward->category) }}</div>
-                <div class="reward-name">{{ $reward->name }}</div>
-                <div class="reward-desc">{{ $reward->description }}</div>
-            </div>
-
-            <div class="reward-footer">
-                <div class="reward-cost">
-                    <div class="cost-icon">
-                        <svg fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                <div class="reward-img">
+                    @if ($reward->image)
+                        <img src="{{ asset($reward->image) }}" alt="{{ $reward->name }}" loading="lazy">
+                    @else
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="48" height="48"
+                            style="opacity:.15">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                         </svg>
-                    </div>
-                    <div>
-                        <div class="cost-num">{{ number_format($reward->point_cost) }}</div>
-                        <div class="cost-unit">poin</div>
-                    </div>
+                    @endif
                 </div>
 
-                <button
-                    class="btn-redeem"
-                    {{ !$canRedeem ? 'disabled' : '' }}
-                    onclick="openModal({{ $reward->id }}, '{{ addslashes($reward->name) }}', {{ $reward->point_cost }}, {{ $user->points }})">
-                    {{ $canRedeem ? 'Tukar' : 'Kurang Poin' }}
-                </button>
+                <div class="reward-body">
+                    <div class="reward-category">{{ ucfirst($reward->category) }}</div>
+                    <div class="reward-name">{{ $reward->name }}</div>
+                    <div class="reward-desc">{{ $reward->description }}</div>
+                </div>
+
+                <div class="reward-footer">
+                    <div class="reward-cost">
+                        <div class="cost-icon">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd"
+                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="cost-num">{{ number_format($reward->point_cost) }}</div>
+                            <div class="cost-unit">poin</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-redeem" {{ !$canRedeem ? 'disabled' : '' }}
+                        onclick="openModal({{ $reward->id }}, '{{ addslashes($reward->name) }}', {{ $reward->point_cost }}, {{ $user->points }})">
+                        {{ $canRedeem ? 'Tukar' : 'Kurang Poin' }}
+                    </button>
+                </div>
             </div>
-        </div>
         @empty
-        <div style="grid-column: 1/-1; padding: 48px 0; text-align: center; color: var(--gym-gray);">
-            <p style="font-size:0.85rem">Belum ada hadiah tersedia saat ini.</p>
-        </div>
+            <div style="grid-column: 1/-1; padding: 48px 0; text-align: center; color: var(--gym-gray);">
+                <p style="font-size:0.85rem">Belum ada hadiah tersedia saat ini.</p>
+            </div>
         @endforelse
     </div>
-
-    {{-- ── RIWAYAT PENUKARAN ── --}}
-    @if($redemptionHistory->count())
-    <div style="margin-top: 40px;">
-        <div class="section-header">
-            <span class="section-title">Riwayat Penukaran</span>
-        </div>
-        <div class="card" style="padding: 0; overflow: hidden;">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Hadiah</th>
-                        <th>Poin Digunakan</th>
-                        <th>Tanggal</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($redemptionHistory as $h)
-                    <tr>
-                        <td style="color: var(--gym-white); font-weight: 500;">{{ $h->reward_name }}</td>
-                        <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;">
-                            {{ number_format($h->points_spent) }} pts
-                        </td>
-                        <td style="color: var(--gym-gray); font-size: 0.8rem;">
-                            {{ $h->created_at->format('d M Y') }}
-                        </td>
-                        <td>
-                            <span style="
+    @if ($redemptionHistory->count())
+        <div style="margin-top: 40px;">
+            <div class="section-header">
+                <span class="section-title">Riwayat Penukaran</span>
+            </div>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Hadiah</th>
+                            <th>Poin Digunakan</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($redemptionHistory as $h)
+                            <tr>
+                                <td style="color: var(--gym-white); font-weight: 500;">{{ $h->reward_name }}</td>
+                                <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;">
+                                    {{ number_format($h->points_spent) }} pts
+                                </td>
+                                <td style="color: var(--gym-gray); font-size: 0.8rem;">
+                                    {{ $h->created_at->format('d M Y') }}
+                                </td>
+                                <td>
+                                    <span
+                                        style="
                                 font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
                                 text-transform: uppercase; color: #4ade80;
                                 background: #4ade8018; border: 1px solid #4ade8044; padding: 3px 10px;">
-                                Success
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                        Success
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     @endif
-
-    {{-- ── RIWAYAT POIN ── --}}
-    @if($pointHistory->count())
-    <div style="margin-top: 32px;">
-        <div class="section-header">
-            <span class="section-title">Riwayat Poin</span>
-        </div>
-        <div class="card" style="padding: 0; overflow: hidden;">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Keterangan</th>
-                        <th>Poin</th>
-                        <th>Tanggal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pointHistory as $log)
-                    <tr>
-                        <td style="color: var(--gym-light);">{{ $log->description }}</td>
-                        <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+    @if ($pointHistory->count())
+        <div style="margin-top: 32px;">
+            <div class="section-header">
+                <span class="section-title">Riwayat Poin</span>
+            </div>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Keterangan</th>
+                            <th>Poin</th>
+                            <th>Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pointHistory as $log)
+                            <tr>
+                                <td style="color: var(--gym-light);">{{ $log->description }}</td>
+                                <td
+                                    style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
                                    color: {{ $log->points > 0 ? '#4ade80' : '#f87171' }};">
-                            {{ $log->points > 0 ? '+' : '' }}{{ number_format($log->points) }} pts
-                        </td>
-                        <td style="color: var(--gym-gray); font-size: 0.8rem;">
-                            {{ $log->created_at->format('d M Y, H:i') }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                    {{ $log->points > 0 ? '+' : '' }}{{ number_format($log->points) }} pts
+                                </td>
+                                <td style="color: var(--gym-gray); font-size: 0.8rem;">
+                                    {{ $log->created_at->format('d M Y, H:i') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     @endif
-
-    {{-- ── CONFIRM MODAL ── --}}
     <div class="modal-overlay" id="redeemModal">
         <div class="modal-box">
             <div class="modal-title">Konfirmasi Penukaran</div>
@@ -592,71 +659,66 @@
 
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Batal</button>
-                <form id="redeemForm" method="POST" action="" style="flex:2">
-                    @csrf
-                    <button type="submit" class="btn-primary btn-redeem btn-confirm" style="width:100%;clip-path:none;">
-                        Ya, Tukar Sekarang
-                    </button>
-                </form>
+                <a id="modalTicketLink" href="#" class="btn-primary btn-confirm"
+                    style="flex:2;display:inline-block;text-align:center;text-decoration:none;
+              padding:10px 22px;line-height:1.4;">
+                    Lihat Tiket QR →
+                </a>
             </div>
         </div>
     </div>
-
-    {{-- ── TOAST ── --}}
     <div class="toast" id="toast">
         <div class="toast-title" id="toastTitle"></div>
-        <div class="toast-msg"   id="toastMsg"></div>
+        <div class="toast-msg" id="toastMsg"></div>
     </div>
 
     @push('scripts')
-    <script>
-        // ── Filter
-        document.querySelectorAll('.filter-tag').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.dataset.filter;
-                document.querySelectorAll('.reward-card').forEach(card => {
-                    card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+        <script>
+            document.querySelectorAll('.filter-tag').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.dataset.filter;
+                    document.querySelectorAll('.reward-card').forEach(card => {
+                        card.style.display = (filter === 'all' || card.dataset.category === filter) ?
+                            '' : 'none';
+                    });
                 });
             });
-        });
 
-        // ── Modal
-        function openModal(rewardId, rewardName, cost, userPoints) {
-            document.getElementById('modalRewardName').textContent  = rewardName;
-            document.getElementById('modalCost').textContent        = cost.toLocaleString('id-ID') + ' poin';
-            document.getElementById('modalUserPoints').textContent  = userPoints.toLocaleString('id-ID') + ' poin';
-            document.getElementById('modalRemaining').textContent   = (userPoints - cost).toLocaleString('id-ID') + ' poin';
-            document.getElementById('redeemForm').action            = `/dashboard/rewards/${rewardId}/redeem`;
-            document.getElementById('redeemModal').classList.add('show');
-        }
+            function openModal(rewardId, rewardName, cost, userPoints) {
+                document.getElementById('modalRewardName').textContent = rewardName;
+                document.getElementById('modalCost').textContent = cost.toLocaleString('id-ID') + ' poin';
+                document.getElementById('modalUserPoints').textContent = userPoints.toLocaleString('id-ID') + ' poin';
+                document.getElementById('modalRemaining').textContent = (userPoints - cost).toLocaleString('id-ID') + ' poin';
+                document.getElementById('modalTicketLink').href = `/dashboard/rewards/${rewardId}/redeem-ticket`;
+                document.getElementById('redeemModal').classList.add('show');
+            }
 
-        function closeModal() {
-            document.getElementById('redeemModal').classList.remove('show');
-        }
+            function closeModal() {
+                document.getElementById('redeemModal').classList.remove('show');
+            }
 
-        document.getElementById('redeemModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+            document.getElementById('redeemModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
 
-        // ── Toast
-        function showToast(title, msg, type = '') {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMsg').textContent   = msg;
-            toast.className = 'toast ' + type;
-            void toast.offsetWidth;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3500);
-        }
+            function showToast(title, msg, type = '') {
+                const toast = document.getElementById('toast');
+                document.getElementById('toastTitle').textContent = title;
+                document.getElementById('toastMsg').textContent = msg;
+                toast.className = 'toast ' + type;
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3500);
+            }
 
-        @if (session('success'))
-            showToast('Berhasil!', @json(session('success')), 'success');
-        @endif
-        @if (session('error'))
-            showToast('Gagal', @json(session('error')), 'error');
-        @endif
-    </script>
+            @if (session('success'))
+                showToast('Berhasil!', @json(session('success')), 'success');
+            @endif
+            @if (session('error'))
+                showToast('Gagal', @json(session('error')), 'error');
+            @endif
+        </script>
     @endpush
 </x-layouts.dashboard>
