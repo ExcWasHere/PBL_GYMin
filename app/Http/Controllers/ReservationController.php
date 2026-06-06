@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\User;
+use App\Events\GymVisitStreakUpdated;
+use App\Services\StreakService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -182,44 +184,59 @@ class ReservationController extends Controller
     }
 
     public function confirm(Request $request)
-    {
-        $request->validate([
-            'code' => ['required', 'string', 'max:30'],
-        ]);
+{
+    $request->validate([
+        'code' => ['required', 'string', 'max:30'],
+    ]);
 
-        $code        = strtoupper(trim($request->code));
-        $reservation = Reservation::with('user')->where('code', $code)->first();
+    $code        = strtoupper(trim($request->code));
+    $reservation = Reservation::with('user')->where('code', $code)->first();
 
-        if (! $reservation) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Kode reservasi tidak ditemukan.',
-            ], 404);
-        }
-
-        if ($reservation->status !== 'pending') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Reservasi ini sudah di-scan atau tidak aktif.',
-            ], 422);
-        }
-
-        $reservation->update([
-            'status'       => 'confirmed',
-            'confirmed_at' => now(),
-            'confirmed_by' => Auth::id(),
-        ]);
-
+    if (! $reservation) {
         return response()->json([
-            'success'     => true,
-            'reservation' => [
-                'code'      => $reservation->code,
-                'name'      => $reservation->user->name,
-                'status'    => 'confirmed',
-                'fee_label' => $reservation->fee_label,
-            ],
-        ]);
+            'success' => false,
+            'message' => 'Kode reservasi tidak ditemukan.',
+        ], 404);
     }
+
+    if ($reservation->status !== 'pending') {
+        return response()->json([
+            'success' => false,
+            'message' => 'Reservasi ini sudah di-scan atau tidak aktif.',
+        ], 422);
+    }
+
+    $reservation->update([
+        'status'       => 'confirmed',
+        'confirmed_at' => now(),
+        'confirmed_by' => Auth::id(),
+    ]);
+
+    $streakService = app(StreakService::class);
+    $streakResult  = $streakService->processGymVisit($reservation->user);
+    if (! ($streakResult['already_claimed'] ?? false)) {
+        broadcast(new GymVisitStreakUpdated(
+            userId:     $reservation->user_id,
+            streakData: $streakResult,
+        ));
+    }
+
+    return response()->json([
+        'success'     => true,
+        'reservation' => [
+            'code'      => $reservation->code,
+            'name'      => $reservation->user->name,
+            'status'    => 'confirmed',
+            'fee_label' => $reservation->fee_label,
+        ],
+        'streak' => $streakResult['already_claimed'] ?? false ? null : [
+            'streak'       => $streakResult['streak'],
+            'total_points' => $streakResult['total_points'],
+            'is_milestone' => $streakResult['is_milestone'],
+            'points_earned'=> $streakResult['total_points_earned'],
+        ],
+    ]);
+}
 
     private function getSlotAvailability(string $date): array
     {
