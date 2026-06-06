@@ -8,10 +8,6 @@ use Carbon\Carbon;
 
 class StreakService
 {
-    /**
-     * Milestone streak → bonus poin ekstra.
-     * Key = hari ke-N, Value = bonus poin
-     */
     const STREAK_MILESTONES = [
         3  => 50,
         7  => 150,
@@ -21,46 +17,33 @@ class StreakService
         90 => 3000,
     ];
 
-    /**
-     * Poin dasar per login harian.
-     * Meningkat seiring streak.
-     */
     const BASE_POINTS      = 10;
-    const STREAK_BONUS_PER = 2;   // tambahan poin per hari streak
-    const STREAK_CAP_DAYS  = 30;  // cap bonus streak di hari ke-30
-
-    /**
-     * Proses streak login. Dipanggil setelah user berhasil login.
-     * Return array info untuk ditampilkan di popup.
-     */
-    public function processLogin(User $user): array
+    const STREAK_BONUS_PER = 2;
+    const STREAK_CAP_DAYS  = 30;
+    public function processGymVisit(User $user): array
     {
-        $today     = Carbon::today();
-        $lastLogin = $user->last_login_date ? Carbon::parse($user->last_login_date) : null;
+        $today        = Carbon::today();
+        $lastVisit    = $user->last_login_date
+            ? Carbon::parse($user->last_login_date)
+            : null;
 
-        // Sudah login hari ini → skip (tidak dobel poin)
-        if ($lastLogin && $lastLogin->isSameDay($today)) {
+        if ($lastVisit && $lastVisit->isSameDay($today)) {
             return ['already_claimed' => true];
         }
 
-        $prevStreak = $user->streak_days;
-        $isNewStreak = false;
+        $prevStreak  = $user->streak_days;
+        $isReset     = false;
 
-        // Tentukan apakah streak lanjut atau reset
-        if ($lastLogin && $lastLogin->isSameDay($today->copy()->subDay())) {
-            // Login berturut-turut → streak naik
+        if ($lastVisit && $lastVisit->isSameDay($today->copy()->subDay())) {
             $newStreak = $prevStreak + 1;
         } else {
-            // Lewat sehari atau pertama kali → streak reset ke 1
-            $newStreak   = 1;
-            $isNewStreak = $prevStreak > 0; // tandai reset (bukan pertama kali)
+            $newStreak = 1;
+            $isReset   = $prevStreak > 0;
         }
 
-        // Hitung poin yang didapat
-        $streakBonus   = min($newStreak - 1, self::STREAK_CAP_DAYS) * self::STREAK_BONUS_PER;
-        $pointsEarned  = self::BASE_POINTS + $streakBonus;
+        $streakBonus  = min($newStreak - 1, self::STREAK_CAP_DAYS) * self::STREAK_BONUS_PER;
+        $pointsEarned = self::BASE_POINTS + $streakBonus;
 
-        // Cek milestone streak
         $milestoneBonus       = 0;
         $milestoneDescription = null;
         if (isset(self::STREAK_MILESTONES[$newStreak])) {
@@ -69,21 +52,17 @@ class StreakService
         }
 
         $totalPoints = $pointsEarned + $milestoneBonus;
-
-        // Update user
-        $user->points         += $totalPoints;
-        $user->streak_days     = $newStreak;
-        $user->longest_streak  = max($user->longest_streak, $newStreak);
+        $user->points        += $totalPoints;
+        $user->streak_days    = $newStreak;
+        $user->longest_streak = max($user->longest_streak, $newStreak);
         $user->last_login_date = $today;
-        $user->total_logins   += 1;
+        $user->total_logins  += 1;
         $user->save();
-
-        // Catat ke point_logs
         PointLog::create([
             'user_id'     => $user->id,
             'points'      => $pointsEarned,
-            'type'        => 'login',
-            'description' => "Login harian (streak {$newStreak} hari)",
+            'type'        => 'gym_visit',
+            'description' => "Gym visit (streak {$newStreak} hari)",
         ]);
 
         if ($milestoneBonus > 0) {
@@ -96,23 +75,20 @@ class StreakService
         }
 
         return [
-            'already_claimed'      => false,
-            'streak'               => $newStreak,
-            'prev_streak'          => $prevStreak,
-            'is_reset'             => $isNewStreak && $newStreak === 1,
-            'points_earned'        => $pointsEarned,
-            'milestone_bonus'      => $milestoneBonus,
-            'total_points_earned'  => $totalPoints,
-            'total_points'         => $user->points,
-            'is_milestone'         => $milestoneBonus > 0,
-            'milestone_description'=> $milestoneDescription,
-            'next_milestone'       => $this->getNextMilestone($newStreak),
+            'already_claimed'       => false,
+            'streak'                => $newStreak,
+            'prev_streak'           => $prevStreak,
+            'is_reset'              => $isReset,
+            'points_earned'         => $pointsEarned,
+            'milestone_bonus'       => $milestoneBonus,
+            'total_points_earned'   => $totalPoints,
+            'total_points'          => $user->points,
+            'is_milestone'          => $milestoneBonus > 0,
+            'milestone_description' => $milestoneDescription,
+            'next_milestone'        => $this->getNextMilestone($newStreak),
         ];
     }
 
-    /**
-     * Kurangi poin user saat redeem reward.
-     */
     public function deductPoints(User $user, int $amount, string $description): bool
     {
         if ($user->points < $amount) {
@@ -135,7 +111,11 @@ class StreakService
     {
         foreach (self::STREAK_MILESTONES as $day => $bonus) {
             if ($day > $currentStreak) {
-                return ['day' => $day, 'bonus' => $bonus, 'remaining' => $day - $currentStreak];
+                return [
+                    'day'       => $day,
+                    'bonus'     => $bonus,
+                    'remaining' => $day - $currentStreak,
+                ];
             }
         }
         return null;

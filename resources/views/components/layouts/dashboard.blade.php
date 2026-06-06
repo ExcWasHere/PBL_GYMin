@@ -508,6 +508,28 @@
             {{ $slot }}
         </div>
     </div>
+    @auth
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
+    <script>
+        if (!window.Echo) {
+            try {
+                window.Echo = new Echo({
+                    broadcaster:       'reverb',
+                    key:               '{{ config("broadcasting.connections.reverb.key") }}',
+                    wsHost:            '{{ config("broadcasting.connections.reverb.options.host") }}',
+                    wsPort:            {{ config("broadcasting.connections.reverb.options.port") }},
+                    wssPort:           {{ config("broadcasting.connections.reverb.options.port") }},
+                    forceTLS:          {{ config("broadcasting.connections.reverb.options.scheme") === "https" ? "true" : "false" }},
+                    enabledTransports: ['ws', 'wss'],
+                });
+            } catch (e) {
+                console.warn('Reverb init gagal:', e.message);
+            }
+        }
+    </script>
+    @include('components.streak.streak-listener')
+    @endauth
     @stack('scripts')
 </body>
 </html>
