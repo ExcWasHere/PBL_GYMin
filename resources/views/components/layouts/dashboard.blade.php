@@ -5,6 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Dashboard' }} | Gym-In</title>
+    @php
+        $reverbConfig = [
+            'key' => config('broadcasting.connections.reverb.key'),
+            'host' => config('broadcasting.connections.reverb.options.host'),
+            'port' => config('broadcasting.connections.reverb.options.port'),
+            'scheme' => config('broadcasting.connections.reverb.options.scheme'),
+        ];
+    @endphp
+    <script>
+        window.GYMIN_REVERB = @json($reverbConfig);
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
@@ -517,25 +528,6 @@
         </div>
     </div>
     @auth
-        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
-        <script>
-            if (!window.Echo) {
-                try {
-                    window.Echo = new Echo({
-                        broadcaster: 'reverb',
-                        key: '{{ config('broadcasting.connections.reverb.key') }}',
-                        wsHost: '{{ config('broadcasting.connections.reverb.options.host') }}',
-                        wsPort: {{ config('broadcasting.connections.reverb.options.port') }},
-                        wssPort: {{ config('broadcasting.connections.reverb.options.port') }},
-                        forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
-                        enabledTransports: ['ws', 'wss'],
-                    });
-                } catch (e) {
-                    console.warn('Reverb init gagal:', e.message);
-                }
-            }
-        </script>
         @include('components.streak.streak-listener')
     @endauth
     @stack('scripts')
