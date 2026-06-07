@@ -60,6 +60,8 @@ services:
 networks:
   gymin-network:
     driver: bridge
+  dokploy-network:
+    external: true
 
 volumes:
   public_data:
