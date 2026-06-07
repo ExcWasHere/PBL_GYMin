@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Gym-In | Pusat Kebugaran Smarter' }}</title>
+    @php
+        $reverbConfig = [
+            'key' => config('broadcasting.connections.reverb.key'),
+            'host' => config('broadcasting.connections.reverb.options.host'),
+            'port' => config('broadcasting.connections.reverb.options.port'),
+            'scheme' => config('broadcasting.connections.reverb.options.scheme'),
+        ];
+    @endphp
+    <script>
+        window.GYMIN_REVERB = @json($reverbConfig);
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">

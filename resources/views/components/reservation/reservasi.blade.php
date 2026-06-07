@@ -712,8 +712,6 @@
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
 
         <script>
             const RECEPTIONIST_ID = {{ $receptionist?->id ?? 'null' }};
@@ -724,18 +722,13 @@
             const SLOTS_URL       = '{{ route('reservasi.slots') }}';
             const CSRF            = '{{ csrf_token() }}';
 
-            try {
-                window.Echo = new Echo({
-                    broadcaster: 'reverb',
-                    key: '{{ config('broadcasting.connections.reverb.key') }}',
-                    wsHost: '{{ config('broadcasting.connections.reverb.options.host') }}',
-                    wsPort: {{ config('broadcasting.connections.reverb.options.port') }},
-                    wssPort: {{ config('broadcasting.connections.reverb.options.port') }},
-                    forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
-                    enabledTransports: ['ws', 'wss'],
-                });
-
+            function initMemberChatRealtime() {
                 if (RECEPTIONIST_ID) {
+                    if (!window.Echo || typeof window.Echo.channel !== 'function') {
+                        setTimeout(initMemberChatRealtime, 300);
+                        return;
+                    }
+
                     const chMin = Math.min(MY_ID, RECEPTIONIST_ID);
                     const chMax = Math.max(MY_ID, RECEPTIONIST_ID);
                     window.Echo.channel(`chat.${chMin}.${chMax}`)
@@ -745,9 +738,10 @@
                             }
                         });
                 }
-            } catch (e) {
-                console.warn('Reverb tidak tersedia:', e.message);
             }
+
+            initMemberChatRealtime();
+
             function switchTab(t, btn) {
                 document.querySelectorAll('.res-panel').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.res-tab').forEach(b => b.classList.remove('active'));

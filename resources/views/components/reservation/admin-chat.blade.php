@@ -111,9 +111,6 @@
     </div>
 
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.3.0/dist/web/pusher.js"></script>
-
         <script>
             const MY_ID       = {{ Auth::id() }};
             const MY_INITIALS = '{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}';
@@ -123,26 +120,26 @@
 
             let activeContactId = null;
             let echoChannels    = {};
-            window.Echo = new Echo({
-                broadcaster: 'reverb',
-                key:         '{{ config("broadcasting.connections.reverb.key") }}',
-                wsHost:      '{{ config("broadcasting.connections.reverb.options.host") }}',
-                wsPort:      {{ config("broadcasting.connections.reverb.options.port") }},
-                wssPort:     {{ config("broadcasting.connections.reverb.options.port") }},
-                forceTLS:    {{ config("broadcasting.connections.reverb.options.scheme") === 'https' ? 'true' : 'false' }},
-                enabledTransports: ['ws','wss'],
-            });
 
-            document.querySelectorAll('.ac-contact[data-id]').forEach(el => {
-                const memberId = parseInt(el.dataset.id);
-                subscribeChannel(memberId);
-            });
+            function initAdminChatRealtime() {
+                if (!window.Echo || typeof window.Echo.channel !== 'function') {
+                    setTimeout(initAdminChatRealtime, 300);
+                    return;
+                }
+
+                document.querySelectorAll('.ac-contact[data-id]').forEach(el => {
+                    const memberId = parseInt(el.dataset.id);
+                    subscribeChannel(memberId);
+                });
+            }
+
+            initAdminChatRealtime();
 
             function subscribeChannel(memberId) {
                 if (echoChannels[memberId]) return;
                 const chMin = Math.min(MY_ID, memberId);
                 const chMax = Math.max(MY_ID, memberId);
-                echoChannels[memberId] = Echo.channel(`chat.${chMin}.${chMax}`)
+                echoChannels[memberId] = window.Echo.channel(`chat.${chMin}.${chMax}`)
                     .listen('.message.sent', (data) => {
                         if (data.sender_id === memberId && data.receiver_id === MY_ID) {
                             if (activeContactId === memberId) {
