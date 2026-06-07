@@ -28,6 +28,7 @@ FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache \
     libzip-dev \
+    linux-headers \
     postgresql-dev \
     unzip \
     && docker-php-ext-install pdo pdo_pgsql zip bcmath pcntl posix sockets \
