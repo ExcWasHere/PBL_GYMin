@@ -11,6 +11,7 @@ services:
       DB_PORT: "5432"
     networks:
       - gymin-network
+      - dokploy-network
     volumes:
       - public_data:/shared-public
     restart: always
@@ -25,6 +26,7 @@ services:
       - reverb-gymin
     networks:
       - gymin-network
+      - dokploy-network
     restart: always
 
   queue-gymin:
@@ -40,6 +42,7 @@ services:
     command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
     networks:
       - gymin-network
+      - dokploy-network
     restart: always
 
   reverb-gymin:
@@ -55,11 +58,13 @@ services:
     command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
     networks:
       - gymin-network
+      - dokploy-network
     restart: always
 
 networks:
   gymin-network:
     driver: bridge
+
   dokploy-network:
     external: true
 
