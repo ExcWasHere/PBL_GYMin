@@ -6,7 +6,8 @@
             {{ $errors->first() }}
         </div>
     @endif
-
+    
+    {{-- send form --}}
     <form method="POST" action="/login">
         @csrf
         <div class="form-group">

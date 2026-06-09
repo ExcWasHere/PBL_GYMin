@@ -1,6 +1,7 @@
 <x-layouts.auth title="Regist | Gym-In">
     <p class="auth-title">Buat Akun Baru</p>
 
+    {{-- show validation error --}}
     @if ($errors->any())
         <div
             style="background:rgba(232,41,42,0.1);border:1px solid rgba(232,41,42,0.3);color:#f87171;padding:10px 14px;font-size:0.82rem;margin-bottom:16px;">
@@ -12,6 +13,7 @@
         </div>
     @endif
 
+    {{-- reg form --}}
     <form method="POST" action="/register">
         @csrf
         <div class="form-group">
@@ -44,5 +46,6 @@
         <button type="submit" class="btn-primary">Daftar</button>
     </form>
 
+    {{-- name route into /login--}}
     <p class="auth-footer">Sudah punya akun? <a href="{{ route('login') }}">Masuk</a></p>
 </x-layouts.auth>
