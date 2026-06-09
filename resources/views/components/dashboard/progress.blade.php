@@ -8,6 +8,8 @@
 
     <div class="card">
         <div class="card-title" id="form-title">Tambah / Perbarui Catatan Harian</div>
+
+        {{--store log form--}}
         <form method="POST" action="{{ route('progress.store') }}" id="progress-form">
             @csrf
             <div class="form-group">
@@ -16,6 +18,7 @@
                     value="{{ old('log_date', now()->toDateString()) }}" required>
                 @error('log_date') <div class="form-error">{{ $message }}</div> @enderror
             </div>
+
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="form-group">
                     <label class="form-label">Berat Badan (kg)</label>
@@ -30,18 +33,21 @@
                     @error('muscle_mass_kg') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
             </div>
+
             <div class="form-group">
                 <label class="form-label">% Lemak Tubuh</label>
                 <input type="number" name="body_fat_pct" id="input-body_fat_pct" class="form-input" step="0.1" min="0" max="100"
                     value="{{ old('body_fat_pct') }}" placeholder="e.g. 18.5">
                 @error('body_fat_pct') <div class="form-error">{{ $message }}</div> @enderror
             </div>
+
             <div class="form-group">
                 <label class="form-label">Catatan Latihan</label>
                 <textarea name="workout_notes" id="input-workout_notes" class="form-input" placeholder="3x10 bilang Semangat Kapten">{{ old('workout_notes') }}</textarea>
                 @error('workout_notes')
                 <div class="form-error">{{ $message }}</div> @enderror
             </div>
+
             <div style="display:flex;gap:10px;align-items:center;">
                 <button type="submit" class="btn-primary" id="submit-btn">Simpan Log</button>
                 <button type="button" id="cancel-edit-btn" onclick="resetForm()"
@@ -49,9 +55,11 @@
                     Batal
                 </button>
             </div>
+            
         </form>
     </div>
 
+    {{--calculate progress stats--}}
     <div style="display:flex;flex-direction:column;gap:16px;">
         @php
             $latest = $logs->last();
@@ -68,18 +76,22 @@
                 </div>
             @endif
         </div>
+
         <div class="stat-card">
             <div class="stat-label">Massa Otot Saat Ini</div>
             <div class="stat-value">{{ $latest?->muscle_mass_kg ?? '' }}<span class="stat-unit">kg</span></div>
         </div>
+
         <div class="stat-card">
             <div class="stat-label">% Lemak Saat Ini</div>
             <div class="stat-value">{{ $latest?->body_fat_pct ?? '' }}<span class="stat-unit">%</span></div>
         </div>
+        
         <div class="stat-card">
             <div class="stat-label">Total Entri Log</div>
             <div class="stat-value">{{ $logs->count() }}<span class="stat-unit">hari</span></div>
         </div>
+
     </div>
 </div>
 
@@ -180,8 +192,13 @@
         document.getElementById('cancel-edit-btn').style.display = 'none';
     }
 </script>
+
 @if($logs->count() > 1)
+
+{{--chart.js start--}}
+{{--setup 3 charts--}}
 <script>
+
     const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m/y')));
     const weights = @json($logs->pluck('weight_kg'));
     const muscles = @json($logs->pluck('muscle_mass_kg'));
