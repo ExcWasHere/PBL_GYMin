@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProgressLog extends Model
 {
+    // mass assignment fields
     protected $fillable = [
         'user_id', 
         'log_date', 
@@ -16,10 +17,13 @@ class ProgressLog extends Model
         'workout_notes'
     ];
 
+    // conv. log_date into Date object
     protected $casts = [
         'log_date' => 'date',
     ];
 
+    // rel: progressLog -> User
+    // each progress log belongs to exactly 1 user
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
