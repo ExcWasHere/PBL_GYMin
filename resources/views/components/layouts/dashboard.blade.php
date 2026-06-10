@@ -21,8 +21,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
         rel="stylesheet">
-    {{--
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script> --}}
     <script src="{{ asset('js/chart.umd.min.js') }}"></script>
     <style>
         :root {
@@ -50,8 +48,6 @@
             display: flex;
             min-height: 100vh;
         }
-
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-w);
             background: var(--gym-dark);
@@ -63,7 +59,7 @@
             left: 0;
             bottom: 0;
             z-index: 50;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-logo {
@@ -74,13 +70,12 @@
             border-bottom: 1px solid var(--gym-border);
         }
 
-        .sidebar-logo span {
-            color: var(--gym-red);
-        }
+        .sidebar-logo span { color: var(--gym-red); }
 
         .sidebar-nav {
             flex: 1;
             padding: 16px 0;
+            overflow-y: auto;
         }
 
         .nav-item {
@@ -104,11 +99,7 @@
             border-left-color: var(--gym-red);
         }
 
-        .nav-item svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
+        .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
 
         .sidebar-footer {
             padding: 16px 20px;
@@ -123,14 +114,24 @@
             font-size: 0.85rem;
             margin-bottom: 2px;
         }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 49;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
 
-        /* Main */
+        .sidebar-overlay.active { display: block; }
         .main-content {
             margin-left: var(--sidebar-w);
             flex: 1;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            min-width: 0;
         }
 
         .topbar {
@@ -144,21 +145,57 @@
             position: sticky;
             top: 0;
             z-index: 40;
+            gap: 12px;
         }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--gym-white);
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         .topbar-title {
             font-size: 0.9rem;
             font-weight: 600;
             letter-spacing: 0.06em;
             text-transform: uppercase;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-user {
+            font-size: 0.8rem;
+            color: var(--gym-gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
         }
 
         .page-body {
             padding: 28px;
             flex: 1;
         }
-
-        /* Cards */
         .card {
             background: var(--gym-card);
             border: 1px solid var(--gym-border);
@@ -173,11 +210,7 @@
             color: var(--gym-gray);
             margin-bottom: 16px;
         }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
 
         .form-label {
             display: block;
@@ -201,14 +234,9 @@
             transition: border-color 0.2s;
         }
 
-        .form-input:focus {
-            border-color: var(--gym-red);
-        }
+        .form-input:focus { border-color: var(--gym-red); }
 
-        textarea.form-input {
-            resize: vertical;
-            min-height: 80px;
-        }
+        textarea.form-input { resize: vertical; min-height: 80px; }
 
         .btn-primary {
             background: var(--gym-red);
@@ -225,9 +253,7 @@
             transition: background 0.2s;
         }
 
-        .btn-primary:hover {
-            background: #c0392b;
-        }
+        .btn-primary:hover { background: #c0392b; }
 
         .btn-danger {
             background: transparent;
@@ -240,9 +266,7 @@
             transition: background 0.2s;
         }
 
-        .btn-danger:hover {
-            background: rgba(229, 85, 85, 0.1);
-        }
+        .btn-danger:hover { background: rgba(229, 85, 85, 0.1); }
 
         .alert-success {
             background: rgba(34, 197, 94, 0.1);
@@ -284,9 +308,7 @@
             vertical-align: top;
         }
 
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
+        .data-table tr:last-child td { border-bottom: none; }
 
         .stat-card {
             background: var(--gym-card);
@@ -335,7 +357,10 @@
             color: var(--gym-red);
             background: rgba(232, 41, 42, 0.08);
         }
-
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -348,13 +373,64 @@
             .main-content {
                 margin-left: 0;
             }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .topbar-user {
+                max-width: 90px;
+                font-size: 0.72rem;
+            }
+
+            .page-body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+            [style*="grid-template-columns:1fr 1fr"],
+            [style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            [style*="grid-template-columns:1fr 1fr 1fr"],
+            [style*="grid-template-columns: 1fr 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            .data-table {
+                min-width: 520px;
+            }
+
+            .btn-primary {
+                padding: 10px 16px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar-title {
+                font-size: 0.78rem;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
         }
     </style>
     @stack('styles')
 </head>
 
 <body>
-
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">GYM<span>-IN</span></div>
         <nav class="sidebar-nav">
@@ -369,7 +445,6 @@
                     </svg>
                     Beranda
                 </a>
-
                 <a href="{{ route('owner.hire') }}"
                     class="nav-item {{ request()->routeIs('owner.hire*') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,10 +453,10 @@
                     </svg>
                     Kelola Staff
                 </a>
+
             @elseif($role === 'receptionist')
                 <a href="{{ route('receptionist.dashboard') }}"
                     class="nav-item {{ request()->routeIs('receptionist.dashboard') ? 'active' : '' }}">
-                    {{-- Icon: home --}}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -390,7 +465,6 @@
                     </svg>
                     Beranda
                 </a>
-
                 <a href="{{ route('receptionist.reservation.scan') }}"
                     class="nav-item {{ request()->routeIs('receptionist.reservation.*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -431,22 +505,9 @@
                     </svg>
                     Pesan Masuk
                     <span id="sidebarChatBadge"
-                        style="
-                        display:none;
-                        position:absolute;
-                        right:14px;
-                        top:50%;
-                        transform:translateY(-50%);
-                        background:var(--gym-red);
-                        color:#fff;
-                        font-size:0.6rem;
-                        font-weight:700;
-                        padding:2px 6px;
-                        border-radius:999px;
-                        min-width:18px;
-                        text-align:center;
-                    ">0</span>
+                        style="display:none;position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--gym-red);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:999px;min-width:18px;text-align:center;">0</span>
                 </a>
+
             @else
                 <a href="{{ route('dashboard') }}"
                     class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -464,7 +525,6 @@
                     </svg>
                     Catatan Progres
                 </a>
-
                 <a href="{{ route('gym.density') }}"
                     class="nav-item {{ request()->routeIs('gym.density') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -517,19 +577,56 @@
             </form>
         </div>
     </aside>
+
     <div class="main-content">
         <header class="topbar">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <span class="topbar-title">{{ $title ?? 'Dashboard' }}</span>
-            <span style="font-size:0.8rem;color:var(--gym-gray)">Halo {{ Auth::user()->name }}</span>
+            <span class="topbar-user">Halo {{ Auth::user()->name }}</span>
         </header>
         <div class="page-body">
             @include('components.streak.popup')
             {{ $slot }}
         </div>
     </div>
+
     @auth
         @include('components.streak.streak-listener')
     @endauth
+
+    <script>
+        const hamburger     = document.getElementById('hamburger');
+        const sidebar       = document.getElementById('sidebar');
+        const overlay       = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            hamburger.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        hamburger?.addEventListener('click', () => {
+            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+        });
+        overlay?.addEventListener('click', closeSidebar);
+        sidebar?.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) closeSidebar();
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
