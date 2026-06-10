@@ -1,15 +1,10 @@
 <x-layouts.dashboard title="Progress Tracker">
-
 @if (session('success'))
     <div class="alert-success">{{ session('success') }}</div>
 @endif
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
-
+<div class="progress-top-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
     <div class="card">
         <div class="card-title" id="form-title">Tambah / Perbarui Catatan Harian</div>
-
-        {{--store log form--}}
         <form method="POST" action="{{ route('progress.store') }}" id="progress-form">
             @csrf
             <div class="form-group">
@@ -18,8 +13,7 @@
                     value="{{ old('log_date', now()->toDateString()) }}" required>
                 @error('log_date') <div class="form-error">{{ $message }}</div> @enderror
             </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="progress-metrics-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="form-group">
                     <label class="form-label">Berat Badan (kg)</label>
                     <input type="number" name="weight_kg" id="input-weight_kg" class="form-input" step="0.1" min="1" max="300"
@@ -48,7 +42,7 @@
                 <div class="form-error">{{ $message }}</div> @enderror
             </div>
 
-            <div style="display:flex;gap:10px;align-items:center;">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                 <button type="submit" class="btn-primary" id="submit-btn">Simpan Log</button>
                 <button type="button" id="cancel-edit-btn" onclick="resetForm()"
                     style="display:none;background:none;border:1px solid var(--gym-border);color:var(--gym-gray);padding:9px 18px;cursor:pointer;font-size:0.8rem;font-family:'DM Sans',sans-serif;">
@@ -58,8 +52,6 @@
             
         </form>
     </div>
-
-    {{--calculate progress stats--}}
     <div style="display:flex;flex-direction:column;gap:16px;">
         @php
             $latest = $logs->last();
@@ -95,11 +87,10 @@
     </div>
 </div>
 
-{{-- grafik --}}
 @if($logs->count() > 1)
 <div class="card" style="margin-bottom:28px;">
     <div class="card-title">Grafik Perkembanganmu</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+    <div class="progress-chart-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
         <div><canvas id="chartWeight" height="180"></canvas></div>
         <div><canvas id="chartMuscle" height="180"></canvas></div>
         <div><canvas id="chartFat"    height="180"></canvas></div>
@@ -112,46 +103,48 @@
     @if($logs->isEmpty())
         <p style="color:var(--gym-gray);font-size:0.85rem;">Belum ada log. Mulai catat progress kamu hari ini!</p>
     @else
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Berat (kg)</th>
-                    <th>Otot (kg)</th>
-                    <th>Lemak (%)</th>
-                    <th>Catatan</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($logs->sortByDesc('log_date') as $log)
-                <tr>
-                    <td>{{ $log->log_date->format('d M Y') }}</td>
-                    <td>{{ $log->weight_kg ?? '-' }}</td>
-                    <td>{{ $log->muscle_mass_kg ?? '-' }}</td>
-                    <td>{{ $log->body_fat_pct ?? '-' }}</td>
-                    <td style="max-width:200px;color:var(--gym-gray)">{{ $log->workout_notes ?? '-' }}</td>
-                    <td>
-                        <div style="display:flex;gap:8px;">
-                            <button type="button" class="btn-edit"
-                                onclick="fillForm(
-                                    '{{ $log->log_date->format('Y-m-d') }}',
-                                    '{{ $log->weight_kg }}',
-                                    '{{ $log->muscle_mass_kg }}',
-                                    '{{ $log->body_fat_pct }}',
-                                    {{ json_encode($log->workout_notes) }}
-                                )">Edit</button>
-                            <form method="POST" action="{{ route('progress.destroy', $log) }}"
-                                  onsubmit="return confirm('Hapus log ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn-danger">Hapus</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+            <table class="data-table" style="min-width:560px;">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Berat (kg)</th>
+                        <th>Otot (kg)</th>
+                        <th>Lemak (%)</th>
+                        <th>Catatan</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($logs->sortByDesc('log_date') as $log)
+                    <tr>
+                        <td>{{ $log->log_date->format('d M Y') }}</td>
+                        <td>{{ $log->weight_kg ?? '-' }}</td>
+                        <td>{{ $log->muscle_mass_kg ?? '-' }}</td>
+                        <td>{{ $log->body_fat_pct ?? '-' }}</td>
+                        <td style="max-width:200px;color:var(--gym-gray)">{{ $log->workout_notes ?? '-' }}</td>
+                        <td>
+                            <div style="display:flex;gap:8px;">
+                                <button type="button" class="btn-edit"
+                                    onclick="fillForm(
+                                        '{{ $log->log_date->format('Y-m-d') }}',
+                                        '{{ $log->weight_kg }}',
+                                        '{{ $log->muscle_mass_kg }}',
+                                        '{{ $log->body_fat_pct }}',
+                                        {{ json_encode($log->workout_notes) }}
+                                    )">Edit</button>
+                                <form method="POST" action="{{ route('progress.destroy', $log) }}"
+                                      onsubmit="return confirm('Hapus log ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-danger">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 </div>
 
@@ -168,6 +161,38 @@
         transition: background 0.2s;
     }
     .btn-edit:hover { background: rgba(251,191,36,0.1); }
+
+    /* Tablet: ≤ 900px */
+    @media (max-width: 900px) {
+        .progress-top-grid {
+            grid-template-columns: 1fr !important;
+        }
+        /* Stat cards */
+        .progress-top-grid > div:last-child {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        /* Chart grid */
+        .progress-chart-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    /* Mobile: ≤ 600px */
+    @media (max-width: 600px) {
+        /* Metric inputs */
+        .progress-metrics-grid {
+            grid-template-columns: 1fr !important;
+        }
+        /* Stat cards */
+        .stat-value { font-size: 1.6rem !important; }
+
+        /* Chart */
+        .progress-chart-grid canvas {
+            max-width: 100%;
+        }
+    }
 </style>
 <script>
     function fillForm(date, weight, muscle, fat, notes) {
@@ -194,11 +219,7 @@
 </script>
 
 @if($logs->count() > 1)
-
-{{--chart.js start--}}
-{{--setup 3 charts--}}
 <script>
-
     const labels  = @json($logs->pluck('log_date')->map(fn($d) => $d->format('d/m/y')));
     const weights = @json($logs->pluck('weight_kg'));
     const muscles = @json($logs->pluck('muscle_mass_kg'));

@@ -471,9 +471,20 @@
     </div>
 
     @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         const QR_DATA = @json($qrData);
+
+        if (typeof QRious === 'undefined') {
+            console.error('QRious library gagal load');
+            return;
+        }
+
+        if (!document.getElementById('qrCanvas')) {
+            console.error('Canvas element tidak ditemukan');
+            return;
+        }
 
         new QRious({
             element:    document.getElementById('qrCanvas'),
@@ -484,9 +495,10 @@
             foreground: '#000000',
             padding:    8,
         });
+
         let secondsLeft = 1800;
-        const timerEl   = document.getElementById('timerDisplay');
-        const overlay   = document.getElementById('expiredOverlay');
+        const timerEl  = document.getElementById('timerDisplay');
+        const overlay  = document.getElementById('expiredOverlay');
 
         const tick = () => {
             if (secondsLeft <= 0) {
@@ -505,6 +517,7 @@
 
         tick();
         const countdown = setInterval(tick, 1000);
-    </script>
-    @endpush
+    });
+</script>
+@endpush
 </x-layouts.dashboard>
