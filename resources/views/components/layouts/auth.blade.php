@@ -46,6 +46,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 60px 16px 24px;
         }
 
         body::before {
@@ -75,9 +76,7 @@
             margin-bottom: 28px;
         }
 
-        .auth-logo span {
-            color: var(--gym-red);
-        }
+        .auth-logo span { color: var(--gym-red); }
 
         .auth-title {
             font-size: 1rem;
@@ -89,9 +88,7 @@
             text-transform: uppercase;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
 
         .form-label {
             display: block;
@@ -113,11 +110,10 @@
             font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
+            -webkit-text-size-adjust: 100%;
         }
 
-        .form-input:focus {
-            border-color: var(--gym-red);
-        }
+        .form-input:focus { border-color: var(--gym-red); }
 
         .form-error {
             color: #f87171;
@@ -140,11 +136,10 @@
             clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
             transition: background 0.2s;
             margin-top: 8px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-primary:hover {
-            background: #c0392b;
-        }
+        .btn-primary:hover { background: #c0392b; }
 
         .auth-footer {
             text-align: center;
@@ -159,9 +154,7 @@
             border-bottom: 1px solid var(--gym-border);
         }
 
-        .auth-footer a:hover {
-            border-bottom-color: var(--gym-white);
-        }
+        .auth-footer a:hover { border-bottom-color: var(--gym-white); }
 
         .checkbox-row {
             display: flex;
@@ -171,10 +164,43 @@
             color: var(--gym-gray);
         }
 
-        .checkbox-row input {
-            accent-color: var(--gym-red);
+        .checkbox-row input { accent-color: var(--gym-red); }
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gym-gray);
+            text-decoration: none;
+            padding-bottom: 4px;
+            z-index: 10;
         }
 
+        .back-btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: var(--gym-red);
+            transition: width 0.3s ease;
+        }
+
+        .back-btn:hover { color: var(--gym-white); }
+        .back-btn:hover::after { width: 100%; }
+
+        .back-btn:hover .arrow {
+            transform: translateX(-6px);
+            color: var(--gym-red);
+        }
+
+        .arrow { transition: transform 0.25s ease, color 0.25s ease; }
         #intro-loader {
             position: fixed;
             inset: 0;
@@ -198,11 +224,8 @@
             color: var(--gym-white);
         }
 
-        #type-text span {
-            color: var(--gym-red);
-        }
+        #type-text span { color: var(--gym-red); }
 
-        /* cursor blinking */
         .cursor {
             display: inline-block;
             margin-left: 6px;
@@ -211,17 +234,9 @@
         }
 
         @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
         }
-
         .loader-overlay {
             position: fixed;
             inset: 0;
@@ -233,9 +248,7 @@
             backdrop-filter: blur(4px);
         }
 
-        .loader-box {
-            text-align: center;
-        }
+        .loader-box { text-align: center; }
 
         .spinner {
             width: 50px;
@@ -254,57 +267,38 @@
             text-transform: uppercase;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .hidden { display: none; }
+        @media (max-width: 480px) {
+            body {
+                padding: 56px 12px 20px;
+                align-items: flex-start;
             }
-        }
 
-        .hidden {
-            display: none;
-        }
+            .auth-box {
+                padding: 28px 20px;
+            }
 
-        .back-btn {
-            position: absolute;
-            top: 28px;
-            left: 28px;
+            .auth-logo {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
 
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            .auth-title {
+                font-size: 0.85rem;
+                margin-bottom: 18px;
+            }
 
-            font-size: 0.7rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
+            .form-input {
+                font-size: 16px;
+            }
 
-            color: var(--gym-gray);
-            text-decoration: none;
-
-            padding-bottom: 4px;
-        }
-
-        .back-btn::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 1px;
-            background: var(--gym-red);
-            transition: width 0.3s ease;
-        }
-
-        .back-btn:hover {
-            color: var(--gym-white);
-        }
-
-        .back-btn:hover::after {
-            width: 100%;
-        }
-
-        .back-btn:hover .arrow {
-            transform: translateX(-6px);
-            color: var(--gym-red);
+            .back-btn {
+                top: 16px;
+                left: 16px;
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
@@ -330,41 +324,34 @@
             <p class="loader-text">Here We GO!</p>
         </div>
     </div>
+
     <script>
-        const text = "GYM-IN";
-        const typeText = document.getElementById("type-text");
+        const text       = "GYM-IN";
+        const typeText   = document.getElementById("type-text");
         const introLoader = document.getElementById("intro-loader");
         let i = 0;
 
         function typeWriter() {
             if (i < text.length) {
                 if (text.substring(0, i + 1).includes("-IN")) {
-                    const before = "GYM";
                     const after = "-IN".substring(0, i + 1 - 3);
-                    typeText.innerHTML = before + '<span>' + after + '</span>';
+                    typeText.innerHTML = "GYM" + '<span>' + after + '</span>';
                 } else {
                     typeText.innerHTML = text.substring(0, i + 1);
                 }
-
                 i++;
                 setTimeout(typeWriter, 120);
             } else {
                 typeText.innerHTML += '<span class="cursor">|</span>';
-                setTimeout(() => {
-                    introLoader.classList.add("hide");
-                }, 800);
+                setTimeout(() => introLoader.classList.add("hide"), 800);
             }
         }
 
-        window.addEventListener("load", () => {
-            setTimeout(typeWriter, 300);
-        });
+        window.addEventListener("load", () => setTimeout(typeWriter, 300));
 
-        const forms = document.querySelectorAll('form');
-        const submitLoader = document.getElementById('loader');
-        forms.forEach(form => {
+        document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', () => {
-                submitLoader.classList.remove('hidden');
+                document.getElementById('loader').classList.remove('hidden');
             });
         });
     </script>
