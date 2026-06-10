@@ -41,6 +41,7 @@
                 display: flex;
                 flex-direction: column;
                 gap: 4px;
+                min-width: 0;
             }
 
             .point-label {
@@ -61,7 +62,6 @@
                 color: var(--gym-red);
             }
 
-            /* Streak pill */
             .streak-pill {
                 display: flex;
                 align-items: center;
@@ -69,6 +69,7 @@
                 background: rgba(232, 41, 42, 0.08);
                 border: 1px solid rgba(232, 41, 42, 0.2);
                 padding: 12px 20px;
+                flex-shrink: 0;
             }
 
             .streak-pill .streak-num {
@@ -86,12 +87,12 @@
                 line-height: 1.4;
             }
 
-            /* Streak mini progress */
             .streak-milestones {
                 display: flex;
                 gap: 6px;
                 margin-top: 10px;
                 align-items: center;
+                flex-wrap: wrap;
             }
 
             .milestone-dot {
@@ -122,7 +123,6 @@
                 color: var(--gym-red);
             }
 
-            /* ── Filter bar ── */
             .filter-bar {
                 display: flex;
                 align-items: center;
@@ -143,6 +143,7 @@
                 cursor: pointer;
                 font-family: 'DM Sans', sans-serif;
                 transition: all 0.2s;
+                white-space: nowrap;
             }
 
             .filter-tag:hover,
@@ -152,7 +153,6 @@
                 background: rgba(232, 41, 42, 0.1);
             }
 
-            /* ── Reward Grid ── */
             .reward-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -193,6 +193,7 @@
                 font-size: 0.75rem;
                 letter-spacing: 0.1em;
                 padding: 3px 10px;
+                z-index: 1;
             }
 
             .reward-img {
@@ -248,12 +249,14 @@
                 justify-content: space-between;
                 padding: 14px 20px;
                 border-top: 1px solid var(--gym-border);
+                gap: 10px;
             }
 
             .reward-cost {
                 display: flex;
                 align-items: center;
                 gap: 6px;
+                min-width: 0;
             }
 
             .cost-icon {
@@ -300,6 +303,8 @@
                 cursor: pointer;
                 clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
                 transition: background 0.2s;
+                white-space: nowrap;
+                flex-shrink: 0;
             }
 
             .btn-redeem:hover {
@@ -313,7 +318,6 @@
                 clip-path: none;
             }
 
-            /* ── History Section ── */
             .section-header {
                 display: flex;
                 align-items: center;
@@ -329,7 +333,6 @@
                 font-weight: 600;
             }
 
-            /* ── Modal ── */
             .modal-overlay {
                 display: none;
                 position: fixed;
@@ -373,6 +376,7 @@
                 padding: 10px 0;
                 border-bottom: 1px solid var(--gym-border);
                 font-size: 0.85rem;
+                gap: 12px;
             }
 
             .modal-detail-row:last-of-type {
@@ -381,10 +385,13 @@
 
             .modal-detail-row span:first-child {
                 color: var(--gym-gray);
+                flex-shrink: 0;
             }
 
             .modal-detail-row span:last-child {
                 font-weight: 600;
+                text-align: right;
+                word-break: break-word;
             }
 
             .modal-actions {
@@ -414,7 +421,6 @@
                 flex: 2;
             }
 
-            /* ── Toast ── */
             .toast {
                 position: fixed;
                 bottom: 28px;
@@ -429,6 +435,7 @@
                 opacity: 0;
                 transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                 min-width: 260px;
+                max-width: calc(100vw - 40px);
             }
 
             .toast.show {
@@ -453,15 +460,140 @@
                 color: var(--gym-gray);
                 font-size: 0.78rem;
             }
+            .table-scroll {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
 
             @media (max-width: 640px) {
                 .point-banner {
                     flex-direction: column;
                     align-items: flex-start;
+                    padding: 20px 20px 28px;
+                }
+
+                .point-banner::after {
+                    font-size: 5rem;
+                    right: -4px;
+                    bottom: -8px;
+                }
+
+                .point-value {
+                    font-size: 2.8rem;
+                }
+
+                .streak-pill {
+                    width: 100%;
+                    justify-content: flex-start;
+                }
+
+                .filter-bar {
+                    flex-wrap: nowrap;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 4px;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                    margin-bottom: 20px;
+                }
+
+                .filter-bar::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .filter-tag {
+                    flex-shrink: 0;
+                    padding: 6px 14px;
+                    font-size: 0.72rem;
                 }
 
                 .reward-grid {
                     grid-template-columns: 1fr;
+                    gap: 12px;
+                }
+                .reward-card {
+                    flex-direction: row;
+                    align-items: stretch;
+                }
+
+                .reward-img {
+                    width: 100px;
+                    min-width: 100px;
+                    aspect-ratio: unset;
+                    border-bottom: none;
+                    border-right: 1px solid var(--gym-border);
+                }
+
+                .reward-body {
+                    padding: 14px 16px;
+                    gap: 6px;
+                }
+
+                .reward-name {
+                    font-size: 0.88rem;
+                }
+
+                .reward-desc {
+                    font-size: 0.75rem;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+
+                .reward-footer {
+                    border-top: 1px solid var(--gym-border);
+                    padding: 10px 16px;
+                }
+                .reward-card {
+                    flex-direction: column;
+                }
+
+                .reward-img {
+                    width: 100%;
+                    min-width: unset;
+                    aspect-ratio: 16/9;
+                    border-right: none;
+                    border-bottom: 1px solid var(--gym-border);
+                }
+                .modal-overlay {
+                    padding: 16px;
+                    align-items: flex-end;
+                }
+
+                .modal-box {
+                    padding: 22px 20px;
+                    max-width: 100%;
+                }
+
+                .modal-actions {
+                    flex-direction: column;
+                }
+
+                .btn-confirm,
+                .btn-cancel {
+                    flex: unset;
+                    width: 100%;
+                    text-align: center;
+                }
+                .toast {
+                    bottom: 16px;
+                    right: 16px;
+                    left: 16px;
+                    min-width: unset;
+                }
+                .data-table {
+                    min-width: 480px;
+                }
+            }
+
+            @media (min-width: 641px) and (max-width: 900px) {
+                .reward-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .point-value {
+                    font-size: 3rem;
                 }
             }
         </style>
@@ -477,7 +609,7 @@
             </span>
             @php
                 $milestones = [3, 7, 14, 30, 60, 90];
-                $streak = $user->streak_days;
+                $streak     = $user->streak_days;
             @endphp
             <div class="streak-milestones" style="margin-top:14px;">
                 @foreach ($milestones as $m)
@@ -567,38 +699,38 @@
                 <span class="section-title">Riwayat Penukaran</span>
             </div>
             <div class="card" style="padding: 0; overflow: hidden;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Hadiah</th>
-                            <th>Poin Digunakan</th>
-                            <th>Tanggal</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($redemptionHistory as $h)
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <td style="color: var(--gym-white); font-weight: 500;">{{ $h->reward_name }}</td>
-                                <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;">
-                                    {{ number_format($h->points_spent) }} pts
-                                </td>
-                                <td style="color: var(--gym-gray); font-size: 0.8rem;">
-                                    {{ $h->created_at->format('d M Y') }}
-                                </td>
-                                <td>
-                                    <span
-                                        style="
-                                font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
-                                text-transform: uppercase; color: #4ade80;
-                                background: #4ade8018; border: 1px solid #4ade8044; padding: 3px 10px;">
-                                        Success
-                                    </span>
-                                </td>
+                                <th>Hadiah</th>
+                                <th>Poin Digunakan</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($redemptionHistory as $h)
+                                <tr>
+                                    <td style="color: var(--gym-white); font-weight: 500;">{{ $h->reward_name }}</td>
+                                    <td style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;">
+                                        {{ number_format($h->points_spent) }} pts
+                                    </td>
+                                    <td style="color: var(--gym-gray); font-size: 0.8rem;">
+                                        {{ $h->created_at->format('d M Y') }}
+                                    </td>
+                                    <td>
+                                        <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;
+                                            text-transform:uppercase;color:#4ade80;
+                                            background:#4ade8018;border:1px solid #4ade8044;padding:3px 10px;">
+                                            Success
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     @endif
@@ -608,30 +740,31 @@
                 <span class="section-title">Riwayat Poin</span>
             </div>
             <div class="card" style="padding: 0; overflow: hidden;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Keterangan</th>
-                            <th>Poin</th>
-                            <th>Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pointHistory as $log)
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <td style="color: var(--gym-light);">{{ $log->description }}</td>
-                                <td
-                                    style="font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-                                   color: {{ $log->points > 0 ? '#4ade80' : '#f87171' }};">
-                                    {{ $log->points > 0 ? '+' : '' }}{{ number_format($log->points) }} pts
-                                </td>
-                                <td style="color: var(--gym-gray); font-size: 0.8rem;">
-                                    {{ $log->created_at->format('d M Y, H:i') }}
-                                </td>
+                                <th>Keterangan</th>
+                                <th>Poin</th>
+                                <th>Tanggal</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($pointHistory as $log)
+                                <tr>
+                                    <td style="color: var(--gym-light);">{{ $log->description }}</td>
+                                    <td style="font-family:'Bebas Neue',sans-serif;font-size:1rem;
+                                        color:{{ $log->points > 0 ? '#4ade80' : '#f87171' }};">
+                                        {{ $log->points > 0 ? '+' : '' }}{{ number_format($log->points) }} pts
+                                    </td>
+                                    <td style="color: var(--gym-gray); font-size: 0.8rem; white-space: nowrap;">
+                                        {{ $log->created_at->format('d M Y, H:i') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     @endif
@@ -661,7 +794,7 @@
                 <button class="btn-cancel" onclick="closeModal()">Batal</button>
                 <a id="modalTicketLink" href="#" class="btn-primary btn-confirm"
                     style="flex:2;display:inline-block;text-align:center;text-decoration:none;
-              padding:10px 22px;line-height:1.4;">
+                    padding:10px 22px;line-height:1.4;">
                     Lihat Tiket QR →
                 </a>
             </div>
@@ -680,8 +813,7 @@
                     btn.classList.add('active');
                     const filter = btn.dataset.filter;
                     document.querySelectorAll('.reward-card').forEach(card => {
-                        card.style.display = (filter === 'all' || card.dataset.category === filter) ?
-                            '' : 'none';
+                        card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
                     });
                 });
             });
@@ -702,7 +834,6 @@
             document.getElementById('redeemModal').addEventListener('click', function(e) {
                 if (e.target === this) closeModal();
             });
-
             function showToast(title, msg, type = '') {
                 const toast = document.getElementById('toast');
                 document.getElementById('toastTitle').textContent = title;

@@ -7,6 +7,7 @@
                 border: 1px solid var(--gym-border);
                 width: fit-content;
                 margin-bottom: 28px;
+                flex-wrap: wrap;
             }
 
             .res-tab {
@@ -41,10 +42,6 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 20px;
-            }
-
-            @media (max-width: 900px) {
-                .res-grid { grid-template-columns: 1fr; }
             }
 
             .slot-grid {
@@ -136,7 +133,6 @@
                 line-height: 1.6;
             }
 
-            /* ── Fee badge ──────────────────────────────────── */
             .fee-badge {
                 display: inline-flex;
                 align-items: center;
@@ -156,7 +152,6 @@
                 text-align: center;
                 letter-spacing: 0.04em;
             }
-            /* ──────────────────────────────────────────────── */
 
             .status-badge {
                 display: inline-flex;
@@ -207,11 +202,8 @@
             }
 
             .history-info { flex: 1; }
-
             .history-title { font-size: 0.85rem; font-weight: 600; color: var(--gym-white); }
             .history-sub   { font-size: 0.75rem; color: var(--gym-gray); margin-top: 2px; }
-
-            /* Chat (tidak berubah dari versi asli) */
             .chat-outer {
                 display: grid;
                 grid-template-columns: 220px 1fr;
@@ -219,8 +211,6 @@
                 border: 1px solid var(--gym-border);
                 height: 520px;
             }
-
-            @media (max-width: 700px) { .chat-outer { grid-template-columns: 1fr; height: auto; } }
 
             .chat-sidebar {
                 border-right: 1px solid var(--gym-border);
@@ -383,7 +373,6 @@
             }
 
             .chat-send:hover { background: #c0392b; }
-
             .modal-overlay {
                 display: none;
                 position: fixed;
@@ -392,6 +381,7 @@
                 z-index: 200;
                 align-items: center;
                 justify-content: center;
+                padding: 16px;
             }
 
             .modal-overlay.open { display: flex; }
@@ -401,7 +391,7 @@
                 border: 1px solid var(--gym-border);
                 padding: 32px;
                 max-width: 420px;
-                width: 90%;
+                width: 100%;
             }
 
             .modal-title {
@@ -418,7 +408,6 @@
                 line-height: 1.6;
             }
 
-            /* Biaya highlight di modal */
             .modal-fee {
                 display: flex;
                 align-items: center;
@@ -437,7 +426,12 @@
                 letter-spacing: 0.06em;
             }
 
-            .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+            .modal-actions {
+                display: flex;
+                gap: 10px;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
 
             .btn-cancel {
                 background: transparent;
@@ -451,14 +445,72 @@
                 text-transform: uppercase;
                 transition: all 0.2s;
             }
-
             .btn-cancel:hover { border-color: var(--gym-white); color: var(--gym-white); }
-
             .empty-state {
                 text-align: center;
                 padding: 40px 20px;
                 color: var(--gym-gray);
                 font-size: 0.83rem;
+            }
+            @media (max-width: 900px) {
+                .res-grid {
+                    grid-template-columns: 1fr !important;
+                }
+                .res-tabs {
+                    width: 100%;
+                }
+                .res-tab {
+                    flex: 1;
+                    text-align: center;
+                    padding: 10px 12px;
+                }
+            }
+            @media (max-width: 640px) {
+                .slot-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                .chat-outer {
+                    grid-template-columns: 1fr;
+                    height: auto;
+                    min-height: 460px;
+                }
+                .chat-sidebar {
+                    display: none;
+                }
+                .chat-messages {
+                    max-height: 320px;
+                    min-height: 200px;
+                }
+                .quick-chips {
+                    flex-wrap: nowrap;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    padding: 8px 12px;
+                    scrollbar-width: none;
+                }
+                .quick-chips::-webkit-scrollbar { display: none; }
+                .chip { flex-shrink: 0; }
+                .history-item {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                .history-info { min-width: 0; width: 100%; }
+                .barcode-wrap { padding: 20px 12px; }
+                .res-tab {
+                    font-size: 0.7rem;
+                    padding: 10px 8px;
+                    letter-spacing: 0.06em;
+                }
+            }
+
+            @media (max-width: 400px) {
+                .slot-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .modal-box {
+                    padding: 20px 16px;
+                }
+                .modal-title { font-size: 1.3rem; }
             }
         </style>
     @endpush
@@ -536,7 +588,7 @@
                             ['02', 'Klik Konfirmasi Reservasi'],
                             ['03', 'Bayar biaya sesi (Rp 25.000) di kasir'],
                             ['04', 'Tunjukkan QR Code di tab Tiket Saya'],
-                            ['05', 'Scan QR di pintu masuk gym'],
+                            ['05', 'Scan QR di resepsionis'],
                         ] as [$n, $t])
                             <div style="display:flex;align-items:center;gap:14px;">
                                 <span style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
@@ -728,7 +780,6 @@
                         setTimeout(initMemberChatRealtime, 300);
                         return;
                     }
-
                     const chMin = Math.min(MY_ID, RECEPTIONIST_ID);
                     const chMax = Math.max(MY_ID, RECEPTIONIST_ID);
                     window.Echo.channel(`chat.${chMin}.${chMax}`)
@@ -827,6 +878,7 @@
 
             function closeConfirm() { document.getElementById('confirmModal').classList.remove('open'); }
             function doReserve()    { closeConfirm(); document.getElementById('reservasiForm').submit(); }
+
             function drawQR(text) {
                 const canvas = document.getElementById('qrCanvas');
                 if (!canvas || !text) return;
