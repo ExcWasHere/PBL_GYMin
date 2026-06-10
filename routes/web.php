@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:member')->group(function () {
+        
         // Progress
         Route::get('/dashboard/progress',                  [ProgressController::class, 'index'])->name('progress.index');
         Route::post('/dashboard/progress',                 [ProgressController::class, 'store'])->name('progress.store');
