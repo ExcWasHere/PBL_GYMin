@@ -92,6 +92,97 @@
                 color: var(--gym-gray);
                 border: 1px solid var(--gym-border);
             }
+
+            @media (max-width: 600px) {
+                .weekly-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .week-card {
+                    padding: 14px 14px;
+                }
+
+                .week-value {
+                    font-size: 1.5rem;
+                }
+
+                .week-label {
+                    font-size: 0.62rem;
+                    margin-bottom: 6px;
+                }
+
+                .week-sub {
+                    font-size: 0.68rem;
+                }
+
+                .chart-row {
+                    gap: 14px;
+                    margin-bottom: 20px;
+                }
+
+                .chart-row .card {
+                    padding: 16px;
+                }
+
+                #genderChart {
+                    width: 130px !important;
+                    height: 130px !important;
+                }
+
+                .table-scroll {
+                    overflow-x: visible;
+                }
+
+                .data-table.responsive-table {
+                    min-width: 0;
+                    border: none;
+                }
+
+                .data-table.responsive-table thead {
+                    display: none;
+                }
+
+                .data-table.responsive-table tr {
+                    display: block;
+                    background: var(--gym-card);
+                    border: 1px solid var(--gym-border);
+                    margin-bottom: 12px;
+                    padding: 4px 0;
+                }
+
+                .data-table.responsive-table td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 8px 14px;
+                    border-bottom: 1px solid rgba(34, 34, 34, 0.6);
+                    text-align: right;
+                }
+
+                .data-table.responsive-table tr td:last-child {
+                    border-bottom: none;
+                }
+
+                .data-table.responsive-table td::before {
+                    content: attr(data-label);
+                    font-size: 0.68rem;
+                    font-weight: 600;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: var(--gym-gray);
+                    text-align: left;
+                    flex-shrink: 0;
+                }
+            }
+
+            @media (max-width: 360px) {
+                .weekly-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
     @endpush
     <div style="margin-bottom:24px;">
@@ -242,34 +333,36 @@
     </div>
     <div class="card">
         <div class="card-title">Daftar Anggota</div>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nama</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Bergabung</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (\App\Models\User::where('role', 'member')->orderBy('created_at', 'desc')->get() as $u)
+        <div class="table-scroll">
+            <table class="data-table responsive-table">
+                <thead>
                     <tr>
-                        <td style="color:var(--gym-gray)">{{ $u->id }}</td>
-                        <td>{{ $u->name }}</td>
-                        <td>
-                            @if ($u->gender)
-                                <span class="gender-badge {{ $u->gender }}">{{ $u->gender_label }}</span>
-                            @else
-                                <span class="gender-badge none"></span>
-                            @endif
-                        </td>
-                        <td style="color:var(--gym-gray)">{{ $u->email }}</td>
-                        <td style="color:var(--gym-gray)">{{ $u->created_at->format('d M Y') }}</td>
+                        <th>#</th>
+                        <th>Nama</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Bergabung</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (\App\Models\User::where('role', 'member')->orderBy('created_at', 'desc')->get() as $u)
+                        <tr>
+                            <td data-label="#" style="color:var(--gym-gray)">{{ $u->id }}</td>
+                            <td data-label="Nama">{{ $u->name }}</td>
+                            <td data-label="Gender">
+                                @if ($u->gender)
+                                    <span class="gender-badge {{ $u->gender }}">{{ $u->gender_label }}</span>
+                                @else
+                                    <span class="gender-badge none"></span>
+                                @endif
+                            </td>
+                            <td data-label="Email" style="color:var(--gym-gray)">{{ $u->email }}</td>
+                            <td data-label="Bergabung" style="color:var(--gym-gray)">{{ $u->created_at->format('d M Y') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     @push('scripts')
