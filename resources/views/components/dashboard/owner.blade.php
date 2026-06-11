@@ -102,6 +102,225 @@
                 color: #f87171;
                 font-size: 0.72rem;
             }
+
+            .week-card.clickable {
+                cursor: pointer;
+                transition: border-color 0.2s, transform 0.15s;
+            }
+
+            .week-card.clickable:hover {
+                border-color: var(--gym-red);
+            }
+
+            .week-card.clickable:active {
+                transform: scale(0.98);
+            }
+
+            .revenue-modal-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 1000;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+            }
+
+            .revenue-modal-overlay.active {
+                display: flex;
+            }
+
+            .revenue-modal {
+                background: var(--gym-card);
+                border: 1px solid var(--gym-border);
+                width: 100%;
+                max-width: 640px;
+                max-height: 85vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .revenue-modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 18px 22px;
+                border-bottom: 1px solid var(--gym-border);
+            }
+
+            .revenue-modal-header .card-title {
+                margin-bottom: 0;
+            }
+
+            .revenue-modal-close {
+                background: none;
+                border: none;
+                color: var(--gym-gray);
+                font-size: 1.6rem;
+                line-height: 1;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            .revenue-modal-close:hover {
+                color: var(--gym-red);
+            }
+
+            .revenue-modal-body {
+                padding: 18px 22px;
+                overflow-y: auto;
+                flex: 1;
+            }
+
+            .revenue-modal-summary {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+                padding: 14px 16px;
+                background: var(--gym-dark);
+                border: 1px solid var(--gym-border);
+                font-size: 0.85rem;
+            }
+
+            .revenue-modal-summary strong {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 1.4rem;
+                letter-spacing: 0.04em;
+                color: #fbbf24;
+            }
+
+            .revenue-modal-footer {
+                padding: 16px 22px;
+                border-top: 1px solid var(--gym-border);
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            @media (max-width: 600px) {
+                .weekly-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .week-card {
+                    padding: 14px 14px;
+                }
+
+                .week-value {
+                    font-size: 1.5rem;
+                }
+
+                .week-label {
+                    font-size: 0.62rem;
+                    margin-bottom: 6px;
+                }
+
+                .week-sub {
+                    font-size: 0.68rem;
+                }
+
+                .chart-row {
+                    gap: 14px;
+                    margin-bottom: 20px;
+                }
+
+                .chart-row .card {
+                    padding: 16px;
+                }
+
+                #genderChart {
+                    width: 130px !important;
+                    height: 130px !important;
+                }
+
+                .stat-card {
+                    padding: 14px;
+                }
+
+                .stat-value {
+                    font-size: 1.6rem;
+                }
+
+                .stat-label {
+                    font-size: 0.62rem;
+                }
+
+                .table-scroll {
+                    overflow-x: visible;
+                }
+
+                .data-table.responsive-table {
+                    min-width: 0;
+                    border: none;
+                }
+
+                .data-table.responsive-table thead {
+                    display: none;
+                }
+
+                .data-table.responsive-table tr {
+                    display: block;
+                    background: var(--gym-card);
+                    border: 1px solid var(--gym-border);
+                    margin-bottom: 12px;
+                    padding: 4px 0;
+                }
+
+                .data-table.responsive-table td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 8px 14px;
+                    border-bottom: 1px solid rgba(34, 34, 34, 0.6);
+                    text-align: right;
+                }
+
+                .data-table.responsive-table tr td:last-child {
+                    border-bottom: none;
+                }
+
+                .data-table.responsive-table td::before {
+                    content: attr(data-label);
+                    font-size: 0.68rem;
+                    font-weight: 600;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: var(--gym-gray);
+                    text-align: left;
+                    flex-shrink: 0;
+                }
+
+                .revenue-modal {
+                    max-height: 90vh;
+                }
+
+                .revenue-modal-header,
+                .revenue-modal-body,
+                .revenue-modal-footer {
+                    padding-left: 16px;
+                    padding-right: 16px;
+                }
+
+                .revenue-modal-footer {
+                    flex-direction: column;
+                }
+
+                .revenue-modal-footer .btn-primary {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+
+            @media (max-width: 360px) {
+                .weekly-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
     @endpush
     <div style="margin-bottom:24px;">
@@ -123,6 +342,7 @@
 
         $weekReservations = \App\Models\Reservation::whereBetween('session_date', [$startOfWeek, $endOfWeek])
             ->whereIn('status', ['pending', 'confirmed', 'done'])
+            ->with('user')
             ->get();
 
         $weekTotal = $weekReservations->count();
@@ -171,6 +391,27 @@
 
         $visitDiff = 0;
         $revenueDiff = 0;
+        $weekTransactions = $weekReservations
+            ->whereIn('status', ['confirmed', 'done'])
+            ->sortBy('session_date')
+            ->values()
+            ->map(function ($r) {
+                return [
+                    'tanggal' => \Carbon\Carbon::parse($r->session_date)->format('d M Y'),
+                    'nama' => $r->user->name ?? '-',
+                    'status' => ucfirst($r->status),
+                    'fee' => (int) $r->fee,
+                ];
+            });
+
+        $weekTransactionsForExport = $weekTransactions->map(function ($t) {
+            return [
+                'Tanggal' => $t['tanggal'],
+                'Member' => $t['nama'],
+                'Status' => $t['status'],
+                'Fee (Rp)' => $t['fee'],
+            ];
+        })->values();
     @endphp
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
         <div class="stat-card">
@@ -237,7 +478,8 @@
                 </div>
             </div>
         </div>
-        <div class="week-card">
+        <div class="week-card clickable" id="revenueCardTrigger" role="button" tabindex="0"
+            aria-haspopup="dialog" aria-controls="revenueModal">
             <div class="week-label">Pendapatan Minggu Ini</div>
             <div class="week-value" style="font-size:1.4rem;">
                 Rp {{ number_format($weekRevenue, 0, ',', '.') }}
@@ -250,6 +492,7 @@
                 @else
                     Sama dengan minggu lalu
                 @endif
+                <span style="color:var(--gym-gray);">· klik untuk rincian</span>
             </div>
             <div class="week-bar-wrap">
                 <div class="week-bar" style="width:{{ min($weekConfirmed * 5, 100) }}%;background:#fbbf24;"></div>
@@ -287,45 +530,101 @@
     </div>
     <div class="card">
         <div class="card-title">Daftar Semua User</div>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nama</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Bergabung</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (\App\Models\User::orderBy('created_at', 'desc')->get() as $u)
+        <div class="table-scroll">
+            <table class="data-table responsive-table">
+                <thead>
                     <tr>
-                        <td style="color:var(--gym-gray)">{{ $u->id }}</td>
-                        <td>{{ $u->name }}</td>
-                        <td>
-                            @if ($u->gender)
-                                <span class="gender-badge {{ $u->gender }}">{{ $u->gender_label }}</span>
-                            @else
-                                <span class="gender-badge none"></span>
-                            @endif
-                        </td>
-                        <td style="color:var(--gym-gray)">{{ $u->email }}</td>
-                        <td>
-                            <span
-                                style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
-                            color:{{ $u->role === 'owner' ? '#fbbf24' : ($u->role === 'receptionist' ? '#60a5fa' : '#4ade80') }}">
-                                {{ $u->role }}
-                            </span>
-                        </td>
-                        <td style="color:var(--gym-gray)">{{ $u->created_at->format('d M Y') }}</td>
+                        <th>#</th>
+                        <th>Nama</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Bergabung</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (\App\Models\User::orderBy('created_at', 'desc')->get() as $u)
+                        <tr>
+                            <td data-label="#" style="color:var(--gym-gray)">{{ $u->id }}</td>
+                            <td data-label="Nama">{{ $u->name }}</td>
+                            <td data-label="Gender">
+                                @if ($u->gender)
+                                    <span class="gender-badge {{ $u->gender }}">{{ $u->gender_label }}</span>
+                                @else
+                                    <span class="gender-badge none"></span>
+                                @endif
+                            </td>
+                            <td data-label="Email" style="color:var(--gym-gray)">{{ $u->email }}</td>
+                            <td data-label="Role">
+                                <span
+                                    style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
+                                color:{{ $u->role === 'owner' ? '#fbbf24' : ($u->role === 'receptionist' ? '#60a5fa' : '#4ade80') }}">
+                                    {{ $u->role }}
+                                </span>
+                            </td>
+                            <td data-label="Bergabung" style="color:var(--gym-gray)">{{ $u->created_at->format('d M Y') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="revenue-modal-overlay" id="revenueModal" role="dialog" aria-modal="true" aria-labelledby="revenueModalTitle">
+        <div class="revenue-modal">
+            <div class="revenue-modal-header">
+                <div class="card-title" id="revenueModalTitle">
+                    Rincian Pendapatan Minggu Ini
+                    <span style="display:block;color:var(--gym-border);font-size:0.65rem;letter-spacing:0.05em;text-transform:none;margin-top:4px;">
+                        {{ $startOfWeek->format('d M') }} – {{ $endOfWeek->format('d M Y') }}
+                    </span>
+                </div>
+                <button type="button" class="revenue-modal-close" id="revenueModalClose" aria-label="Tutup">&times;</button>
+            </div>
+            <div class="revenue-modal-body">
+                <div class="revenue-modal-summary">
+                    <span style="color:var(--gym-gray);text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;">Total Pendapatan</span>
+                    <strong>Rp {{ number_format($weekRevenue, 0, ',', '.') }}</strong>
+                </div>
+
+                <div class="table-scroll">
+                    <table class="data-table responsive-table" id="revenueTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Member</th>
+                                <th>Status</th>
+                                <th>Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($weekTransactions as $t)
+                                <tr>
+                                    <td data-label="Tanggal">{{ $t['tanggal'] }}</td>
+                                    <td data-label="Member">{{ $t['nama'] }}</td>
+                                    <td data-label="Status">{{ $t['status'] }}</td>
+                                    <td data-label="Fee">Rp {{ number_format($t['fee'], 0, ',', '.') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="text-align:center;color:var(--gym-gray);">
+                                        Belum ada transaksi minggu ini
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="revenue-modal-footer">
+                <button type="button" class="btn-primary" id="exportRevenueBtn">
+                    Export ke Excel
+                </button>
+            </div>
+        </div>
     </div>
 
     @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <script>
             new Chart(document.getElementById('weeklyChart'), {
                 type: 'bar',
@@ -418,6 +717,60 @@
                     }
                 }
             });
+            (function () {
+                const trigger = document.getElementById('revenueCardTrigger');
+                const modal = document.getElementById('revenueModal');
+                const closeBtn = document.getElementById('revenueModalClose');
+                const exportBtn = document.getElementById('exportRevenueBtn');
+
+                function openModal() {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeModal() {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+
+                trigger.addEventListener('click', openModal);
+                trigger.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal();
+                    }
+                });
+
+                closeBtn.addEventListener('click', closeModal);
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) closeModal();
+                });
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+                });
+
+                const revenueData = @json($weekTransactionsForExport);
+                const totalRevenue = {{ $weekRevenue }};
+                const periodLabel = '{{ $startOfWeek->format("d M Y") }} - {{ $endOfWeek->format("d M Y") }}';
+
+                exportBtn.addEventListener('click', function () {
+                    const dataToExport = revenueData.length > 0
+                        ? [...revenueData, {}, { Tanggal: 'TOTAL', Member: '', Status: '', 'Fee (Rp)': totalRevenue }]
+                        : [{ Tanggal: '-', Member: '-', Status: '-', 'Fee (Rp)': 0 }];
+
+                    const ws = XLSX.utils.json_to_sheet(dataToExport);
+                    ws['!cols'] = [
+                        { wch: 14 },
+                        { wch: 24 },
+                        { wch: 12 },
+                        { wch: 14 },
+                    ];
+
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Pendapatan');
+                    XLSX.writeFile(wb, `Pendapatan_GymIn_${periodLabel.replace(/\s/g, '')}.xlsx`);
+                });
+            })();
         </script>
     @endpush
 </x-layouts.dashboard>
